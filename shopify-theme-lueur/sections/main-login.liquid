@@ -1,0 +1,35 @@
+<section class="section section--cream">
+  <div class="page-width">
+    <div class="form-card">
+      <h1 class="h3" style="text-align:center">{{ 'customer.login.title' | t }}</h1>
+      {%- form 'customer_login' -%}
+        {%- if form.errors -%}<p class="form-message form-message--error" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
+        <div class="field"><label for="CustomerEmail">{{ 'customer.email' | t }}</label><input id="CustomerEmail" type="email" name="customer[email]" autocomplete="email" required></div>
+        {%- if form.password_needed -%}
+          <div class="field"><label for="CustomerPassword">{{ 'customer.password' | t }}</label><input id="CustomerPassword" type="password" name="customer[password]" autocomplete="current-password"></div>
+        {%- endif -%}
+        <button class="button button--full" type="submit">{{ 'customer.login.submit' | t }}</button>
+      {%- endform -%}
+      <p style="text-align:center; margin-top:18px"><a href="{{ routes.account_register_url }}">{{ 'customer.register.title' | t }}</a></p>
+
+      <details style="margin-top:12px">
+        <summary style="cursor:pointer; font-weight:800; text-align:center">{{ 'customer.recover.title' | t }}</summary>
+        {%- form 'recover_customer_password' -%}
+          {%- if form.posted_successfully? -%}<p class="form-message form-message--success">{{ 'customer.recover.success' | t }}</p>{%- endif -%}
+          <div class="field" style="margin-top:16px"><label for="RecoverEmail">{{ 'customer.email' | t }}</label><input id="RecoverEmail" type="email" name="email" autocomplete="email" required></div>
+          <button class="button button--ghost button--full" type="submit">{{ 'customer.recover.submit' | t }}</button>
+        {%- endform -%}
+      </details>
+
+      {%- if shop.checkout.guest_login -%}
+        {%- form 'guest_login' -%}
+          <button class="button button--ghost button--full" type="submit" style="margin-top:16px">{{ 'customer.login.guest' | t }}</button>
+        {%- endform -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Connexion" }
+{% endschema %}

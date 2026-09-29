@@ -1,0 +1,27 @@
+<section class="section section--cream">
+  <div class="page-width">
+    <div class="section-head"><span class="eyebrow">{{ 'blogs.label' | t }}</span><h1 class="h2">{{ blog.title }}</h1></div>
+    {%- paginate blog.articles by 9 -%}
+      <div class="grid">
+        {%- for article in blog.articles -%}
+          <a class="card reveal" href="{{ article.url }}">
+            <div class="card__media" style="aspect-ratio: 4 / 3">
+              {%- if article.image -%}
+                {{ article.image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+              {%- else -%}
+                <img src="{{ 'lueur-morning-tea.jpg' | asset_url }}" alt="" loading="lazy" width="1536" height="1024">
+              {%- endif -%}
+            </div>
+            <h2 class="card__title">{{ article.title }}</h2>
+            <p style="margin:0; opacity:.8">{{ article.excerpt_or_content | strip_html | truncatewords: 22 }}</p>
+          </a>
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}<nav class="pagination" aria-label="{{ 'general.pagination' | t }}">{{ paginate | default_pagination }}</nav>{%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Blog" }
+{% endschema %}

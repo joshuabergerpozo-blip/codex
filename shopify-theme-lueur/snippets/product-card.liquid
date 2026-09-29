@@ -1,0 +1,12 @@
+{%- comment -%} Carte produit. Paramètre : product {%- endcomment -%}
+<a class="card reveal" href="{{ product.url }}">
+  <div class="card__media">
+    {%- if product.featured_media -%}
+      {{ product.featured_media | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 900px) 33vw, 90vw', alt: product.featured_media.alt | default: product.title }}
+    {%- else -%}
+      <img src="{{ 'lueur-packshot.jpg' | asset_url }}" alt="{{ product.title | escape }}" loading="lazy" width="1536" height="1536">
+    {%- endif -%}
+  </div>
+  <h3 class="card__title">{{ product.title }}</h3>
+  {% render 'price', product: product %}
+</a>

@@ -1,0 +1,25 @@
+<section class="section {% if section.settings.peach %}section--peach{% else %}section--cream{% endif %}">
+  <div class="page-width section-head reveal" style="margin-bottom:0">
+    {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2>{{ section.settings.title }}</h2>{%- endif -%}
+    <div class="rte">{{ section.settings.text }}</div>
+    {%- if section.settings.button_label != blank -%}
+      <a class="button" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Texte enrichi",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Surtitre" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Parlez de votre marque" },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Racontez votre histoire.</p>" },
+    { "type": "text", "id": "button_label", "label": "Bouton" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "checkbox", "id": "peach", "label": "Fond pêche", "default": false }
+  ],
+  "presets": [{ "name": "Texte enrichi" }]
+}
+{% endschema %}

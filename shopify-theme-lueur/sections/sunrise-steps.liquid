@@ -1,0 +1,50 @@
+<section class="section section--cream">
+  <div class="page-width">
+    <div class="section-head reveal">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.title }}</h2>
+      {{ section.settings.text }}
+    </div>
+    <ol class="steps" style="list-style:none; padding:0; margin:0">
+      {%- for block in section.blocks -%}
+        <li class="step reveal" style="--delay: {{ forloop.index0 | times: 0.12 }}s" {{ block.shopify_attributes }}>
+          <span class="step__time">{{ block.settings.time }}</span><span class="step__tag">{{ block.settings.tag }}</span>
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Étapes de l'aube",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Surtitre", "default": "Comment ça marche" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "30 minutes pour <em>réveiller</em> votre horloge interne." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>La lumière est le signal le plus puissant pour votre rythme biologique. Lueur reproduit fidèlement les couleurs d'un vrai lever de soleil, du rouge profond au jaune doré.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Étape",
+      "settings": [
+        { "type": "text", "id": "time", "label": "Moment", "default": "−30" },
+        { "type": "text", "id": "tag", "label": "Étiquette", "default": "min" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Rouge profond" },
+        { "type": "textarea", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [{
+    "name": "Étapes de l'aube",
+    "blocks": [
+      { "type": "step", "settings": { "time": "−30", "tag": "min · rouge profond", "title": "La nuit s'éclaircit", "text": "Une lueur rouge, à peine perceptible, traverse vos paupières. Votre cerveau commence doucement à freiner la production de mélatonine, l'hormone du sommeil." } },
+      { "type": "step", "settings": { "time": "−15", "tag": "min · orange ambré", "title": "Le corps se prépare", "text": "La lumière gagne en intensité. Votre sommeil s'allège naturellement et votre organisme se met en route, sans aucune brutalité." } },
+      { "type": "step", "settings": { "time": "0", "tag": "min · jaune soleil", "title": "Vous ouvrez les yeux", "text": "Pleine lumière et chant d'oiseaux. Souvent, vous êtes réveillé avant même le son. Reposé, lucide, prêt." } }
+    ]
+  }]
+}
+{% endschema %}

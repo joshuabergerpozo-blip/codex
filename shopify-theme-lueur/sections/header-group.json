@@ -1,0 +1,18 @@
+{
+  "type": "header",
+  "name": "En-tête",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "blocks": {
+        "a1": { "type": "announcement", "settings": { "text": "☀️ Livraison offerte en 48 h · 100 nuits pour l'essayer · Garantie 2 ans", "link": "" } }
+      },
+      "block_order": ["a1"]
+    },
+    "header": {
+      "type": "header",
+      "settings": { "menu": "main-menu", "mobile_cta_label": "Commander Lueur" }
+    }
+  },
+  "order": ["announcement", "header"]
+}

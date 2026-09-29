@@ -1,0 +1,60 @@
+<section class="hero" id="hero-{{ section.id }}">
+  <div class="page-width hero__grid">
+    <div class="hero__content">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow reveal">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h1 class="hero__title reveal" style="--delay:.08s">{{ section.settings.title }}</h1>
+      <div class="hero__text reveal" style="--delay:.16s">{{ section.settings.text }}</div>
+      <div class="hero__actions reveal" style="--delay:.24s">
+        {%- if section.settings.button_label != blank -%}
+          <a class="button" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.video_label != blank -%}
+          <a class="button button--ghost" href="#film" data-scroll-to-video>
+            <span class="play">{% render 'icon', name: 'play' %}</span>{{ section.settings.video_label }}
+          </a>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.proof != blank -%}
+        <div class="hero__proof reveal" style="--delay:.32s">
+          <span class="avatars" aria-hidden="true">
+            <span style="background:#e2663f">C</span><span style="background:#ff9b4a">M</span><span style="background:#ffb14a">J</span><span style="background:#c8453a">S</span>
+          </span>
+          <span>{% render 'stars', rating: 5 %}<br>{{ section.settings.proof }}</span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="hero__media reveal" style="--delay:.1s">
+      <div class="hero__sun" aria-hidden="true"></div>
+      <div class="hero__image">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '500, 800, 1200', sizes: '(min-width: 900px) 45vw, 90vw' }}
+        {%- else -%}
+          <img src="{{ 'lueur-bedside.jpg' | asset_url }}" alt="{{ 'sections.hero.image_alt' | t }}" width="1536" height="1536" fetchpriority="high">
+        {%- endif -%}
+      </div>
+      {%- if section.settings.badge_1 != blank -%}<span class="hero__badge hero__badge--a"><span class="dot"></span>{{ section.settings.badge_1 }}</span>{%- endif -%}
+      {%- if section.settings.badge_2 != blank -%}<span class="hero__badge hero__badge--b">{{ section.settings.badge_2 }}</span>{%- endif -%}
+    </div>
+  </div>
+  <svg class="hero__horizon" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 60c180-40 360-40 540-10s360 30 540 0 270-35 360-20v60H0z"/></svg>
+</section>
+
+{% schema %}
+{
+  "name": "Héros",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Surtitre", "default": "Réveil simulateur d'aube" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Et si demain, c'était le <em>soleil</em> qui vous réveillait ?", "info": "Mettez un mot en italique pour le surligner en orange." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Lueur fait lever une aube dans votre chambre 30 minutes avant votre réveil. Votre corps sort du sommeil à son rythme&nbsp;: plus de sursaut, plus de brouillard. Juste l'envie de commencer la journée.</p>" },
+    { "type": "text", "id": "button_label", "label": "Bouton principal", "default": "Je veux des matins doux" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" },
+    { "type": "text", "id": "video_label", "label": "Bouton vidéo", "default": "Voir le film (24 s)" },
+    { "type": "text", "id": "proof", "label": "Preuve sociale", "default": "4,8/5 · des milliers de matins transformés" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "badge_1", "label": "Badge 1", "default": "Aube en 30 min" },
+    { "type": "text", "id": "badge_2", "label": "Badge 2", "default": "☀️ 100 nuits d'essai" }
+  ],
+  "presets": [{ "name": "Héros" }]
+}
+{% endschema %}

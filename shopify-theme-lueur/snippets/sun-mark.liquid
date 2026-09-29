@@ -1,0 +1,15 @@
+{%- comment -%} Logo « soleil levant » de Lueur. Paramètre : class {%- endcomment -%}
+<svg class="{{ class | default: 'logo__mark' }}" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="sunmark-{{ section.id | default: 'g' }}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFB26B"/>
+      <stop offset="1" stop-color="#FF7A2F"/>
+    </linearGradient>
+  </defs>
+  <circle cx="24" cy="24" r="23" fill="url(#sunmark-{{ section.id | default: 'g' }})"/>
+  <path d="M11 30a13 13 0 0 1 26 0z" fill="#FFF7EE"/>
+  <rect x="8" y="32" width="32" height="4" rx="2" fill="#FFF7EE"/>
+  <g stroke="#FFF7EE" stroke-width="3" stroke-linecap="round">
+    <path d="M24 9v4M13.5 13.5l2.8 2.8M34.5 13.5l-2.8 2.8"/>
+  </g>
+</svg>

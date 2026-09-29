@@ -1,0 +1,23 @@
+<section class="section section--cream">
+  <div class="page-width">
+    <div class="section-head"><h1 class="h2">{{ 'collections.all' | t }}</h1></div>
+    <div class="grid">
+      {%- for collection in collections -%}
+        <a class="card reveal" href="{{ collection.url }}">
+          <div class="card__media">
+            {%- if collection.featured_image -%}
+              {{ collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+            {%- else -%}
+              <img src="{{ 'lueur-bedside.jpg' | asset_url }}" alt="{{ collection.title | escape }}" loading="lazy" width="1536" height="1536">
+            {%- endif -%}
+          </div>
+          <h2 class="card__title">{{ collection.title }}</h2>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Liste des collections" }
+{% endschema %}

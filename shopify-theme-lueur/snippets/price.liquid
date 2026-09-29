@@ -1,0 +1,18 @@
+{%- comment -%} Prix. Paramètres : product (objet) ou price/compare (en centimes) {%- endcomment -%}
+{%- liquid
+  if product
+    assign variant = product.selected_or_first_available_variant
+    assign price = variant.price
+    assign compare = variant.compare_at_price
+  endif
+  assign price = price | default: 0
+  assign compare = compare | default: 0
+-%}
+<div class="price">
+  <span class="price__current" data-price>{{ price | money }}</span>
+  <s class="price__compare" data-compare-price {% unless compare > price %}hidden{% endunless %}>{{ compare | money }}</s>
+  {%- if compare > price and show_badge -%}
+    {%- assign saving = compare | minus: price | money_without_trailing_zeros -%}
+    <span class="price__badge">{{ 'products.product.save' | t: amount: saving }}</span>
+  {%- endif -%}
+</div>

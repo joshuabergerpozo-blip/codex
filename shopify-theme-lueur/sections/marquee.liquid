@@ -1,0 +1,35 @@
+{%- capture items -%}
+  {%- for block in section.blocks -%}
+    <span class="marquee__item" {{ block.shopify_attributes }}>{{ block.settings.text }}{% render 'icon', name: 'sun' %}</span>
+  {%- endfor -%}
+{%- endcapture -%}
+<section class="section--tight" style="overflow:hidden; padding-block: 28px">
+  <div class="marquee" style="--marquee-speed: {{ section.settings.speed }}s" aria-label="{{ section.settings.label | escape }}">
+    <div class="marquee__track">
+      <div class="marquee__item">{{ items }}</div>
+      <div class="marquee__item" aria-hidden="true">{{ items }}</div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bandeau défilant",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Libellé accessible", "default": "Les points forts de Lueur" },
+    { "type": "range", "id": "speed", "label": "Durée d'un tour", "min": 15, "max": 90, "step": 5, "unit": "s", "default": 45 }
+  ],
+  "blocks": [
+    { "type": "item", "name": "Élément", "settings": [{ "type": "text", "id": "text", "label": "Texte", "default": "Aube progressive" }] }
+  ],
+  "presets": [{
+    "name": "Bandeau défilant",
+    "blocks": [
+      { "type": "item", "settings": { "text": "Aube progressive de 10 à 60 min" } },
+      { "type": "item", "settings": { "text": "7 sons de la nature" } },
+      { "type": "item", "settings": { "text": "Crépuscule pour s'endormir" } },
+      { "type": "item", "settings": { "text": "20 niveaux de lumière" } }
+    ]
+  }]
+}
+{% endschema %}

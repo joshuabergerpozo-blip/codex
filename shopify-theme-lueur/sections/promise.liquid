@@ -1,0 +1,29 @@
+<section class="section section--cream">
+  <div class="page-width">
+    <div class="promise reveal">
+      <div class="promise__seal" aria-hidden="true"><div><span>{{ section.settings.seal_value }}</span><small>{{ section.settings.seal_label }}</small></div></div>
+      <div>
+        <h2>{{ section.settings.title }}</h2>
+        {{ section.settings.text }}
+      </div>
+      {%- if section.settings.button_label != blank -%}
+        <a class="button button--light" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Garantie",
+  "settings": [
+    { "type": "text", "id": "seal_value", "label": "Chiffre du sceau", "default": "100" },
+    { "type": "text", "id": "seal_label", "label": "Légende du sceau", "default": "nuits" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Essayez Lueur pendant 100 nuits." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Il faut quelques matins pour sentir la différence. Alors prenez votre temps. Si Lueur ne transforme pas vos réveils, renvoyez-le&nbsp;: on vous rembourse, sans une seule question.</p>" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Commencer mon essai" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" }
+  ],
+  "presets": [{ "name": "Garantie" }]
+}
+{% endschema %}

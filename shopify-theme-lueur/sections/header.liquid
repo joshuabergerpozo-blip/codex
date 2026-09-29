@@ -1,0 +1,56 @@
+<header class="site-header">
+  <div class="page-width site-header__inner">
+    <a class="logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 300 | image_tag: alt: shop.name, widths: '150, 300', height: 44 }}
+      {%- else -%}
+        {% render 'sun-mark' %}<span>{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    <nav class="nav--desktop" aria-label="{{ 'general.main_menu' | t }}">
+      <ul class="nav nav--desktop">
+        {%- for link in section.settings.menu.links -%}
+          <li><a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a class="icon-button" href="{{ routes.search_url }}" aria-label="{{ 'general.search' | t }}">{% render 'icon', name: 'search' %}</a>
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="icon-button icon-account" href="{{ routes.account_url }}" aria-label="{{ 'customer.account.title' | t }}">{% render 'icon', name: 'account' %}</a>
+      {%- endif -%}
+      <a class="icon-button" href="{{ routes.cart_url }}" aria-label="{{ 'cart.title' | t }} ({{ cart.item_count }})">
+        {% render 'icon', name: 'cart' %}
+        {%- if cart.item_count > 0 -%}<span class="cart-count" aria-hidden="true">{{ cart.item_count }}</span>{%- endif -%}
+      </a>
+      <button class="icon-button menu-toggle" type="button" data-menu-toggle aria-controls="mobile-nav" aria-expanded="false" aria-label="{{ 'general.menu' | t }}">{% render 'icon', name: 'menu' %}</button>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav">
+    <button class="icon-button" type="button" data-menu-toggle aria-controls="mobile-nav" aria-expanded="false" aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+    <ul>
+      {%- for link in section.settings.menu.links -%}
+        <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+      {%- endfor -%}
+    </ul>
+    {%- if section.settings.mobile_cta_label != blank -%}
+      <p style="margin-top:32px"><a class="button button--full" href="{{ section.settings.mobile_cta_link | default: routes.all_products_collection_url }}">{{ section.settings.mobile_cta_label }}</a></p>
+    {%- endif -%}
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "En-tête",
+  "class": "section-header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Laissez vide pour utiliser le soleil Lueur + le nom de la boutique." },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "text", "id": "mobile_cta_label", "label": "Bouton du menu mobile", "default": "Commander Lueur" },
+    { "type": "url", "id": "mobile_cta_link", "label": "Lien du bouton mobile" }
+  ]
+}
+{% endschema %}

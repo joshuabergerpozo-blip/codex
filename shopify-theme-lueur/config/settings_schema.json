@@ -1,0 +1,37 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Lueur",
+    "theme_version": "1.0.0",
+    "theme_author": "Lueur",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "Couleurs",
+    "settings": [
+      { "type": "paragraph", "content": "Une palette solaire, du rouge de l'aube au jaune du plein jour." },
+      { "type": "color", "id": "color_sun", "label": "Orange soleil (boutons, accents)", "default": "#FF7A2F" },
+      { "type": "color", "id": "color_sun_deep", "label": "Orange profond (survol, prix)", "default": "#E2551B" },
+      { "type": "color", "id": "color_apricot", "label": "Abricot", "default": "#FFB26B" },
+      { "type": "color", "id": "color_peach", "label": "Pêche (fonds doux)", "default": "#FFE8D4" },
+      { "type": "color", "id": "color_cream", "label": "Crème (fond principal)", "default": "#FFF7EE" },
+      { "type": "color", "id": "color_cocoa", "label": "Cacao (pied de page, badges)", "default": "#4A1E0E" },
+      { "type": "color", "id": "color_night", "label": "Nuit (sections sombres)", "default": "#231733" },
+      { "type": "color", "id": "color_text", "label": "Texte", "default": "#5A2A17" },
+      { "type": "color", "id": "color_heading", "label": "Titres", "default": "#4A1E0E" }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      { "type": "image_picker", "id": "favicon", "label": "Image", "info": "32 × 32 px recommandé" }
+    ]
+  },
+  {
+    "name": "Panier",
+    "settings": [
+      { "type": "checkbox", "id": "cart_note", "label": "Activer la note de commande", "default": false }
+    ]
+  }
+]

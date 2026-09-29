@@ -1,0 +1,52 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "d1": { "type": "collapsible", "settings": { "title": "Description", "content": "", "use_description": true, "open": true } },
+        "d2": { "type": "collapsible", "settings": { "title": "Dans la boîte", "content": "<p>Votre réveil Lueur, un câble USB-C avec adaptateur secteur, un guide de démarrage illustré… et la promesse de matins plus doux.</p>", "use_description": false, "open": false } },
+        "d3": { "type": "collapsible", "settings": { "title": "Caractéristiques", "content": "<ul><li>Aube et crépuscule réglables de 10 à 60 min</li><li>20 niveaux de luminosité, 7 sons naturels + radio FM</li><li>2 alarmes indépendantes, répétition douce</li><li>Écran à atténuation automatique</li><li>Alimentation USB-C</li></ul>", "use_description": false, "open": false } },
+        "d4": { "type": "collapsible", "settings": { "title": "Livraison & retours", "content": "<p>Commandé avant 14 h, expédié le jour même. Livraison offerte en 48 h en France métropolitaine. 100 nuits pour changer d'avis, retour pris en charge.</p>", "use_description": false, "open": false } }
+      },
+      "block_order": ["d1", "d2", "d3", "d4"],
+      "settings": {
+        "eyebrow": "Réveil simulateur d'aube",
+        "rating_text": "4,8/5 · avis clients vérifiés",
+        "lede": "<p>Le réveil qui fait lever le soleil dans votre chambre. Une aube de 10 à 60 minutes, des sons de la nature et un crépuscule pour vous endormir sans écran.</p>",
+        "stock_text": "En stock · expédié sous 24 h",
+        "button_label": "Ajouter au panier",
+        "show_dynamic_checkout": true,
+        "sticky_bar": true,
+        "reassurance_1": "Livraison offerte en 48 h",
+        "reassurance_2": "100 nuits pour l'essayer",
+        "reassurance_3": "Garantie 2 ans",
+        "reassurance_4": "SAV basé en France"
+      }
+    },
+    "film": {
+      "type": "motion-video",
+      "settings": {
+        "eyebrow": "24 secondes pour comprendre",
+        "title": "Votre nouveau matin, <em>en accéléré</em>.",
+        "text": "<p>De la nuit noire au plein soleil, en 24 secondes.</p>",
+        "style": "night"
+      }
+    },
+    "steps": {
+      "type": "sunrise-steps",
+      "blocks": {
+        "st1": { "type": "step", "settings": { "time": "−30", "tag": "min · rouge profond", "title": "La nuit s'éclaircit", "text": "Une lueur rouge, à peine perceptible, traverse vos paupières. Votre cerveau commence doucement à freiner la mélatonine." } },
+        "st2": { "type": "step", "settings": { "time": "−15", "tag": "min · orange ambré", "title": "Le corps se prépare", "text": "La lumière gagne en intensité. Votre sommeil s'allège naturellement, sans la moindre brutalité." } },
+        "st3": { "type": "step", "settings": { "time": "0", "tag": "min · jaune soleil", "title": "Vous ouvrez les yeux", "text": "Pleine lumière et chant d'oiseaux. Reposé, lucide, prêt." } }
+      },
+      "block_order": ["st1", "st2", "st3"],
+      "settings": {
+        "eyebrow": "Comment ça marche",
+        "title": "30 minutes pour <em>réveiller</em> votre horloge interne.",
+        "text": ""
+      }
+    },
+    "promise": { "type": "promise", "settings": {} }
+  },
+  "order": ["main", "film", "steps", "promise"]
+}

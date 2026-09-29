@@ -1,0 +1,161 @@
+{
+  "accessibility": {
+    "skip_to_content": "Aller au contenu"
+  },
+  "general": {
+    "main_menu": "Menu principal",
+    "menu": "Menu",
+    "close": "Fermer",
+    "search": "Rechercher",
+    "yes": "Oui",
+    "no": "Non",
+    "pagination": "Pagination",
+    "payment_methods": "Moyens de paiement acceptés",
+    "rating": "Note : {{ rating }} sur 5"
+  },
+  "sections": {
+    "hero": {
+      "image_alt": "Réveil simulateur d'aube Lueur allumé sur une table de chevet"
+    },
+    "video": {
+      "play": "Lire la vidéo",
+      "pause": "Mettre la vidéo en pause"
+    },
+    "comparison": {
+      "feature": "Critère"
+    },
+    "featured_product": {
+      "demo_title": "Lueur — Réveil simulateur d'aube",
+      "demo_alt": "Réveil simulateur d'aube Lueur"
+    }
+  },
+  "products": {
+    "product": {
+      "save": "−{{ amount }}",
+      "tax_note": "TVA incluse · Livraison offerte",
+      "quantity": "Quantité",
+      "increase": "Augmenter la quantité",
+      "decrease": "Diminuer la quantité",
+      "adding": "Ajout en cours…",
+      "sold_out": "Bientôt de retour",
+      "error": "Oups, l'ajout au panier n'a pas fonctionné. Réessayez.",
+      "show_image": "Afficher l'image {{ index }}"
+    }
+  },
+  "collections": {
+    "label": "Collection",
+    "all": "Toutes nos collections",
+    "empty": "Aucun produit ici pour le moment."
+  },
+  "cart": {
+    "title": "Votre panier",
+    "empty": "Votre panier est encore dans le noir.",
+    "continue": "Découvrir Lueur",
+    "remove": "Retirer",
+    "note": "Un mot pour nous ?",
+    "subtotal": "Sous-total",
+    "taxes_note": "TVA incluse. Frais de port calculés à l'étape suivante.",
+    "checkout": "Passer commande",
+    "update": "Mettre à jour",
+    "free_shipping_remaining": "Plus que {{ amount }} pour la livraison offerte ☀️",
+    "free_shipping_reached": "Bonne nouvelle : la livraison vous est offerte ☀️"
+  },
+  "contact": {
+    "name": "Nom",
+    "email": "E-mail",
+    "message": "Message",
+    "send": "Envoyer",
+    "success": "Merci ! Nous vous répondons en moins de 24 h."
+  },
+  "errors": {
+    "not_found_title": "Cette page dort encore.",
+    "not_found_text": "Impossible de trouver ce que vous cherchez. Revenons à la lumière.",
+    "back_home": "Retour à l'accueil"
+  },
+  "search": {
+    "placeholder": "Que cherchez-vous ?",
+    "results_count": {
+      "one": "{{ count }} résultat pour « {{ terms }} »",
+      "other": "{{ count }} résultats pour « {{ terms }} »"
+    }
+  },
+  "blogs": {
+    "label": "Le journal",
+    "back": "Retour à {{ title }}"
+  },
+  "newsletter": {
+    "label": "Votre adresse e-mail",
+    "success": "C'est noté ! Votre guide arrive dans votre boîte mail."
+  },
+  "password": {
+    "notify": "Me prévenir",
+    "owner": "Vous êtes le propriétaire ?",
+    "password": "Mot de passe",
+    "enter": "Entrer"
+  },
+  "gift_card": {
+    "title": "Votre carte cadeau",
+    "expired": "Cette carte cadeau a expiré.",
+    "expires_on": "Valable jusqu'au {{ date }}",
+    "shop": "Aller à la boutique",
+    "wallet": "Ajouter à Apple Wallet"
+  },
+  "customer": {
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "password_confirm": "Confirmer le mot de passe",
+    "first_name": "Prénom",
+    "last_name": "Nom",
+    "login": {
+      "title": "Connexion",
+      "submit": "Se connecter",
+      "guest": "Continuer en tant qu'invité"
+    },
+    "register": {
+      "title": "Créer un compte",
+      "submit": "Créer mon compte"
+    },
+    "recover": {
+      "title": "Mot de passe oublié ?",
+      "submit": "Recevoir un lien",
+      "success": "Un e-mail vient de vous être envoyé."
+    },
+    "activate": {
+      "title": "Activer votre compte",
+      "submit": "Activer"
+    },
+    "reset": {
+      "title": "Nouveau mot de passe",
+      "submit": "Enregistrer"
+    },
+    "account": {
+      "title": "Mon compte",
+      "hello": "Bonjour {{ name }} ☀️",
+      "logout": "Se déconnecter",
+      "orders": "Mes commandes",
+      "no_orders": "Vous n'avez pas encore passé de commande."
+    },
+    "order": {
+      "title": "Commande {{ name }}",
+      "number": "Commande",
+      "date": "Date",
+      "status": "Statut",
+      "total": "Total",
+      "product": "Produit",
+      "quantity": "Quantité",
+      "shipping_address": "Adresse de livraison"
+    },
+    "addresses": {
+      "title": "Mes adresses",
+      "default": "Adresse par défaut",
+      "delete": "Supprimer",
+      "add": "Ajouter une adresse",
+      "address1": "Adresse",
+      "zip": "Code postal",
+      "city": "Ville",
+      "country": "Pays",
+      "phone": "Téléphone",
+      "set_default": "Définir comme adresse par défaut"
+    }
+  }
+}

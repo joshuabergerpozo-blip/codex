@@ -1,0 +1,211 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Réveil simulateur d'aube",
+        "title": "Et si demain, c'était le <em>soleil</em> qui vous réveillait ?",
+        "text": "<p>Lueur fait lever une aube dans votre chambre 30 minutes avant votre réveil. Votre corps sort du sommeil à son rythme : plus de sursaut, plus de brouillard. Juste l'envie de commencer la journée.</p>",
+        "button_label": "Je veux des matins doux",
+        "button_link": "",
+        "video_label": "Voir le film (24 s)",
+        "proof": "4,8/5 · des milliers de matins transformés",
+        "badge_1": "Aube en 30 min",
+        "badge_2": "☀️ 100 nuits d'essai"
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "blocks": {
+        "m1": { "type": "item", "settings": { "text": "Aube progressive de 10 à 60 min" } },
+        "m2": { "type": "item", "settings": { "text": "7 sons de la nature" } },
+        "m3": { "type": "item", "settings": { "text": "Crépuscule pour s'endormir" } },
+        "m4": { "type": "item", "settings": { "text": "20 niveaux de lumière" } },
+        "m5": { "type": "item", "settings": { "text": "100 nuits pour l'essayer" } }
+      },
+      "block_order": ["m1", "m2", "m3", "m4", "m5"],
+      "settings": { "label": "Les points forts de Lueur", "speed": 45 }
+    },
+    "pains": {
+      "type": "pains",
+      "blocks": {
+        "p1": { "type": "pain", "settings": { "emoji": "⏰", "title": "Le sursaut", "text": "Tiré du sommeil par une alarme, votre corps passe en mode alerte avant même d'ouvrir les yeux. Mauvais départ garanti." } },
+        "p2": { "type": "pain", "settings": { "emoji": "😴", "title": "Le snooze sans fin", "text": "« Encore 5 minutes. » Trois fois. Ces micro-sommeils hachés vous laissent plus fatigué qu'avant de les commencer." } },
+        "p3": { "type": "pain", "settings": { "emoji": "🌙", "title": "L'hiver, dans le noir", "text": "D'octobre à mars, on se lève avant le soleil. Sans lumière, votre horloge interne ne sait tout simplement pas qu'il fait jour." } }
+      },
+      "block_order": ["p1", "p2", "p3"],
+      "settings": {
+        "eyebrow": "Le problème",
+        "title": "Votre réveil vous <em>veut du mal</em>.",
+        "text": "<p>Chaque matin, la même scène : un bip strident arrache votre corps au sommeil. Le cœur s'emballe, l'alerte est donnée… et vous traînez ce brouillard jusqu'à midi. Ce n'est pas un manque de volonté. C'est un réveil qui va à contre-courant de votre biologie.</p>",
+        "bridge": "Pendant des millénaires, l'humain s'est réveillé avec la lumière du jour. Lueur vous la rend, même au cœur de l'hiver."
+      }
+    },
+    "film": {
+      "type": "motion-video",
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "value": "30 min", "label": "d'aube progressive" } },
+        "s2": { "type": "stat", "settings": { "value": "0 bip", "label": "strident au réveil" } },
+        "s3": { "type": "stat", "settings": { "value": "100 nuits", "label": "pour l'adopter" } }
+      },
+      "block_order": ["s1", "s2", "s3"],
+      "settings": {
+        "eyebrow": "24 secondes pour comprendre",
+        "title": "Votre nouveau matin, <em>en accéléré</em>.",
+        "text": "<p>De la nuit noire au plein soleil : voici ce qui se passe dans votre chambre pendant les 30 minutes qui précèdent votre réveil.</p>",
+        "style": "night"
+      }
+    },
+    "steps": {
+      "type": "sunrise-steps",
+      "blocks": {
+        "st1": { "type": "step", "settings": { "time": "−30", "tag": "min · rouge profond", "title": "La nuit s'éclaircit", "text": "Une lueur rouge, à peine perceptible, traverse vos paupières. Votre cerveau commence doucement à freiner la mélatonine, l'hormone du sommeil." } },
+        "st2": { "type": "step", "settings": { "time": "−15", "tag": "min · orange ambré", "title": "Le corps se prépare", "text": "La lumière gagne en intensité. Votre sommeil s'allège naturellement et votre organisme se met en route, sans la moindre brutalité." } },
+        "st3": { "type": "step", "settings": { "time": "0", "tag": "min · jaune soleil", "title": "Vous ouvrez les yeux", "text": "Pleine lumière et chant d'oiseaux. Souvent, vous êtes réveillé avant même le son. Reposé, lucide, prêt." } }
+      },
+      "block_order": ["st1", "st2", "st3"],
+      "settings": {
+        "eyebrow": "Comment ça marche",
+        "title": "30 minutes pour <em>réveiller</em> votre horloge interne.",
+        "text": "<p>La lumière est le signal le plus puissant que reçoit votre rythme biologique. Lueur reproduit les couleurs d'un vrai lever de soleil, du rouge profond au jaune doré.</p>"
+      }
+    },
+    "features": {
+      "type": "image-with-text",
+      "blocks": {
+        "c1": { "type": "check", "settings": { "title": "Aube réglable de 10 à 60 min", "text": "Du rouge profond au jaune doré, sur 20 niveaux d'intensité." } },
+        "c2": { "type": "check", "settings": { "title": "7 sons de la nature", "text": "Chants d'oiseaux, vagues, pluie fine, forêt… ou votre radio FM préférée." } },
+        "c3": { "type": "check", "settings": { "title": "Un écran qui sait se faire oublier", "text": "L'affichage s'atténue automatiquement la nuit pour ne rien troubler." } },
+        "c4": { "type": "check", "settings": { "title": "Aussi une lampe de chevet", "text": "Une lumière chaude et tamisable pour vos soirées lecture." } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4"],
+      "settings": {
+        "fallback_image": "lueur-detail.jpg",
+        "fallback_alt": "Réveil Lueur affichant 6 h 30, lumière dégradée du rouge à l'orange",
+        "reverse": false,
+        "style": "peach",
+        "eyebrow": "Pensé dans les moindres détails",
+        "title": "Tout pour bien vous réveiller. <em>Rien</em> pour vous déranger.",
+        "text": "<p>Lueur a été conçu pour se faire discret toute la nuit et briller au bon moment. Pas d'appli obligatoire, pas de tic-tac, pas de lumière bleue agressive.</p>",
+        "button_label": "Découvrir Lueur",
+        "button_link": ""
+      }
+    },
+    "evening": {
+      "type": "image-with-text",
+      "blocks": {
+        "e1": { "type": "check", "settings": { "title": "Crépuscule de 10 à 60 min", "text": "La lumière décline lentement, du doré à l'ambre, puis s'éteint d'elle-même." } },
+        "e2": { "type": "check", "settings": { "title": "Des sons qui apaisent", "text": "Pluie, vagues ou bruit blanc pour couvrir les bruits de la ville." } },
+        "e3": { "type": "check", "settings": { "title": "Votre téléphone dort ailleurs", "text": "Votre réveil n'est plus votre smartphone. Vos nuits vous diront merci." } }
+      },
+      "block_order": ["e1", "e2", "e3"],
+      "settings": {
+        "fallback_image": "lueur-evening.jpg",
+        "fallback_alt": "Lecture au lit à la lumière chaude d'une lampe ronde",
+        "reverse": true,
+        "style": "night",
+        "eyebrow": "Le soir aussi",
+        "title": "Le soir, Lueur <em>éteint le jour</em> avec vous.",
+        "text": "<p>Le mode crépuscule fait l'inverse de l'aube. La lumière baisse doucement, et votre esprit comprend qu'il est temps de ralentir. Posez le téléphone, ouvrez un livre, laissez faire.</p>",
+        "button_label": "Offrez-vous ce rituel",
+        "button_link": ""
+      }
+    },
+    "comparison": {
+      "type": "comparison",
+      "blocks": {
+        "r1": { "type": "row", "settings": { "feature": "Réveil progressif par la lumière", "has_us": true, "has_a": false, "has_b": false } },
+        "r2": { "type": "row", "settings": { "feature": "Sons naturels qui montent en douceur", "has_us": true, "has_a": false, "has_b": true } },
+        "r3": { "type": "row", "settings": { "feature": "Crépuscule pour s'endormir", "has_us": true, "has_a": false, "has_b": false } },
+        "r4": { "type": "row", "settings": { "feature": "Zéro écran ni notification au lit", "has_us": true, "has_a": true, "has_b": false } },
+        "r5": { "type": "row", "settings": { "feature": "Efficace même en plein hiver", "has_us": true, "has_a": false, "has_b": false } }
+      },
+      "block_order": ["r1", "r2", "r3", "r4", "r5"],
+      "settings": {
+        "eyebrow": "Le match",
+        "title": "Pourquoi Lueur change <em>vraiment</em> vos matins.",
+        "col_us": "Lueur",
+        "col_a": "Réveil classique",
+        "col_b": "Smartphone"
+      }
+    },
+    "reviews": {
+      "type": "testimonials",
+      "blocks": {
+        "v1": { "type": "review", "settings": { "rating": 5, "headline": "Je me réveille avant la sonnerie", "quote": "<p>Je me lève à 5 h toute l'année. Depuis Lueur, plus ce coup au cœur quand l'alarme sonne : la plupart du temps, j'ouvre les yeux avant. Je ne reviendrai pas en arrière.</p>", "author": "Camille R.", "context": "Exemple d'avis · à remplacer" } },
+        "v2": { "type": "review", "settings": { "rating": 5, "headline": "L'hiver n'est plus une épreuve", "quote": "<p>Novembre, c'était mon cauchemar : nuit noire au lever, moral en berne. Avec cette lumière le matin, j'ai l'impression que le printemps arrive plus tôt.</p>", "author": "Mathieu D.", "context": "Exemple d'avis · à remplacer" } },
+        "v3": { "type": "review", "settings": { "rating": 5, "headline": "Même mon ado se lève sans râler", "quote": "<p>Mon fils ne se levait qu'au troisième réveil. Maintenant, il descend petit-déjeuner tout seul. Honnêtement, le meilleur achat de l'année.</p>", "author": "Sophie L.", "context": "Exemple d'avis · à remplacer" } }
+      },
+      "block_order": ["v1", "v2", "v3"],
+      "settings": {
+        "eyebrow": "Ils ont changé de matin",
+        "title": "Des réveils qui <em>changent les journées</em>.",
+        "summary": "Note moyenne 4,8/5 sur nos avis clients vérifiés"
+      }
+    },
+    "buy": {
+      "type": "featured-product",
+      "blocks": {
+        "b1": { "type": "collapsible", "settings": { "title": "Dans la boîte", "content": "<p>Votre réveil Lueur, un câble USB-C avec adaptateur secteur, un guide de démarrage illustré… et la promesse de matins plus doux.</p>", "use_description": false, "open": false } },
+        "b2": { "type": "collapsible", "settings": { "title": "Caractéristiques", "content": "<ul><li>Aube et crépuscule réglables de 10 à 60 min</li><li>20 niveaux de luminosité, 7 sons naturels + radio FM</li><li>2 alarmes indépendantes, répétition douce</li><li>Écran à atténuation automatique</li><li>Alimentation USB-C</li></ul>", "use_description": false, "open": false } },
+        "b3": { "type": "collapsible", "settings": { "title": "Livraison & retours", "content": "<p>Commandé avant 14 h, expédié le jour même. Livraison offerte en 48 h en France métropolitaine. 100 nuits pour changer d'avis, retour pris en charge.</p>", "use_description": false, "open": false } }
+      },
+      "block_order": ["b1", "b2", "b3"],
+      "settings": {
+        "product": "",
+        "eyebrow": "Offre de lancement",
+        "rating_text": "4,8/5 · avis clients vérifiés",
+        "lede": "<p>Le réveil qui fait lever le soleil dans votre chambre. Une aube de 10 à 60 minutes, des sons de la nature et un crépuscule pour vous endormir sans écran.</p>",
+        "stock_text": "En stock · expédié sous 24 h",
+        "button_label": "Je commande mon Lueur",
+        "show_dynamic_checkout": true,
+        "sticky_bar": false,
+        "reassurance_1": "Livraison offerte en 48 h",
+        "reassurance_2": "100 nuits pour l'essayer",
+        "reassurance_3": "Garantie 2 ans",
+        "reassurance_4": "SAV basé en France"
+      }
+    },
+    "promise": {
+      "type": "promise",
+      "settings": {
+        "seal_value": "100",
+        "seal_label": "nuits",
+        "title": "Essayez Lueur pendant 100 nuits.",
+        "text": "<p>Il faut quelques matins pour sentir la différence. Alors prenez votre temps. Si Lueur ne transforme pas vos réveils, renvoyez-le : on vous rembourse, sans une seule question.</p>",
+        "button_label": "Commencer mon essai",
+        "button_link": ""
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": { "type": "question", "settings": { "question": "Est-ce que ça marche si j'ai le sommeil lourd ?", "answer": "<p>Oui. La lumière agit en amont : pendant 30 minutes, elle allège progressivement votre sommeil. Au moment du réveil, vous êtes déjà tout proche de l'éveil. Et à l'heure choisie, un son naturel prend le relais, avec un volume réglable.</p>" } },
+        "q2": { "type": "question", "settings": { "question": "Je dors avec des rideaux occultants. Est-ce un problème ?", "answer": "<p>Au contraire ! Lueur devient la seule source de lumière de votre chambre, et n'en est que plus efficace. Placez-le sur votre table de chevet, tourné vers vous, à 30–60 cm de votre visage.</p>" } },
+        "q3": { "type": "question", "settings": { "question": "Nous nous levons à des heures différentes. Comment faire ?", "answer": "<p>Lueur propose deux alarmes indépendantes. Si vos horaires sont très éloignés, l'idéal reste un Lueur de chaque côté du lit : chacun son soleil.</p>" } },
+        "q4": { "type": "question", "settings": { "question": "La lumière est-elle douce pour les yeux ?", "answer": "<p>La lumière est diffuse et monte si progressivement que vos yeux s'y habituent naturellement. Le mode crépuscule privilégie des teintes chaudes, idéales avant de dormir.</p>" } },
+        "q5": { "type": "question", "settings": { "question": "Comment fonctionne l'essai de 100 nuits ?", "answer": "<p>Testez Lueur chez vous pendant 100 nuits. S'il ne vous convainc pas, écrivez-nous : nous organisons le retour et vous remboursons intégralement.</p>" } },
+        "q6": { "type": "question", "settings": { "question": "Quels sont les délais de livraison ?", "answer": "<p>Commandé avant 14 h, expédié le jour même. Livraison offerte en 48 h en France métropolitaine, avec suivi.</p>" } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"],
+      "settings": {
+        "eyebrow": "Vos questions",
+        "title": "Tout savoir <em>avant de dormir</em>.",
+        "text": "",
+        "open_first": true,
+        "peach": true
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "Offert",
+        "title": "Le guide des <em>matins doux</em>.",
+        "text": "<p>7 rituels simples pour vous lever reposé, même quand il fait encore nuit. Directement dans votre boîte mail.</p>",
+        "button_label": "Je le veux",
+        "note": "Un e-mail doux par semaine, maximum. Désinscription en un clic."
+      }
+    }
+  },
+  "order": ["hero", "marquee", "pains", "film", "steps", "features", "evening", "comparison", "reviews", "buy", "promise", "faq", "newsletter"]
+}

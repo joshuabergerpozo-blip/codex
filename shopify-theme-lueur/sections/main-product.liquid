@@ -1,0 +1,62 @@
+<section class="section section--cream" style="padding-top: clamp(32px, 5vw, 64px)">
+  <div class="page-width">
+    {% render 'product-buy-box', product: product, section: section, heading_tag: 'h1' %}
+  </div>
+</section>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "url": {{ request.origin | append: product.url | json }},
+    {%- if product.featured_media -%}"image": [{{ product.featured_media | image_url: width: 1200 | prepend: 'https:' | json }}],{%- endif -%}
+    "description": {{ product.description | strip_html | json }},
+    "brand": { "@type": "Brand", "name": {{ product.vendor | json }} },
+    "offers": [
+      {%- for variant in product.variants -%}
+        {
+          "@type": "Offer",
+          "sku": {{ variant.sku | json }},
+          "availability": "http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+          "price": {{ variant.price | divided_by: 100.00 | json }},
+          "priceCurrency": {{ cart.currency.iso_code | json }},
+          "url": {{ request.origin | append: variant.url | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Fiche produit",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Surtitre", "default": "Réveil simulateur d'aube" },
+    { "type": "text", "id": "rating_text", "label": "Texte de notation", "default": "4,8/5 · avis clients vérifiés", "info": "Affichez uniquement des chiffres issus de vos avis réels." },
+    { "type": "richtext", "id": "lede", "label": "Accroche", "default": "<p>Le réveil qui fait lever le soleil dans votre chambre. Une aube de 10 à 60 minutes, des sons de la nature et un crépuscule pour vous endormir sans écran.</p>" },
+    { "type": "text", "id": "stock_text", "label": "Message de disponibilité", "default": "En stock · expédié sous 24 h" },
+    { "type": "text", "id": "button_label", "label": "Texte du bouton", "default": "Ajouter au panier" },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Boutons de paiement accéléré", "default": true },
+    { "type": "checkbox", "id": "sticky_bar", "label": "Barre d'achat collante sur mobile", "default": true },
+    { "type": "header", "content": "Réassurance" },
+    { "type": "text", "id": "reassurance_1", "label": "Élément 1", "default": "Livraison offerte en 48 h" },
+    { "type": "text", "id": "reassurance_2", "label": "Élément 2", "default": "100 nuits pour l'essayer" },
+    { "type": "text", "id": "reassurance_3", "label": "Élément 3", "default": "Garantie 2 ans" },
+    { "type": "text", "id": "reassurance_4", "label": "Élément 4", "default": "SAV basé en France" }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "collapsible",
+      "name": "Onglet repliable",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre", "default": "Caractéristiques" },
+        { "type": "richtext", "id": "content", "label": "Contenu" },
+        { "type": "checkbox", "id": "use_description", "label": "Afficher la description du produit", "default": false },
+        { "type": "checkbox", "id": "open", "label": "Ouvert par défaut", "default": false }
+      ]
+    }
+  ]
+}
+{% endschema %}

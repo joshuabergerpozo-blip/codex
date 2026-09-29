@@ -1,0 +1,51 @@
+<section class="section section--cream">
+  <div class="page-width">
+    <div class="section-head reveal">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.title }}</h2>
+    </div>
+    {%- if section.settings.summary != blank -%}
+      <div class="reviews__summary reveal">{% render 'stars', rating: 5 %}<span>{{ section.settings.summary }}</span></div>
+    {%- endif -%}
+    <div class="reviews">
+      {%- for block in section.blocks -%}
+        <figure class="review reveal" style="--delay: {{ forloop.index0 | times: 0.1 }}s; margin:0" {{ block.shopify_attributes }}>
+          {% render 'stars', rating: block.settings.rating %}
+          <blockquote>
+            <strong>« {{ block.settings.headline }} »</strong>
+            {{ block.settings.quote }}
+          </blockquote>
+          <figcaption>
+            <span class="review__avatar" aria-hidden="true">{{ block.settings.author | slice: 0 }}</span>
+            <span>{{ block.settings.author }}<small>{{ block.settings.context }}</small></span>
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Témoignages",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Surtitre", "default": "Ils ont changé de matin" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "« Je ne pensais pas qu'un réveil pouvait <em>changer mes journées</em>. »" },
+    { "type": "text", "id": "summary", "label": "Résumé des avis", "default": "Note moyenne 4,8/5 sur nos avis clients vérifiés", "info": "Affichez uniquement des chiffres issus de vos avis réels." }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Note", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "headline", "label": "Accroche", "default": "Fini le brouillard du matin" },
+        { "type": "richtext", "id": "quote", "label": "Avis", "default": "<p>Collez ici un avis client réel.</p>" },
+        { "type": "text", "id": "author", "label": "Auteur", "default": "Prénom N." },
+        { "type": "text", "id": "context", "label": "Contexte", "default": "Client vérifié" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Témoignages", "blocks": [{ "type": "review" }, { "type": "review" }, { "type": "review" }] }]
+}
+{% endschema %}

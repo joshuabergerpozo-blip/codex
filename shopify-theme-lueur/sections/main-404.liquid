@@ -1,0 +1,12 @@
+<section class="section section--peach" style="text-align:center">
+  <div class="page-width">
+    <div style="width:160px; margin:0 auto 24px">{% render 'sun-mark', class: 'sun-404' %}</div>
+    <h1 class="h2">{{ 'errors.not_found_title' | t }}</h1>
+    <p>{{ 'errors.not_found_text' | t }}</p>
+    <a class="button" href="{{ routes.root_url }}">{{ 'errors.back_home' | t }}</a>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Page 404" }
+{% endschema %}

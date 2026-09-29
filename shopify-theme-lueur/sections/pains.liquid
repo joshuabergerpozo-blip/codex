@@ -1,0 +1,52 @@
+<section class="section section--peach">
+  <div class="page-width">
+    <div class="section-head reveal">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.title }}</h2>
+      {{ section.settings.text }}
+    </div>
+    <div class="pains">
+      {%- for block in section.blocks -%}
+        <article class="pain reveal" style="--delay: {{ forloop.index0 | times: 0.1 }}s" {{ block.shopify_attributes }}>
+          <div class="pain__emoji" aria-hidden="true">{{ block.settings.emoji }}</div>
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.bridge != blank -%}
+      <p class="pains__bridge reveal">{{ section.settings.bridge }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Problème",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Surtitre", "default": "Le problème" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Votre réveil vous <em>veut du mal</em>." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Chaque matin, la même scène&nbsp;: un bip strident arrache votre corps au sommeil. Le cœur s'emballe, l'alerte est donnée… et vous traînez ce brouillard jusqu'à midi. Ce n'est pas un manque de volonté. C'est un réveil qui va à contre-courant de votre biologie.</p>" },
+    { "type": "inline_richtext", "id": "bridge", "label": "Phrase de transition", "default": "Pendant des millénaires, l'humain s'est réveillé avec la lumière du jour. Lueur vous la rend, même en plein hiver." }
+  ],
+  "blocks": [
+    {
+      "type": "pain",
+      "name": "Irritant",
+      "settings": [
+        { "type": "text", "id": "emoji", "label": "Émoji", "default": "⏰" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Le sursaut" },
+        { "type": "textarea", "id": "text", "label": "Texte", "default": "Tiré du sommeil par une alarme, votre corps passe en mode alerte avant même d'ouvrir les yeux." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Problème",
+    "blocks": [
+      { "type": "pain", "settings": { "emoji": "⏰", "title": "Le sursaut", "text": "Tiré du sommeil par une alarme, votre corps passe en mode alerte avant même d'ouvrir les yeux. Mauvais départ garanti." } },
+      { "type": "pain", "settings": { "emoji": "😴", "title": "Le snooze sans fin", "text": "« Encore 5 minutes. » Trois fois. Ces micro-sommeils hachés vous laissent plus fatigué qu'avant." } },
+      { "type": "pain", "settings": { "emoji": "🌙", "title": "L'hiver, dans le noir", "text": "D'octobre à mars, on se lève avant le soleil. Sans lumière, votre horloge interne ne sait tout simplement pas qu'il fait jour." } }
+    ]
+  }]
+}
+{% endschema %}

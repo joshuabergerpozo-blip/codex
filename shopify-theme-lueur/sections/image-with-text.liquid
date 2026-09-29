@@ -1,0 +1,75 @@
+{%- liquid
+  case section.settings.style
+    when 'night'
+      assign bg = 'section--night'
+    when 'peach'
+      assign bg = 'section--peach'
+    else
+      assign bg = 'section--cream'
+  endcase
+-%}
+<section class="section {{ bg }}">
+  <div class="page-width split {% if section.settings.reverse %}split--reverse{% endif %}">
+    <div class="split__media reveal">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '500, 800, 1200', sizes: '(min-width: 860px) 45vw, 90vw' }}
+      {%- else -%}
+        <img src="{{ section.settings.fallback_image | asset_url }}" alt="{{ section.settings.fallback_alt | escape }}" loading="lazy" width="1200" height="1500">
+      {%- endif -%}
+    </div>
+    <div class="split__text reveal" style="--delay:.12s">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.title }}</h2>
+      {{ section.settings.text }}
+      {%- if section.blocks.size > 0 -%}
+        <ul class="checks">
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}><span><strong>{{ block.settings.title }}</strong>{{ block.settings.text }}</span></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a class="button" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image et texte",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    {
+      "type": "select", "id": "fallback_image", "label": "Image de démonstration", "info": "Utilisée tant qu'aucune image n'est choisie.",
+      "options": [
+        { "value": "lueur-wake-up.jpg", "label": "Réveil au lit" },
+        { "value": "lueur-detail.jpg", "label": "Détail produit" },
+        { "value": "lueur-evening.jpg", "label": "Lecture du soir" },
+        { "value": "lueur-morning-tea.jpg", "label": "Thé du matin" },
+        { "value": "lueur-bedside.jpg", "label": "Table de chevet" }
+      ],
+      "default": "lueur-detail.jpg"
+    },
+    { "type": "text", "id": "fallback_alt", "label": "Texte alternatif de l'image de démonstration", "default": "Réveil Lueur allumé sur une table de chevet" },
+    { "type": "checkbox", "id": "reverse", "label": "Image à droite", "default": false },
+    { "type": "select", "id": "style", "label": "Ambiance", "options": [{ "value": "cream", "label": "Crème" }, { "value": "peach", "label": "Pêche" }, { "value": "night", "label": "Nuit" }], "default": "cream" },
+    { "type": "text", "id": "eyebrow", "label": "Surtitre" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Pensé pour vos matins." },
+    { "type": "richtext", "id": "text", "label": "Texte" },
+    { "type": "text", "id": "button_label", "label": "Bouton" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton" }
+  ],
+  "blocks": [
+    {
+      "type": "check",
+      "name": "Point fort",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre", "default": "Point fort" },
+        { "type": "text", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Image et texte", "blocks": [{ "type": "check" }, { "type": "check" }] }]
+}
+{% endschema %}

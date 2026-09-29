@@ -1,0 +1,64 @@
+<footer class="site-footer">
+  <div class="page-width">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="logo" href="{{ routes.root_url }}">{% render 'sun-mark' %}<span>{{ shop.name }}</span></a>
+        {%- if section.settings.text != blank -%}<div>{{ section.settings.text }}</div>{%- endif -%}
+      </div>
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+          {%- case block.type -%}
+            {%- when 'menu' -%}
+              <p class="footer__title">{{ block.settings.title | default: block.settings.menu.title }}</p>
+              <ul class="footer__links">
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            {%- when 'text' -%}
+              <p class="footer__title">{{ block.settings.title }}</p>
+              <div>{{ block.settings.text }}</div>
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }} · {{ section.settings.baseline }}</span>
+      {%- if section.settings.show_payment -%}
+        <ul class="payment-icons" aria-label="{{ 'general.payment_methods' | t }}">
+          {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pied de page",
+  "class": "section-footer",
+  "settings": [
+    { "type": "richtext", "id": "text", "label": "Texte de marque", "default": "<p>Nous concevons des objets qui respectent votre rythme. Parce qu'une bonne journée commence toujours par un bon réveil.</p>" },
+    { "type": "text", "id": "baseline", "label": "Signature", "default": "Réveillez-vous du bon côté de la lumière." },
+    { "type": "checkbox", "id": "show_payment", "label": "Afficher les moyens de paiement", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Texte",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre", "default": "Une question ?" },
+        { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Notre équipe répond en moins de 24 h, du lundi au samedi.</p>" }
+      ]
+    }
+  ]
+}
+{% endschema %}

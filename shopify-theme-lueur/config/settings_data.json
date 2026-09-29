@@ -1,0 +1,17 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "color_sun": "#FF7A2F",
+      "color_sun_deep": "#E2551B",
+      "color_apricot": "#FFB26B",
+      "color_peach": "#FFE8D4",
+      "color_cream": "#FFF7EE",
+      "color_cocoa": "#4A1E0E",
+      "color_night": "#231733",
+      "color_text": "#5A2A17",
+      "color_heading": "#4A1E0E",
+      "cart_note": false
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{%- if section.blocks.size > 0 -%}
+  <div class="announcement" {{ section.shopify_attributes }}>
+    <div class="announcement__track">
+      {%- for block in section.blocks -%}
+        <p style="margin:0" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{{ block.settings.text }}</a>{%- else -%}{{ block.settings.text }}{%- endif -%}
+        </p>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Barre d'annonce",
+  "class": "section-announcement",
+  "max_blocks": 3,
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Annonce",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texte", "default": "☀️ Livraison offerte en 48 h · 100 nuits pour l'essayer" },
+        { "type": "url", "id": "link", "label": "Lien" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Barre d'annonce", "blocks": [{ "type": "announcement" }] }]
+}
+{% endschema %}

@@ -1,0 +1,19 @@
+<section class="section section--cream">
+  <div class="page-width">
+    <div class="form-card">
+      <h1 class="h3" style="text-align:center">{{ 'customer.register.title' | t }}</h1>
+      {%- form 'create_customer' -%}
+        {%- if form.errors -%}<p class="form-message form-message--error" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
+        <div class="field"><label for="RegisterFirst">{{ 'customer.first_name' | t }}</label><input id="RegisterFirst" name="customer[first_name]" autocomplete="given-name"></div>
+        <div class="field"><label for="RegisterLast">{{ 'customer.last_name' | t }}</label><input id="RegisterLast" name="customer[last_name]" autocomplete="family-name"></div>
+        <div class="field"><label for="RegisterEmail">{{ 'customer.email' | t }}</label><input id="RegisterEmail" type="email" name="customer[email]" autocomplete="email" required></div>
+        <div class="field"><label for="RegisterPassword">{{ 'customer.password' | t }}</label><input id="RegisterPassword" type="password" name="customer[password]" autocomplete="new-password" required></div>
+        <button class="button button--full" type="submit">{{ 'customer.register.submit' | t }}</button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Inscription" }
+{% endschema %}

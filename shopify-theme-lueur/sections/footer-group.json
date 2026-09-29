@@ -1,0 +1,16 @@
+{
+  "type": "footer",
+  "name": "Pied de page",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "m1": { "type": "menu", "settings": { "title": "Boutique", "menu": "main-menu" } },
+        "m2": { "type": "menu", "settings": { "title": "Aide", "menu": "footer" } },
+        "t1": { "type": "text", "settings": { "title": "Une question ?", "text": "<p>Notre équipe répond en moins de 24 h, du lundi au samedi.</p><p>Écrivez-nous depuis la page Contact.</p>" } }
+      },
+      "block_order": ["m1", "m2", "t1"]
+    }
+  },
+  "order": ["footer"]
+}

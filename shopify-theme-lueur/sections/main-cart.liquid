@@ -1,0 +1,77 @@
+<section class="section section--cream">
+  <div class="page-width">
+    <div class="section-head"><h1 class="h2">{{ 'cart.title' | t }}</h1></div>
+    {%- if cart.item_count > 0 -%}
+      {%- liquid
+        assign threshold = section.settings.free_shipping_threshold | times: 100
+        assign remaining = threshold | minus: cart.total_price
+        if threshold > 0
+          assign pct = cart.total_price | times: 100 | divided_by: threshold
+          if pct > 100
+            assign pct = 100
+          endif
+        endif
+      -%}
+      {%- if threshold > 0 -%}
+        <p style="text-align:center; font-weight:800; margin-bottom:0">
+          {%- if remaining > 0 -%}{%- assign remaining_money = remaining | money -%}{{ 'cart.free_shipping_remaining' | t: amount: remaining_money }}{%- else -%}{{ 'cart.free_shipping_reached' | t }}{%- endif -%}
+        </p>
+        <div class="progress" aria-hidden="true"><span style="width: {{ pct }}%"></span></div>
+      {%- endif -%}
+
+      <form action="{{ routes.cart_url }}" method="post" data-cart-form>
+        <div class="cart-items">
+          {%- for item in cart.items -%}
+            <div class="cart-item">
+              {%- if item.image -%}{{ item.image | image_url: width: 240 | image_tag: loading: 'lazy' }}{%- endif -%}
+              <div>
+                <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title }}</a>
+                {%- unless item.product.has_only_default_variant -%}<div style="opacity:.7">{{ item.variant.title }}</div>{%- endunless -%}
+                <div style="font-weight:800; margin-top:6px">{{ item.final_line_price | money }}</div>
+              </div>
+              <div style="display:grid; gap:8px; justify-items:end">
+                <div class="qty">
+                  <button type="button" data-step="-1" aria-label="{{ 'products.product.decrease' | t }}">−</button>
+                  <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="{{ 'products.product.quantity' | t }}">
+                  <button type="button" data-step="1" aria-label="{{ 'products.product.increase' | t }}">+</button>
+                </div>
+                <a href="{{ item.url_to_remove }}" style="font-size:.9rem">{{ 'cart.remove' | t }}</a>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="cart-footer">
+          {%- if settings.cart_note -%}
+            <div class="field" style="flex:1; min-width:260px; max-width:460px">
+              <label for="CartNote">{{ 'cart.note' | t }}</label>
+              <textarea id="CartNote" name="note" rows="3">{{ cart.note }}</textarea>
+            </div>
+          {%- endif -%}
+          <div class="cart-footer__totals">
+            <p style="margin:0; font-weight:800">{{ 'cart.subtotal' | t }}</p>
+            <div class="price" style="justify-content:flex-end; margin-top:0"><span class="price__current">{{ cart.total_price | money_with_currency }}</span></div>
+            <p class="price__note">{{ 'cart.taxes_note' | t }}</p>
+            <button class="button button--full" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button>
+            <noscript><button class="button button--ghost button--full" type="submit" name="update" style="margin-top:10px">{{ 'cart.update' | t }}</button></noscript>
+            {%- if additional_checkout_buttons -%}<div style="margin-top:12px">{{ content_for_additional_checkout_buttons }}</div>{%- endif -%}
+          </div>
+        </div>
+      </form>
+    {%- else -%}
+      <div style="text-align:center">
+        <p>{{ 'cart.empty' | t }}</p>
+        <a class="button" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Panier",
+  "settings": [
+    { "type": "number", "id": "free_shipping_threshold", "label": "Seuil de livraison offerte (en devise de la boutique)", "default": 50, "info": "0 pour masquer la barre de progression." }
+  ]
+}
+{% endschema %}

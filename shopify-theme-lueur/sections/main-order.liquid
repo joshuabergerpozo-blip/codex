@@ -1,0 +1,26 @@
+<section class="section section--cream">
+  <div class="page-width">
+    <p><a href="{{ routes.account_url }}">← {{ 'customer.account.title' | t }}</a></p>
+    <h1 class="h2">{{ 'customer.order.title' | t: name: order.name }}</h1>
+    <p>{{ order.created_at | time_tag: format: 'date_at_time' }}</p>
+    <table class="table">
+      <thead><tr><th scope="col">{{ 'customer.order.product' | t }}</th><th scope="col">{{ 'customer.order.quantity' | t }}</th><th scope="col">{{ 'customer.order.total' | t }}</th></tr></thead>
+      <tbody>
+        {%- for line_item in order.line_items -%}
+          <tr><td>{{ line_item.title | link_to: line_item.product.url }}</td><td>{{ line_item.quantity }}</td><td>{{ line_item.final_line_price | money }}</td></tr>
+        {%- endfor -%}
+      </tbody>
+      <tfoot>
+        <tr><th scope="row" colspan="2">{{ 'customer.order.total' | t }}</th><td>{{ order.total_net_amount | money_with_currency }}</td></tr>
+      </tfoot>
+    </table>
+    {%- if order.shipping_address -%}
+      <h2 class="h3" style="margin-top:32px">{{ 'customer.order.shipping_address' | t }}</h2>
+      {{ order.shipping_address | format_address }}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Commande" }
+{% endschema %}

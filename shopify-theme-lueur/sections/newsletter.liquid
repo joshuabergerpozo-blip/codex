@@ -1,0 +1,33 @@
+<section class="section section--peach">
+  <div class="page-width newsletter reveal">
+    {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+    <h2>{{ section.settings.title }}</h2>
+    {{ section.settings.text }}
+    {%- form 'customer', id: 'newsletter-form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <label class="visually-hidden" for="newsletter-email-{{ section.id }}">{{ 'newsletter.label' | t }}</label>
+      <input id="newsletter-email-{{ section.id }}" type="email" name="contact[email]" autocomplete="email" required placeholder="{{ 'newsletter.label' | t }}">
+      <button class="button" type="submit">{{ section.settings.button_label }}</button>
+      {%- if form.posted_successfully? -%}
+        <p class="form-message form-message--success" role="status" style="position:absolute; left:0; right:0; top:100%">{{ 'newsletter.success' | t }}</p>
+      {%- elsif form.errors -%}
+        <p class="form-message form-message--error" role="alert" style="position:absolute; left:0; right:0; top:100%">{{ form.errors | default_errors }}</p>
+      {%- endif -%}
+    {%- endform -%}
+    <p class="newsletter__note">{{ section.settings.note }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Surtitre", "default": "Offert" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Le guide des <em>matins doux</em>." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>7 rituels simples, validés par des passionnés de sommeil, pour vous lever reposé même quand il fait nuit. Directement dans votre boîte mail.</p>" },
+    { "type": "text", "id": "button_label", "label": "Bouton", "default": "Je le veux" },
+    { "type": "text", "id": "note", "label": "Mention", "default": "Un e-mail doux par semaine, maximum. Désinscription en un clic." }
+  ],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}

@@ -1,0 +1,74 @@
+<section class="section section--peach">
+  <div class="page-width">
+    <div class="section-head reveal">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.title }}</h2>
+    </div>
+    <div class="compare reveal">
+      <table>
+        <caption class="visually-hidden">{{ section.settings.title | strip_html }}</caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">{{ 'sections.comparison.feature' | t }}</span></th>
+            <th scope="col" class="is-us">{{ section.settings.col_us }}</th>
+            <th scope="col">{{ section.settings.col_a }}</th>
+            <th scope="col">{{ section.settings.col_b }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <th scope="row">{{ block.settings.feature }}</th>
+              {%- assign cols = 'us,a,b' | split: ',' -%}
+              {%- for col in cols -%}
+                {%- assign key = 'has_' | append: col -%}
+                <td {% if col == 'us' %}class="is-us"{% endif %}>
+                  {%- if block.settings[key] -%}
+                    <span class="yes" aria-label="{{ 'general.yes' | t }}">✓</span>
+                  {%- else -%}
+                    <span class="no" aria-label="{{ 'general.no' | t }}">✕</span>
+                  {%- endif -%}
+                </td>
+              {%- endfor -%}
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparatif",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Surtitre", "default": "Le match" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Pourquoi Lueur change <em>vraiment</em> vos matins." },
+    { "type": "text", "id": "col_us", "label": "Colonne 1 (vous)", "default": "Lueur" },
+    { "type": "text", "id": "col_a", "label": "Colonne 2", "default": "Réveil classique" },
+    { "type": "text", "id": "col_b", "label": "Colonne 3", "default": "Smartphone" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Ligne",
+      "settings": [
+        { "type": "text", "id": "feature", "label": "Critère", "default": "Réveil progressif par la lumière" },
+        { "type": "checkbox", "id": "has_us", "label": "Colonne 1", "default": true },
+        { "type": "checkbox", "id": "has_a", "label": "Colonne 2", "default": false },
+        { "type": "checkbox", "id": "has_b", "label": "Colonne 3", "default": false }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Comparatif",
+    "blocks": [
+      { "type": "row", "settings": { "feature": "Réveil progressif par la lumière", "has_us": true, "has_a": false, "has_b": false } },
+      { "type": "row", "settings": { "feature": "Sons naturels qui montent en douceur", "has_us": true, "has_a": false, "has_b": true } },
+      { "type": "row", "settings": { "feature": "Crépuscule pour s'endormir", "has_us": true, "has_a": false, "has_b": false } },
+      { "type": "row", "settings": { "feature": "Zéro écran ni notification au lit", "has_us": true, "has_a": true, "has_b": false } },
+      { "type": "row", "settings": { "feature": "Efficace même en plein hiver", "has_us": true, "has_a": false, "has_b": false } }
+    ]
+  }]
+}
+{% endschema %}

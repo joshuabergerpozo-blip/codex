@@ -1,0 +1,139 @@
+{%- comment -%}
+  Bloc d'achat partagé par la fiche produit et la section « Produit mis en avant ».
+  Paramètres : product (peut être vide → contenu de démonstration), section, heading_tag
+{%- endcomment -%}
+{%- liquid
+  assign heading_tag = heading_tag | default: 'h2'
+  if product != blank
+    assign current_variant = product.selected_or_first_available_variant
+    assign title = product.title
+  else
+    assign title = 'sections.featured_product.demo_title' | t
+  endif
+-%}
+<div class="product" data-product>
+  <div class="product__gallery reveal">
+    <div class="product__main">
+      {%- if product != blank and product.featured_media -%}
+        {%- assign first = current_variant.featured_media | default: product.featured_media -%}
+        {{ first | image_url: width: 1200 | image_tag: loading: 'eager', widths: '500, 800, 1200', sizes: '(min-width: 900px) 50vw, 95vw' }}
+      {%- else -%}
+        <img src="{{ 'lueur-packshot.jpg' | asset_url }}" alt="{{ 'sections.featured_product.demo_alt' | t }}" width="1536" height="1536">
+      {%- endif -%}
+    </div>
+    <div class="product__thumbs">
+      {%- if product != blank and product.media.size > 1 -%}
+        {%- for media in product.media limit: 8 -%}
+          {%- if media.media_type == 'image' -%}
+            <button type="button" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" data-src="{{ media | image_url: width: 1200 }}" data-srcset="{{ media | image_url: width: 800 }} 800w, {{ media | image_url: width: 1200 }} 1200w" aria-label="{{ 'products.product.show_image' | t: index: forloop.index }}">
+              {{ media | image_url: width: 200 | image_tag: loading: 'lazy' }}
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- elsif product == blank -%}
+        {%- assign demo = 'lueur-packshot.jpg,lueur-bedside.jpg,lueur-detail.jpg,lueur-wake-up.jpg,lueur-evening.jpg' | split: ',' -%}
+        {%- for img in demo -%}
+          <button type="button" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" data-src="{{ img | asset_url }}" aria-label="{{ 'products.product.show_image' | t: index: forloop.index }}">
+            <img src="{{ img | asset_url }}" alt="{{ 'sections.featured_product.demo_alt' | t }}" loading="lazy" width="200" height="200">
+          </button>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="product__info reveal" style="--delay:.1s">
+    {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+    <{{ heading_tag }} class="h1">{{ title }}</{{ heading_tag }}>
+    {%- if section.settings.rating_text != blank -%}
+      <div class="product__rating">{% render 'stars', rating: 5 %}<span>{{ section.settings.rating_text }}</span></div>
+    {%- endif -%}
+    <div class="product__lede">{{ section.settings.lede }}</div>
+
+    {%- if product != blank -%}
+      {% render 'price', product: product, show_badge: true %}
+    {%- else -%}
+      {% render 'price', price: 8900, compare: 11900, show_badge: true %}
+    {%- endif -%}
+    <p class="price__note">{{ 'products.product.tax_note' | t }}</p>
+
+    {%- if product == blank or current_variant.available -%}
+      <p class="stock">{{ section.settings.stock_text }}</p>
+    {%- endif -%}
+
+    {%- if product != blank -%}
+      {%- form 'product', product, data-product-form: '', novalidate: 'novalidate' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <fieldset class="variant-picker">
+              <legend>{{ option.name }}</legend>
+              <div class="variant-picker__options">
+                {%- for value in option.values -%}
+                  <input type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ section.id }}-{{ option.name | handle }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                  <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">{{ value }}</label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+          <script type="application/json" data-variants>
+            [{%- for v in product.variants -%}{"id":{{ v.id }},"options":{{ v.options | json }},"price":{{ v.price }},"compare_at_price":{{ v.compare_at_price | default: 0 }},"available":{{ v.available }}}{% unless forloop.last %},{% endunless %}{%- endfor -%}]
+          </script>
+        {%- endunless -%}
+
+        <div class="buy-row">
+          <div class="qty">
+            <button type="button" data-step="-1" aria-label="{{ 'products.product.decrease' | t }}">−</button>
+            <input type="number" name="quantity" value="1" min="1" aria-label="{{ 'products.product.quantity' | t }}">
+            <button type="button" data-step="1" aria-label="{{ 'products.product.increase' | t }}">+</button>
+          </div>
+          <button class="button" type="submit"
+            data-label-add="{{ section.settings.button_label | escape }}"
+            data-label-adding="{{ 'products.product.adding' | t }}"
+            data-label-sold-out="{{ 'products.product.sold_out' | t }}"
+            {% unless current_variant.available %}disabled{% endunless %}>
+            <span>{%- if current_variant.available -%}{{ section.settings.button_label }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}</span>
+          </button>
+        </div>
+        <p class="form-message form-message--error" data-form-error data-fallback="{{ 'products.product.error' | t }}" role="alert" hidden></p>
+        {%- if section.settings.show_dynamic_checkout -%}
+          {{ form | payment_button }}
+        {%- endif -%}
+      {%- endform -%}
+    {%- else -%}
+      {%- comment -%} Aucun produit choisi : aperçu de démonstration dans l'éditeur. {%- endcomment -%}
+      <div class="buy-row">
+        <a class="button" href="{{ routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
+      </div>
+    {%- endif -%}
+
+    <ul class="reassurance">
+      <li>{% render 'icon', name: 'truck' %}{{ section.settings.reassurance_1 }}</li>
+      <li>{% render 'icon', name: 'moon' %}{{ section.settings.reassurance_2 }}</li>
+      <li>{% render 'icon', name: 'shield' %}{{ section.settings.reassurance_3 }}</li>
+      <li>{% render 'icon', name: 'heart' %}{{ section.settings.reassurance_4 }}</li>
+    </ul>
+
+    <div class="accordion">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {% render block %}
+          {%- when 'collapsible' -%}
+            <details {{ block.shopify_attributes }} {% if block.settings.open %}open{% endif %}>
+              <summary>{{ block.settings.title }}</summary>
+              <div class="rte">
+                {%- if block.settings.use_description and product != blank -%}{{ product.description }}{%- else -%}{{ block.settings.content }}{%- endif -%}
+              </div>
+            </details>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- if section.settings.sticky_bar -%}
+  <div class="sticky-atc" aria-hidden="true">
+    <span class="sticky-atc__title">{{ title }}</span>
+    <button class="button" type="button" tabindex="-1">{{ section.settings.button_label }}</button>
+  </div>
+{%- endif -%}

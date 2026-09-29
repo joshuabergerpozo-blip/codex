@@ -1,0 +1,65 @@
+<section class="section motion {% if section.settings.style == 'night' %}section--night{% else %}section--peach{% endif %}" id="film">
+  <div class="page-width">
+    <div class="section-head reveal">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.title }}</h2>
+      {{ section.settings.text }}
+    </div>
+
+    <div class="motion__frame reveal" data-motion>
+      {%- if section.settings.video != blank -%}
+        {{ section.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'metadata', image_size: '1280x' }}
+      {%- else -%}
+        <video autoplay loop muted playsinline preload="metadata" poster="{{ 'lueur-motion-poster.jpg' | asset_url }}" aria-label="{{ section.settings.title | strip_html | escape }}">
+          <source src="{{ 'lueur-motion.mp4' | asset_url }}" type="video/mp4">
+        </video>
+      {%- endif -%}
+      <button class="motion__toggle" type="button" data-label-play="{{ 'sections.video.play' | t }}" data-label-pause="{{ 'sections.video.pause' | t }}" aria-label="{{ 'sections.video.pause' | t }}">
+        <span class="icon-pause">{% render 'icon', name: 'pause' %}</span>
+        <span class="icon-play">{% render 'icon', name: 'play' %}</span>
+      </button>
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="motion__stats">
+        {%- for block in section.blocks -%}
+          <div class="stat reveal" style="--delay: {{ forloop.index0 | times: 0.1 }}s" {{ block.shopify_attributes }}>
+            <strong>{{ block.settings.value }}</strong>
+            <span>{{ block.settings.label }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Vidéo motion design",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Surtitre", "default": "24 secondes pour comprendre" },
+    { "type": "inline_richtext", "id": "title", "label": "Titre", "default": "Votre nouveau matin, <em>en accéléré</em>." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>De la nuit noire au plein soleil&nbsp;: voici ce qui se passe dans votre chambre pendant les 30 minutes qui précèdent votre réveil.</p>" },
+    { "type": "video", "id": "video", "label": "Vidéo", "info": "Laissez vide pour utiliser le film motion design fourni avec le thème." },
+    { "type": "select", "id": "style", "label": "Ambiance", "options": [{ "value": "peach", "label": "Pêche" }, { "value": "night", "label": "Nuit" }], "default": "night" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Chiffre clé",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Valeur", "default": "30 min" },
+        { "type": "text", "id": "label", "label": "Légende", "default": "d'aube progressive" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Vidéo motion design",
+    "blocks": [
+      { "type": "stat", "settings": { "value": "30 min", "label": "d'aube progressive" } },
+      { "type": "stat", "settings": { "value": "0 bip", "label": "strident au réveil" } },
+      { "type": "stat", "settings": { "value": "100 nuits", "label": "pour l'adopter" } }
+    ]
+  }]
+}
+{% endschema %}

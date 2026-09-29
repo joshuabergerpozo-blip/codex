@@ -1,0 +1,46 @@
+{%- layout none -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ 'gift_card.title' | t }} · {{ shop.name }}</title>
+    <style>
+      :root {
+        --color-sun: {{ settings.color_sun }}; --color-sun-deep: {{ settings.color_sun_deep }}; --color-apricot: {{ settings.color_apricot }};
+        --color-peach: {{ settings.color_peach }}; --color-cream: {{ settings.color_cream }}; --color-cocoa: {{ settings.color_cocoa }};
+        --color-night: {{ settings.color_night }}; --color-text: {{ settings.color_text }}; --color-heading: {{ settings.color_heading }};
+      }
+    </style>
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+    {{ content_for_header }}
+  </head>
+  <body>
+    <main class="section" style="text-align:center">
+      <div class="page-width" style="max-width:560px">
+        <div style="width:96px; margin:0 auto 20px">{% render 'sun-mark', class: 'sun-404' %}</div>
+        <h1 class="h2">{{ 'gift_card.title' | t }}</h1>
+        <div class="promise" style="grid-template-columns:1fr; justify-items:center">
+          <p style="font-family:var(--font-heading); font-weight:700; font-size:3rem; margin:0">{{ gift_card.balance | money }}</p>
+          {%- if gift_card.enabled == false or gift_card.expired -%}
+            <p>{{ 'gift_card.expired' | t }}</p>
+          {%- elsif gift_card.expires_on -%}
+            {%- assign expires = gift_card.expires_on | date: '%d/%m/%Y' -%}
+            <p>{{ 'gift_card.expires_on' | t: date: expires }}</p>
+          {%- endif -%}
+          <p style="font-size:1.5rem; font-weight:800; letter-spacing:.1em">{{ gift_card.code | format_code }}</p>
+          <div id="QrCode" data-identifier="{{ gift_card.qr_identifier }}"></div>
+        </div>
+        <p style="margin-top:28px"><a class="button" href="{{ shop.url }}">{{ 'gift_card.shop' | t }}</a></p>
+        {%- if gift_card.pass_url -%}<p><a href="{{ gift_card.pass_url }}">{{ 'gift_card.wallet' | t }}</a></p>{%- endif -%}
+      </div>
+    </main>
+    <script>
+      window.addEventListener('load', () => {
+        const el = document.getElementById('QrCode');
+        if (window.QRCode && el) new QRCode(el, { text: el.dataset.identifier, width: 120, height: 120 });
+      });
+    </script>
+  </body>
+</html>
