@@ -14,6 +14,11 @@
           <source src="{{ 'lueur-motion.mp4' | asset_url }}" type="video/mp4">
         </video>
       {%- endif -%}
+      <button class="motion__sound" type="button" aria-pressed="false" data-label-on="{{ 'sections.video.sound_on' | t }}" data-label-off="{{ 'sections.video.sound_off' | t }}">
+        <span class="icon-muted">{% render 'icon', name: 'sound-off' %}</span>
+        <span class="icon-sound">{% render 'icon', name: 'sound-on' %}</span>
+        <span class="motion__sound-label">{{ 'sections.video.sound_on' | t }}</span>
+      </button>
       <button class="motion__toggle" type="button" data-label-play="{{ 'sections.video.play' | t }}" data-label-pause="{{ 'sections.video.pause' | t }}" aria-label="{{ 'sections.video.pause' | t }}">
         <span class="icon-pause">{% render 'icon', name: 'pause' %}</span>
         <span class="icon-play">{% render 'icon', name: 'play' %}</span>

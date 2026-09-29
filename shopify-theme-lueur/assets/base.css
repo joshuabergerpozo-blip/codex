@@ -269,6 +269,20 @@ h1 em, h2 em, .highlight {
 .motion__toggle .icon-play { display: none; }
 .motion__frame.is-paused .icon-play { display: block; }
 .motion__frame.is-paused .icon-pause { display: none; }
+.motion__sound {
+  position: absolute; left: 18px; bottom: 18px; height: 52px; padding: 0 20px 0 16px; border: 0; border-radius: 99px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255, 247, 238, 0.92); color: var(--color-cocoa);
+  font-family: var(--font-heading); font-weight: 600; font-size: 1rem;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s var(--ease), background 0.3s;
+}
+.motion__sound:hover { transform: translateY(-2px); background: #fff; }
+.motion__sound svg { width: 22px; height: 22px; }
+.motion__sound .icon-sound, .motion__sound[aria-pressed="true"] .icon-muted { display: none; }
+.motion__sound[aria-pressed="true"] .icon-sound { display: block; color: var(--color-sun); }
+.motion__sound[aria-pressed="false"] .icon-muted { animation: breathe 2.4s ease-in-out infinite; }
+@media (max-width: 600px) { .motion__sound { height: 44px; left: 12px; bottom: 12px; font-size: 0.9rem; } .motion__toggle { width: 44px; height: 44px; right: 12px; bottom: 12px; } }
 .motion__stats { display: flex; justify-content: center; gap: clamp(24px, 6vw, 80px); flex-wrap: wrap; margin-top: 48px; }
 .stat strong { display: block; font-family: var(--font-heading); font-weight: 700; font-size: clamp(2.4rem, 4vw, 3.4rem); line-height: 1; color: var(--color-sun); }
 .stat span { font-weight: 700; opacity: 0.8; }

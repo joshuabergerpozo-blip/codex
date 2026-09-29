@@ -5,7 +5,8 @@ boutique mono-produit qui vend un **réveil simulateur d'aube**.
 
 - **Ambiance apaisante** : palette solaire (rouge de l'aube → orange → abricot → crème), fonds pêche, sections « nuit » pour le contraste.
 - **Typographies grasses et rondes** : *Fredoka* (titres) et *Nunito* (texte), hébergées dans `assets/` (aucun appel externe).
-- **Vidéo motion design** de 24 s (`assets/lueur-motion.mp4`, 1,2 Mo) : la nuit, le « BIP BIP » agressif, puis un lever de soleil qui remplit l'écran, les trois bénéfices, et la signature de marque. Elle boucle sans coupure.
+- **Vidéo motion design** de 24 s (`assets/lueur-motion.mp4`, 1,6 Mo) : la nuit, le « BIP BIP » agressif, puis un lever de soleil qui remplit l'écran, les trois bénéfices, et la signature de marque. Elle boucle sans coupure.
+- **Sound design et musique d'ambiance** : grillons la nuit, alarme stridente qui s'arrête net, souffle du lever de soleil, oiseaux, « pops » des cartes, carillon de la signature, sur une musique douce au piano et nappes (70 BPM, Fa maj7 → Do → La m7 → Sol). Tout est synthétisé par code : aucun droit à payer. La vidéo démarre muette (règle des navigateurs) avec un bouton « Activer le son » ; le bouton « Voir le film » du héros la lance directement avec le son.
 - **Visuels** : 6 photos produit et lifestyle générées pour le thème (`assets/lueur-*.jpg`).
 - **Copywriting** de conversion en français, entièrement modifiable depuis l'éditeur.
 
@@ -64,10 +65,13 @@ Le film est une animation Canvas déterministe (`tools/motion/lueur-motion.html`
 Pour ré-encoder le MP4 après modification :
 
 ```bash
-pip install imageio-ffmpeg                 # ou ffmpeg dans le PATH
+pip install numpy imageio-ffmpeg           # ou ffmpeg dans le PATH
 npm i -g playwright
-NODE_PATH=$(npm root -g) node tools/motion/render.cjs
+NODE_PATH=$(npm root -g) node tools/motion/render.cjs   # image
+python3 tools/motion/lueur-sound.py                      # bande-son (numpy), mixée dans le MP4
 ```
+
+La bande-son est décrite dans `tools/motion/lueur-sound.py` : chaque effet y est placé à la seconde près de l'animation.
 
 ## Qualité
 

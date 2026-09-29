@@ -2,6 +2,7 @@
 //
 //   pip install imageio-ffmpeg        # ou ffmpeg dans le PATH
 //   NODE_PATH=$(npm root -g) node tools/motion/render.cjs
+//   python3 tools/motion/lueur-sound.py   # ajoute la bande-son
 //
 // Le rendu est fait image par image (30 i/s) : le résultat est identique
 // quelle que soit la vitesse de la machine.

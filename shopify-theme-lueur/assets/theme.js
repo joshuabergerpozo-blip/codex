@@ -54,6 +54,17 @@
     };
     video.addEventListener("play", sync);
     video.addEventListener("pause", sync);
+    // Son : coupé par défaut (les navigateurs n'autorisent l'autoplay que muet)
+    const sound = frame.querySelector(".motion__sound");
+    sound?.addEventListener("click", () => {
+      video.muted = !video.muted;
+      if (!video.muted) {
+        video.volume = 0.8;
+        if (video.paused) { userPaused = false; video.play().catch(() => {}); }
+      }
+      sound.setAttribute("aria-pressed", String(!video.muted));
+      sound.querySelector(".motion__sound-label").textContent = video.muted ? sound.dataset.labelOn : sound.dataset.labelOff;
+    });
     toggle?.addEventListener("click", () => {
       if (video.paused) { userPaused = false; video.play(); } else { userPaused = true; video.pause(); }
     });
@@ -68,8 +79,13 @@
   });
   document.querySelectorAll("[data-scroll-to-video]").forEach((link) => {
     link.addEventListener("click", () => {
-      const video = document.querySelector("[data-motion] video");
-      if (video) { video.currentTime = 0; video.play().catch(() => {}); }
+      const frame = document.querySelector("[data-motion]");
+      const video = frame?.querySelector("video");
+      if (!video) return;
+      video.currentTime = 0;
+      // Clic volontaire : on peut lancer le film avec le son
+      if (video.muted) frame.querySelector(".motion__sound")?.click();
+      video.play().catch(() => {});
     });
   });
 

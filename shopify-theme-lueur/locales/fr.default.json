@@ -19,7 +19,9 @@
     },
     "video": {
       "play": "Lire la vidéo",
-      "pause": "Mettre la vidéo en pause"
+      "pause": "Mettre la vidéo en pause",
+      "sound_on": "Activer le son",
+      "sound_off": "Couper le son"
     },
     "comparison": {
       "feature": "Critère"
