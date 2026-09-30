@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lueur Studio</title>
+<meta name="description" content="50 templates de motion design avec design sonore, à personnaliser et exporter en MP4 directement dans le navigateur. Sans clé API.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!--PAGE-START-->
+<nav class="nav" aria-label="Navigation principale">
+  <a class="brand" href="#top" aria-label="Lueur, accueil"><span class="brand-dot"></span>Lueur</a>
+  <div class="nav-links">
+    <a href="#templates">Templates</a>
+    <a href="#intentions">Intentions</a>
+    <a href="#son">Son</a>
+  </div>
+  <button class="pill pill-white nav-cta" type="button" data-open="ethere">Créer une vidéo</button>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="bubbles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="hero-inner">
+    <p class="eyebrow">Studio de motion design · Sans clé API</p>
+    <h1>Des vidéos qui<br><em>font bouger</em> les gens.</h1>
+    <p class="hero-lede">Cinquante templates animés, un design sonore généré en direct et l'export MP4. Tout se passe dans ton navigateur.</p>
+    <div class="hero-actions">
+      <button class="pill pill-white" type="button" data-open="impact">Créer une vidéo <span aria-hidden="true">→</span></button>
+      <a class="pill pill-ghost" href="#templates">Voir les 50 templates</a>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <p><span class="eyebrow">Lueur®</span><br>Chaque template vise une intention : faire comprendre, faire ressentir ou faire agir.</p>
+  </div>
+  <figure class="hero-live glass" aria-label="Aperçu en direct">
+    <canvas id="hero-canvas" width="270" height="480"></canvas>
+    <figcaption><span class="live-dot" aria-hidden="true"></span><span id="hero-caption">En direct</span></figcaption>
+  </figure>
+</header>
+
+<main>
+  <section class="section intentions" id="intentions" aria-labelledby="intentions-title">
+    <div class="section-head">
+      <p class="eyebrow eyebrow-dark">Trois intentions</p>
+      <h2 id="intentions-title">Chaque vidéo a <em>un seul</em> travail.</h2>
+      <p class="section-lede">En communication, on parle d'objectifs cognitif, affectif et conatif. Les templates sont rangés ainsi pour que tu choisisses d'abord ce que ta vidéo doit obtenir.</p>
+    </div>
+    <div class="intent-grid">
+      <article class="intent">
+        <div class="intent-img" style="background-image:url('assets/img/sphere.webp')" role="img" aria-label="Sphère de verre au-dessus d'une mer rose"></div>
+        <div class="intent-body glass">
+          <p class="eyebrow">Cognitif · <span data-count="cognitif">17</span> templates</p>
+          <h3>Faire <em>comprendre</em></h3>
+          <p>Chiffres clés, étapes, comparaisons, définitions. Le public sait quelque chose de plus.</p>
+          <button class="pill pill-white pill-sm" type="button" data-filter="cognitif">Explorer</button>
+        </div>
+      </article>
+      <article class="intent">
+        <div class="intent-img" style="background-image:url('assets/img/magnolia.webp')" role="img" aria-label="Fleurs de magnolia flottant dans un ciel rose"></div>
+        <div class="intent-body glass">
+          <p class="eyebrow">Affectif · <span data-count="affectif">17</span> templates</p>
+          <h3>Faire <em>ressentir</em></h3>
+          <p>Manifestes, témoignages, remerciements, atmosphères. Le public s'attache à la marque.</p>
+          <button class="pill pill-white pill-sm" type="button" data-filter="affectif">Explorer</button>
+        </div>
+      </article>
+      <article class="intent">
+        <div class="intent-img" style="background-image:url('assets/img/escalier.webp')" role="img" aria-label="Escalier de pierre qui monte vers un soleil rose"></div>
+        <div class="intent-body glass">
+          <p class="eyebrow">Conatif · <span data-count="conatif">16</span> templates</p>
+          <h3>Faire <em>agir</em></h3>
+          <p>Promos, comptes à rebours, codes, inscriptions. Le public clique, achète ou partage.</p>
+          <button class="pill pill-white pill-sm" type="button" data-filter="conatif">Explorer</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section gallery" id="templates" aria-labelledby="templates-title">
+    <div class="section-head row">
+      <div>
+        <p class="eyebrow eyebrow-dark">Bibliothèque</p>
+        <h2 id="templates-title"><span id="tpl-count">50</span> templates, <em>prêts à bouger</em>.</h2>
+      </div>
+      <div class="filters">
+        <div class="chips" role="group" aria-label="Filtrer par intention">
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">Tous</button>
+          <button class="chip" type="button" data-filter="cognitif" aria-pressed="false">Cognitif</button>
+          <button class="chip" type="button" data-filter="affectif" aria-pressed="false">Affectif</button>
+          <button class="chip" type="button" data-filter="conatif" aria-pressed="false">Conatif</button>
+        </div>
+        <label class="search"><span class="sr-only">Rechercher un template</span><input id="search" type="search" placeholder="Rechercher : promo, merci, chiffre…" autocomplete="off"></label>
+      </div>
+    </div>
+    <p class="gallery-hint">Survole une carte pour la voir bouger. Clique pour l'ouvrir dans le studio.</p>
+    <div class="masonry" id="grid"></div>
+    <p class="empty" id="empty" hidden>Aucun template ne correspond. Essaie « promo », « chiffre » ou « merci ».</p>
+  </section>
+
+  <section class="section sound" id="son" aria-labelledby="son-title">
+    <div class="sound-bg" aria-hidden="true"></div>
+    <div class="section-head">
+      <p class="eyebrow">Design sonore</p>
+      <h2 id="son-title">Un son qui <em>respire</em> avec l'image.</h2>
+      <p class="section-lede">Chaque apparition, chaque clic, chaque chiffre qui défile a son bruitage, calé à l'image près. La musique est composée en direct par le navigateur : rien à télécharger, aucune licence à payer.</p>
+    </div>
+    <div class="kits" id="kits"></div>
+  </section>
+
+  <section class="section how" aria-labelledby="how-title">
+    <div class="section-head">
+      <p class="eyebrow eyebrow-dark">Comment ça marche</p>
+      <h2 id="how-title">Trois étapes, <em>huit secondes</em> de vidéo.</h2>
+    </div>
+    <ol class="steps">
+      <li><span class="step-n">1</span><h3>Choisis une intention</h3><p>Comprendre, ressentir ou agir. Le template porte déjà le bon rythme et le bon son.</p></li>
+      <li><span class="step-n">2</span><h3>Personnalise</h3><p>Textes, couleurs, format et ambiance sonore. Écris <em>*un mot*</em> entre astérisques pour le passer en italique.</p></li>
+      <li><span class="step-n">3</span><h3>Exporte</h3><p>Ton navigateur calcule la vidéo et le son, puis te donne un MP4 prêt pour TikTok, Reels ou YouTube.</p></li>
+    </ol>
+  </section>
+</main>
+
+<footer class="footer">
+  <p class="footer-word">Lueur<em>.</em></p>
+  <p>Fait dans le navigateur. Aucune clé API, aucune vidéo envoyée sur un serveur.</p>
+</footer>
+
+<div class="studio" id="studio" role="dialog" aria-modal="true" aria-labelledby="st-name" hidden>
+  <div class="studio-bg" aria-hidden="true"></div>
+  <header class="st-bar">
+    <button class="pill pill-ghost pill-sm" type="button" id="st-close"><span aria-hidden="true">←</span> Templates</button>
+    <div class="st-title">
+      <span class="obj-chip" id="st-obj">Cognitif</span>
+      <h2 id="st-name">Template</h2>
+      <span class="st-goal" id="st-goal"></span>
+    </div>
+    <button class="pill pill-white pill-sm" type="button" id="st-export">Exporter en MP4</button>
+  </header>
+  <div class="st-main">
+    <section class="st-stage" aria-label="Aperçu">
+      <div class="st-canvas-wrap"><canvas id="st-canvas" width="1080" height="1920"></canvas></div>
+      <div class="transport glass">
+        <button type="button" class="round" id="st-play" aria-label="Pause"></button>
+        <input type="range" id="st-scrub" min="0" max="1000" step="1" value="0" aria-label="Position dans la vidéo">
+        <span class="tc" id="st-tc">00:00.0</span>
+        <button type="button" class="round round-ghost" id="st-sound" aria-label="Couper le son" aria-pressed="true"></button>
+      </div>
+    </section>
+    <aside class="st-panel glass" aria-label="Réglages">
+      <div class="tabs" role="tablist">
+        <button role="tab" type="button" id="tab-text" aria-selected="true" aria-controls="pane-text">Textes</button>
+        <button role="tab" type="button" id="tab-style" aria-selected="false" aria-controls="pane-style">Style</button>
+        <button role="tab" type="button" id="tab-sound" aria-selected="false" aria-controls="pane-sound">Son</button>
+      </div>
+      <div class="pane" role="tabpanel" id="pane-text" aria-labelledby="tab-text">
+        <p class="hint">Mets un mot entre *astérisques* pour l'écrire en italique.</p>
+        <div id="fields" class="fields"></div>
+        <button type="button" class="link-btn" id="reset-text">Revenir aux textes d'origine</button>
+      </div>
+      <div class="pane" role="tabpanel" id="pane-style" aria-labelledby="tab-style" hidden>
+        <p class="label">Format</p>
+        <div class="seg" id="formats" role="radiogroup" aria-label="Format"></div>
+        <p class="label">Palette</p>
+        <div class="palettes" id="palettes"></div>
+        <p class="label">Couleurs</p>
+        <div class="colors">
+          <label>Fond<input type="color" id="c-bg"></label>
+          <label>Texte<input type="color" id="c-ink"></label>
+          <label>Accent<input type="color" id="c-accent"></label>
+          <label>Doux<input type="color" id="c-soft"></label>
+        </div>
+      </div>
+      <div class="pane" role="tabpanel" id="pane-sound" aria-labelledby="tab-sound" hidden>
+        <p class="label">Ambiance</p>
+        <div class="kit-list" id="kit-list" role="radiogroup" aria-label="Ambiance sonore"></div>
+        <label class="toggle"><input type="checkbox" id="snd-music" checked><span>Musique</span></label>
+        <label class="range"><span>Volume musique</span><input type="range" id="vol-music" min="0" max="100" value="60"></label>
+        <label class="toggle"><input type="checkbox" id="snd-sfx" checked><span>Bruitages</span></label>
+        <label class="range"><span>Volume bruitages</span><input type="range" id="vol-sfx" min="0" max="100" value="70"></label>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modal" id="export-modal" hidden>
+    <div class="modal-card glass" role="alertdialog" aria-modal="true" aria-labelledby="ex-title">
+      <h3 id="ex-title">Export en cours</h3>
+      <p class="ex-status" id="ex-status">Préparation…</p>
+      <div class="bar"><i id="ex-bar"></i></div>
+      <div class="ex-result" id="ex-result" hidden>
+        <video id="ex-video" controls playsinline></video>
+        <p class="ex-meta" id="ex-meta"></p>
+      </div>
+      <p class="ex-note" id="ex-note" hidden>Dans l'aperçu Claude, les téléchargements sont bloqués. Sur ton site publié, le bouton enregistre le fichier.</p>
+      <div class="modal-actions">
+        <button type="button" class="pill pill-ghost pill-sm" id="ex-cancel">Annuler</button>
+        <button type="button" class="pill pill-white pill-sm" id="ex-save" hidden>Télécharger la vidéo</button>
+        <button type="button" class="pill pill-ghost pill-sm" id="ex-wav" hidden>Son seul (WAV)</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--PAGE-END-->
+<script src="js/vendor/mp4-muxer.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/export.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
