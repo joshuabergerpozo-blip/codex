@@ -29,6 +29,12 @@ body{background:var(--page);color:var(--page-fg);font-family:var(--display);padd
 .controls button:focus-visible,#scrub:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 #scrub{flex:1 1 160px;min-width:0;accent-color:var(--red)}
 .time{color:var(--page-dim);font-variant-numeric:tabular-nums}
+.start{position:absolute;inset:0;z-index:30;display:grid;place-items:end center;background:rgba(18,18,20,.12);border:0;cursor:pointer;padding:0 0 16%}
+.start span{font-family:var(--mono);font-size:clamp(11px,1.6vw,15px);letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:var(--ink);border-radius:999px;padding:14px 22px;display:flex;align-items:center;gap:12px}
+.start span::before{content:"";width:0;height:0;border-left:11px solid var(--red);border-top:7px solid transparent;border-bottom:7px solid transparent}
+.start:hover span,.start:focus-visible span{background:var(--red)}
+.start:hover span::before,.start:focus-visible span::before{border-left-color:var(--paper)}
+.start:focus-visible{outline:none}
 .caption{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--page-dim)}
 
 /* ---------- stage ---------- */
@@ -148,7 +154,7 @@ body{background:var(--page);color:var(--page-fg);font-family:var(--display);padd
 body.render{padding:0;display:block;background:var(--paper)}
 body.render .player{width:1920px;gap:0}
 body.render .screen{width:1920px;height:1080px;border-radius:0}
-body.render .controls,body.render .caption{display:none}
+body.render .controls,body.render .caption,body.render .start{display:none}
 </style>
 
 <div class="player">
@@ -329,15 +335,18 @@ body.render .controls,body.render .caption{display:none}
         </div>
       </section>
     </div>
+    <button type="button" class="start" id="btnStart"><span>Lancer avec le son</span></button>
   </div>
+  <audio id="snd" src="portfolio-intro-sound.mp3" preload="auto"></audio>
   <div class="controls">
     <button type="button" id="btnPlay">Pause</button>
     <button type="button" id="btnReplay">Rejouer</button>
+    <button type="button" id="btnSound" aria-pressed="true">Son : activé</button>
     <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Position dans l'animation">
     <span class="time" id="timeLabel">00:00 / 00:49</span>
     <button type="button" id="btnFs">Plein écran</button>
   </div>
-  <div class="caption">Motion d'ouverture · 49 s · 16:9 · Espace pour lecture / pause</div>
+  <div class="caption">Motion d'ouverture · 49 s · 16:9 · avec son · Espace pour lecture / pause</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
@@ -509,6 +518,7 @@ body.render .controls,body.render .caption{display:none}
   const pad = n => String(n).padStart(2, '0');
   let lastChap = '';
   let dragging = false;
+  let playing = false;
   function sync() {
     const t = tl.time();
     const s = Math.floor(t), f = Math.floor((t - s) * 30);
@@ -528,15 +538,41 @@ body.render .controls,body.render .caption{display:none}
     pt.setAttribute('fill', p.y > 240 ? '#E2261C' : '#121214');
     if (!dragging) scrub.value = Math.round(t / DUR * 1000);
     timeLabel.textContent = `00:${pad(s)} / 00:${pad(DUR)}`;
-    btnPlay.textContent = tl.isActive() ? 'Pause' : 'Lecture';
+    btnPlay.textContent = playing ? 'Pause' : 'Lecture';
   }
 
-  const btnPlay = $('#btnPlay');
-  const play = () => { if (tl.time() >= DUR - .01) tl.restart(); else tl.play(); };
-  btnPlay.addEventListener('click', () => tl.isActive() ? tl.pause() : play());
-  $('#btnReplay').addEventListener('click', () => tl.restart());
+  // playback: with sound on, the audio clock drives the timeline so picture and sound never drift
+  const btnPlay = $('#btnPlay'), btnSound = $('#btnSound'), btnStart = $('#btnStart'), snd = $('#snd');
+  let soundOn = true;
+  const seekTo = t => { tl.seek(t); try { snd.currentTime = t; } catch (e) {} };
+  const startAudio = () => {
+    tl.pause();
+    try { snd.currentTime = tl.time(); } catch (e) {}
+    snd.play().catch(() => { soundOn = false; paintSound(); if (playing) tl.play(); });
+  };
+  function play() {
+    btnStart.hidden = true;
+    if (tl.time() >= DUR - .01) seekTo(0);
+    playing = true;
+    if (soundOn) startAudio(); else tl.play();
+  }
+  function pause() { playing = false; tl.pause(); snd.pause(); }
+  function paintSound() {
+    btnSound.textContent = soundOn ? 'Son : activé' : 'Son : coupé';
+    btnSound.setAttribute('aria-pressed', String(soundOn));
+  }
+  tl.eventCallback('onComplete', () => { if (!soundOn) pause(); });
+  btnStart.addEventListener('click', () => { soundOn = true; paintSound(); seekTo(0); play(); });
+  btnPlay.addEventListener('click', () => playing ? pause() : play());
+  $('#btnReplay').addEventListener('click', () => { seekTo(0); play(); });
+  btnSound.addEventListener('click', () => {
+    soundOn = !soundOn;
+    paintSound();
+    if (!playing) return;
+    if (soundOn) startAudio(); else { snd.pause(); tl.play(); }
+  });
   scrub.addEventListener('pointerdown', () => { dragging = true; });
-  scrub.addEventListener('input', () => { tl.pause(); tl.seek(scrub.value / 1000 * DUR); });
+  scrub.addEventListener('input', () => { pause(); seekTo(scrub.value / 1000 * DUR); });
   scrub.addEventListener('change', () => { dragging = false; });
   $('#btnFs').addEventListener('click', () => {
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
@@ -545,7 +581,7 @@ body.render .controls,body.render .caption{display:none}
   document.addEventListener('keydown', e => {
     if (e.code !== 'Space' || e.target.closest('button, input')) return;
     e.preventDefault();
-    tl.isActive() ? tl.pause() : play();
+    playing ? pause() : play();
   });
 
   if (RENDER) {
@@ -553,11 +589,17 @@ body.render .controls,body.render .caption{display:none}
     window.__DUR = DUR;
     return;
   }
-  gsap.ticker.add(sync);
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const start = () => reduced ? tl.seek(DUR) : tl.play(0);
-  tl.seek(4.4); // poster frame until fonts are ready
+  gsap.ticker.add(() => {
+    if (playing && soundOn && !snd.paused) {
+      const t = Math.min(snd.currentTime, DUR);
+      tl.seek(t);
+      if (t >= DUR - .01) pause();
+    }
+    sync();
+  });
+  snd.addEventListener('ended', () => { if (playing && soundOn) { tl.seek(DUR); pause(); } });
+  // poster frame: "Moi c'est Joshua." waits behind the start button (sound needs a click to play)
+  tl.seek(4.4);
   sync();
-  (document.fonts?.ready ?? Promise.resolve()).then(() => setTimeout(start, 300));
 })();
 </script>
