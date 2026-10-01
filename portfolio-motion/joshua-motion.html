@@ -1,0 +1,563 @@
+<title>Joshua, Portfolio 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a 1920×1080 paper stage, letterboxed on a dark screening-room page; mono HUD in the stage corners, one red thread through every scene */
+:root{
+  --paper:#F3F3F0;
+  --ink:#121214;
+  --red:#E2261C;
+  --navy:#132E6B;
+  --fr-blue:#2A49B6;
+  --mute:#8B8B86;
+  --page:#0C0C0D;
+  --page-fg:#E6E6E2;
+  --page-dim:#7C7C78;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--page);color:var(--page-fg);font-family:var(--display);padding-inline:16px;padding-block:24px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center}
+.player{width:min(100%,calc((100dvh - 150px) * 16 / 9));margin-inline:auto;display:flex;flex-direction:column;gap:14px}
+.screen{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;overflow:hidden;background:var(--paper);border-radius:4px}
+.screen:fullscreen{border-radius:0;background:#000}
+.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.controls button{font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--page-fg);background:transparent;border:1px solid #3a3a3a;border-radius:999px;padding:8px 14px;cursor:pointer}
+.controls button:hover{border-color:var(--page-fg)}
+.controls button:focus-visible,#scrub:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+#scrub{flex:1 1 160px;min-width:0;accent-color:var(--red)}
+.time{color:var(--page-dim);font-variant-numeric:tabular-nums}
+.caption{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--page-dim)}
+
+/* ---------- stage ---------- */
+.stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:var(--paper);color:var(--ink);overflow:hidden;--hud:#121214;--tick:#E2261C}
+.mono{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.14em}
+.d{font-family:var(--display);font-variation-settings:"wdth" var(--wd,100)}
+.scene{position:absolute;inset:0;visibility:hidden}
+.c{display:inline-block;will-change:transform}
+.mask{display:inline-block;overflow:hidden;padding:.06em .04em .12em;margin:-.06em -.04em -.12em;vertical-align:top}
+.ln{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
+.ln>.in{display:inline-block}
+.red{color:var(--red)}
+.center{position:absolute;inset:0;display:grid;place-items:center}
+
+/* HUD */
+.hud{position:absolute;z-index:20;color:var(--hud);font-size:18px}
+.hud-tl{left:72px;top:56px}
+.hud-tr{right:72px;top:56px}
+.hud-bl{left:72px;bottom:56px;font-variant-numeric:tabular-nums}
+.hud-br{right:72px;bottom:56px;display:flex;gap:22px}
+.hud-br span{opacity:.35}
+.hud-br span.on{opacity:1;color:var(--tick)}
+.bar{position:absolute;left:0;bottom:0;height:6px;width:100%;background:var(--red);transform-origin:0 50%;transform:scaleX(0);z-index:21}
+.mark{position:absolute;width:26px;height:26px;border-color:var(--hud);border-style:solid;border-width:0;opacity:.5;z-index:20}
+.mark.a{left:32px;top:32px;border-left-width:2px;border-top-width:2px}
+.mark.b{right:32px;top:32px;border-right-width:2px;border-top-width:2px}
+.mark.c2{left:32px;bottom:32px;border-left-width:2px;border-bottom-width:2px}
+.mark.d2{right:32px;bottom:32px;border-right-width:2px;border-bottom-width:2px}
+.wipe{position:absolute;inset:0;z-index:15}
+#wipeR{background:var(--red)}
+#wipeK{background:var(--ink)}
+
+/* intro */
+#dot{position:absolute;left:50%;top:50%;width:26px;height:26px;border-radius:13px;background:var(--red)}
+.namewrap{position:relative}
+.name{font-size:330px;font-weight:850;line-height:1;letter-spacing:-.02em;margin:0}
+.period{display:inline-block;width:.17em;height:.17em;border-radius:50%;background:var(--red);margin-left:.05em}
+.hello{position:absolute;left:.1em;bottom:100%;font-size:64px;font-weight:300;margin-bottom:6px}
+.intro-meta{position:absolute;left:50%;bottom:-70px;transform:translateX(-50%);font-size:20px;white-space:nowrap}
+
+/* age */
+.age{position:absolute;left:160px;top:0;bottom:0;display:flex;align-items:center;gap:120px}
+.odo-wrap{display:flex;align-items:flex-end;gap:28px}
+.odo{font-size:600px;font-weight:900;line-height:1;--wd:70;font-variant-numeric:tabular-nums;display:flex;letter-spacing:-.03em}
+.col{display:block;height:1em;overflow:hidden}
+.strip{display:block}
+.strip>span{display:block;height:1em}
+.ans{font-size:140px;font-weight:300;line-height:1;margin-bottom:.32em}
+.profile{display:flex;flex-direction:column;gap:26px;max-width:640px}
+.label{font-size:20px;color:var(--mute)}
+.profile .txt{font-size:64px;font-weight:500;line-height:1.08;letter-spacing:-.01em}
+
+/* sommaire */
+.sum{position:absolute;left:160px;right:160px;top:230px;display:flex;flex-direction:column;gap:0}
+.sum .label{margin-bottom:40px}
+.row{position:relative;display:grid;grid-template-columns:140px 1fr auto;align-items:baseline;padding-block:18px 26px}
+.row .num{font-size:26px;color:var(--red)}
+.row .ttl{font-size:150px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.row .desc{font-size:22px;color:var(--mute)}
+.rule{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--ink);transform-origin:0 50%}
+
+/* chapter cards */
+.chap-wrap{position:absolute;left:160px;right:160px;top:0;bottom:0;display:flex;align-items:center;gap:56px}
+.chap-num{font-size:560px;font-weight:900;line-height:.86;color:var(--red);letter-spacing:-.04em;--wd:62}
+.chap-side{display:flex;flex-direction:column;gap:28px;padding-bottom:30px;align-self:flex-end;margin-bottom:262px}
+.kicker{font-size:22px}
+.chap-ttl{font-size:210px;font-weight:800;line-height:.92;letter-spacing:-.025em}
+.chap-ttl .mask{display:block}
+
+/* stages */
+.s3-text{position:absolute;left:160px;top:250px;width:860px;display:flex;flex-direction:column;gap:30px}
+.s3-text .lead{font-size:56px;font-weight:400;line-height:1.1}
+.s3-text .big{font-size:92px;font-weight:800;line-height:1;letter-spacing:-.02em;--wd:84}
+.chart{position:absolute;left:1120px;top:300px;width:640px;height:520px;overflow:visible}
+.chart text{font-family:var(--mono);font-size:17px;font-weight:500;letter-spacing:.14em}
+
+/* FR x JP */
+.s4-text{position:absolute;left:160px;top:300px;width:900px;display:flex;flex-direction:column;gap:30px}
+.s4-text .big{font-size:120px;font-weight:800;line-height:.98;letter-spacing:-.025em;--wd:88}
+.s4-text .sub{font-size:44px;font-weight:400}
+.flag{position:absolute;top:360px;height:360px;width:76px;transform-origin:50% 100%}
+.flag.b1{left:1120px;background:var(--fr-blue)}
+.flag.b2{left:1206px;background:var(--paper);box-shadow:inset 0 0 0 3px var(--ink)}
+.flag.b3{left:1292px;background:var(--red)}
+.fr-lbl{position:absolute;left:1120px;top:752px;font-size:18px}
+#sun{position:absolute;left:1500px;top:390px;width:300px;height:300px;border-radius:50%;background:var(--red);z-index:5}
+.jp-lbl{position:absolute;left:1500px;top:752px;font-size:18px}
+.times{position:absolute;left:1392px;top:500px;width:108px;text-align:center;font-family:var(--mono);font-size:64px;line-height:80px}
+
+/* Heinz x Absolut */
+.half{position:absolute;top:0;bottom:0;width:50%;display:grid;place-items:center;color:var(--paper)}
+.half.l{left:0;background:var(--red)}
+.half.r{left:50%;background:var(--navy)}
+.brand{display:flex;flex-direction:column;align-items:center;gap:22px}
+.brand .nm{font-size:190px;font-weight:900;line-height:1;letter-spacing:-.02em}
+.brand .nm.h{--wd:100}
+.brand .nm.a{--wd:72}
+.brand .tag{font-size:22px;opacity:.85}
+.badge{position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:var(--paper);color:var(--ink);display:grid;place-items:center;font-family:var(--mono);font-size:70px;z-index:3}
+.hx-cap{position:absolute;left:0;right:0;bottom:170px;text-align:center;color:var(--paper);font-size:44px;font-weight:400;z-index:3}
+.hx-kick{position:absolute;left:0;right:0;top:190px;text-align:center;color:var(--paper);font-size:20px;z-index:3}
+
+/* projets */
+.s5{position:absolute;left:160px;right:160px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:24px}
+.s5 .lead{font-size:64px;font-weight:400}
+.slot{font-size:210px;font-weight:900;line-height:1;letter-spacing:-.02em;--wd:78;height:1.14em;overflow:hidden;padding-bottom:0;margin-bottom:0}
+.slot .strip>span{height:1.14em}
+.s5 .sub{font-size:44px;font-weight:400;color:var(--ink);margin-top:10px}
+
+/* outro */
+.outro{display:flex;flex-direction:column;align-items:center;gap:34px}
+.outro .name{font-size:300px}
+.outro .chapters{font-size:22px;color:var(--mute)}
+.outro .bye{font-size:68px;font-weight:400}
+
+/* render mode (video export) */
+body.render{padding:0;display:block;background:var(--paper)}
+body.render .player{width:1920px;gap:0}
+body.render .screen{width:1920px;height:1080px;border-radius:0}
+body.render .controls,body.render .caption{display:none}
+</style>
+
+<div class="player">
+  <div class="screen" id="screen">
+    <div class="stage" id="stage" aria-label="Présentation animée du portfolio de Joshua">
+      <i class="mark a"></i><i class="mark b"></i><i class="mark c2"></i><i class="mark d2"></i>
+      <div class="hud hud-tl mono">Joshua — Portfolio 2026</div>
+      <div class="hud hud-tr mono" id="hudChap">00 — Intro</div>
+      <div class="hud hud-bl mono" id="hudTc">00:00:00</div>
+      <div class="hud hud-br mono" id="hudTicks"><span>00</span><span>01</span><span>02</span><span>03</span></div>
+      <div class="bar" id="bar"></div>
+      <div class="wipe" id="wipeR"></div>
+      <div class="wipe" id="wipeK"></div>
+
+      <!-- 0 · intro -->
+      <section class="scene" id="s-intro">
+        <div id="dot"></div>
+        <div class="center">
+          <div class="namewrap">
+            <div class="hello"><span class="mask" data-split>Moi c'est</span></div>
+            <h1 class="name d" id="name"><span class="mask"><span data-split>Joshua</span><span class="period" id="period"></span></span></h1>
+            <div class="intro-meta mono" id="introMeta">Portfolio — 2026</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1 · âge -->
+      <section class="scene" id="s-age">
+        <div class="age">
+          <div class="odo-wrap">
+            <div class="odo d" id="odo">
+              <span class="col"><span class="strip" id="tens"><span>0</span><span>1</span></span></span>
+              <span class="col"><span class="strip" id="ones"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span></span>
+            </div>
+            <div class="ans d"><span class="mask" data-split>ans</span></div>
+          </div>
+          <div class="profile">
+            <div class="label mono ln"><span class="in">Profil</span></div>
+            <div class="txt d">
+              <span class="ln"><span class="in">Étudiant, et déjà</span></span>
+              <span class="ln"><span class="in">passé par</span></span>
+              <span class="ln"><span class="in">l'entreprise<span class="red">.</span></span></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 · sommaire -->
+      <section class="scene" id="s-sum">
+        <div class="sum">
+          <div class="label mono ln"><span class="in">Dans ce portfolio</span></div>
+          <div class="row"><span class="num mono">01</span><span class="ttl d ln"><span class="in">Stages</span></span><span class="desc mono">En entreprise</span><i class="rule"></i></div>
+          <div class="row"><span class="num mono">02</span><span class="ttl d ln"><span class="in">Ateliers</span></span><span class="desc mono">En cours</span><i class="rule"></i></div>
+          <div class="row"><span class="num mono">03</span><span class="ttl d ln"><span class="in">Projets perso</span></span><span class="desc mono">À côté des études</span><i class="rule"></i></div>
+        </div>
+      </section>
+
+      <!-- 3 · chapitre stages -->
+      <section class="scene" id="s-c1">
+        <div class="chap-wrap">
+          <div class="chap-num d"><span class="mask" data-split>01</span></div>
+          <div class="chap-side">
+            <div class="kicker mono">Chapitre 01 — En entreprise</div>
+            <div class="chap-ttl d"><span class="mask" data-split>Stages</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="s-stages">
+        <div class="s3-text">
+          <div class="label mono ln"><span class="in">Stages en entreprise</span></div>
+          <div class="lead d">
+            <span class="ln"><span class="in">Plusieurs stages,</span></span>
+            <span class="ln"><span class="in">une mission marquante :</span></span>
+          </div>
+          <div class="big d">
+            <span class="ln"><span class="in">aider une entreprise</span></span>
+            <span class="ln"><span class="in">en déficit à</span></span>
+            <span class="ln"><span class="in red">sortir du rouge.</span></span>
+          </div>
+        </div>
+        <svg class="chart" viewBox="0 0 640 520" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="520">
+              <stop offset="0" stop-color="#121214"/>
+              <stop offset=".4615" stop-color="#121214"/>
+              <stop offset=".4615" stop-color="#E2261C"/>
+              <stop offset="1" stop-color="#E2261C"/>
+            </linearGradient>
+          </defs>
+          <rect id="zone" x="0" y="240" width="640" height="250" fill="#E2261C" fill-opacity=".09"/>
+          <line id="zero" x1="0" y1="240" x2="640" y2="240" stroke="#121214" stroke-width="2" stroke-dasharray="6 8"/>
+          <line id="axis" x1="0" y1="490" x2="640" y2="490" stroke="#121214" stroke-width="2"/>
+          <text class="ax" x="0" y="226" fill="#121214">0</text>
+          <text class="ax" x="0" y="520" fill="#8B8B86">Avant</text>
+          <text class="ax" x="640" y="520" fill="#8B8B86" text-anchor="end">Après</text>
+          <path id="curve" d="M0,150 C80,160 150,330 240,400 S360,440 420,320 S560,80 640,56" fill="none" stroke="url(#g)" stroke-width="9" stroke-linecap="round"/>
+          <text id="lblDef" x="240" y="462" fill="#E2261C" text-anchor="middle">Déficit</text>
+          <text id="lblRed" x="640" y="24" fill="#121214" text-anchor="end">Redressement</text>
+          <circle id="pt" r="13" cx="0" cy="150" fill="#121214"/>
+        </svg>
+      </section>
+
+      <!-- 4 · chapitre ateliers -->
+      <section class="scene" id="s-c2">
+        <div class="chap-wrap">
+          <div class="chap-num d"><span class="mask" data-split>02</span></div>
+          <div class="chap-side">
+            <div class="kicker mono">Chapitre 02 — En cours</div>
+            <div class="chap-ttl d"><span class="mask" data-split>Ateliers</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="s-frjp">
+        <div class="s4-text">
+          <div class="label mono ln"><span class="in">Atelier — Cas 1</span></div>
+          <div class="big d">
+            <span class="ln"><span class="in">Mariages</span></span>
+            <span class="ln"><span class="in">franco-japonais</span></span>
+          </div>
+          <div class="sub d ln"><span class="in">Deux cultures, une seule célébration.</span></div>
+        </div>
+        <i class="flag b1"></i><i class="flag b2"></i><i class="flag b3"></i>
+        <div class="fr-lbl mono">France</div>
+        <div class="times" id="times">×</div>
+        <div id="sun"></div>
+        <div class="jp-lbl mono">Japon</div>
+      </section>
+
+      <section class="scene" id="s-hx">
+        <div class="half l" id="halfL">
+          <div class="brand"><div class="nm h d"><span class="mask" data-split>HEINZ</span></div><div class="tag mono">Ketchup</div></div>
+        </div>
+        <div class="half r" id="halfR">
+          <div class="brand"><div class="nm a d"><span class="mask" data-split>ABSOLUT</span></div><div class="tag mono">Vodka</div></div>
+        </div>
+        <div class="hx-kick mono" id="hxKick">Atelier — Cas 2 · Partenariat de marque</div>
+        <div class="badge" id="badge">×</div>
+        <div class="hx-cap d ln" id="hxCap"><span class="in">Deux marques que rien ne relie. Un partenariat imaginé de A à Z.</span></div>
+      </section>
+
+      <!-- 5 · chapitre projets -->
+      <section class="scene" id="s-c3">
+        <div class="chap-wrap">
+          <div class="chap-num d"><span class="mask" data-split>03</span></div>
+          <div class="chap-side">
+            <div class="kicker mono">Chapitre 03 — À côté des études</div>
+            <div class="chap-ttl d"><span class="mask" data-split>Projets</span><span class="mask" data-split>perso</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="s-proj">
+        <div class="s5">
+          <div class="label mono ln"><span class="in">En dehors des cours</span></div>
+          <div class="lead d ln"><span class="in">À côté de mes études, j'ai voulu</span></div>
+          <div class="slot d ln"><span class="in"><span class="strip" id="words">
+            <span>entreprendre<span class="red">.</span></span>
+            <span>tester<span class="red">.</span></span>
+            <span>créer<span class="red">.</span></span>
+            <span>apprendre<span class="red">.</span></span>
+            <span>entreprendre<span class="red">.</span></span>
+          </span></span></div>
+          <div class="sub d ln"><span class="in">Les projets que j'ai menés en parallèle, de l'idée au concret.</span></div>
+        </div>
+      </section>
+
+      <!-- 6 · outro -->
+      <section class="scene" id="s-outro">
+        <div class="center">
+          <div class="outro">
+            <div class="mono ln" style="font-size:22px"><span class="in">Portfolio — 2026</span></div>
+            <h2 class="name d" id="name2"><span class="mask"><span data-split>Joshua</span><span class="period" id="period2"></span></span></h2>
+            <div class="chapters mono ln"><span class="in">Stages · Ateliers · Projets perso</span></div>
+            <div class="bye d ln"><span class="in">Bonne découverte<span class="red">.</span></span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="controls">
+    <button type="button" id="btnPlay">Pause</button>
+    <button type="button" id="btnReplay">Rejouer</button>
+    <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Position dans l'animation">
+    <span class="time" id="timeLabel">00:00 / 00:49</span>
+    <button type="button" id="btnFs">Plein écran</button>
+  </div>
+  <div class="caption">Motion d'ouverture · 49 s · 16:9 · Espace pour lecture / pause</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script>
+(() => {
+  const RENDER = !!window.__RENDER__;
+  if (RENDER) document.body.classList.add('render');
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const stage = $('#stage'), screen = $('#screen');
+
+  // split text nodes into animatable characters
+  $$('[data-split]').forEach(el => {
+    [...el.childNodes].forEach(n => {
+      if (n.nodeType !== 3) return;
+      const frag = document.createDocumentFragment();
+      for (const ch of n.textContent) {
+        const s = document.createElement('span');
+        s.className = 'c';
+        s.textContent = ch === ' ' ? ' ' : ch;
+        frag.appendChild(s);
+      }
+      n.replaceWith(frag);
+    });
+  });
+  const chars = sel => $$(sel + ' .c');
+  const ins = sel => $$(sel + ' .ln > .in');
+
+  // fit the 1920×1080 stage into its screen
+  function fit() {
+    const w = screen.clientWidth, h = screen.clientHeight;
+    const s = Math.min(w / 1920, h / 1080);
+    stage.style.transform = `translate(${(w - 1920 * s) / 2}px, ${(h - 1080 * s) / 2}px) scale(${s})`;
+  }
+  new ResizeObserver(fit).observe(screen);
+  fit();
+
+  const DUR = 49;
+  const tl = gsap.timeline({ paused: true });
+  const E = 'expo.out', EI = 'expo.in', EIO = 'expo.inOut';
+  const show = (sel, t) => tl.set(sel, { autoAlpha: 1 }, t);
+  const hide = (sel, t) => tl.set(sel, { autoAlpha: 0 }, t);
+  const rise = (targets, t, o = {}) => tl.fromTo(targets, { yPercent: 115 }, { yPercent: 0, duration: .9, ease: E, stagger: .04, ...o }, t);
+  const leave = (targets, t, o = {}) => tl.to(targets, { yPercent: -115, duration: .55, ease: EI, stagger: .02, ...o }, t);
+  const wipe = (sel, t, from, to) => {
+    tl.fromTo(sel, { xPercent: -101 }, { xPercent: 0, duration: .45, ease: EI, immediateRender: false }, t);
+    hide(from, t + .45); show(to, t + .45);
+    tl.to(sel, { xPercent: 101, duration: .6, ease: E }, t + .45);
+  };
+  gsap.set(['#wipeR', '#wipeK'], { xPercent: -101 });
+
+  // 0 · intro — the red dot becomes a line, the name rises from it
+  show('#s-intro', 0);
+  gsap.set('#dot', { xPercent: -50, yPercent: -50 });
+  tl.fromTo('#dot', { scale: 0 }, { scale: 1, duration: .5, ease: 'back.out(3)' }, .2);
+  tl.to('#dot', { width: 1500, height: 6, borderRadius: 3, duration: .8, ease: EIO }, .85);
+  tl.to('#dot', { y: 168, duration: .7, ease: EIO }, 1.5);
+  rise(chars('#name'), 1.6, { stagger: .05 });
+  tl.fromTo('#name', { '--wd': 62 }, { '--wd': 112, duration: 1.7, ease: 'power3.inOut' }, 1.6);
+  tl.to('#dot', { scaleX: 0, transformOrigin: '100% 50%', duration: .6, ease: EI }, 2.5);
+  tl.fromTo('#introMeta', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: .6, ease: 'power3.out' }, 2.7);
+  gsap.set(['#period', '#period2'], { scale: 0 });
+
+  // 1 · "Moi c'est Joshua." then 19 ans
+  rise(chars('.hello'), 3.4, { duration: .7, stagger: .03 });
+  tl.to('#period', { scale: 1, duration: .5, ease: 'back.out(4)' }, 3.75);
+  tl.to('#introMeta', { autoAlpha: 0, duration: .3 }, 4.9);
+  leave(chars('.hello'), 5.0);
+  leave(chars('#name'), 5.05, { duration: .6, stagger: .03 });
+  tl.to('#period', { scale: 0, duration: .3, ease: EI }, 5.35);
+  hide('#s-intro', 5.75); show('#s-age', 5.6);
+  tl.fromTo('#odo', { yPercent: 25, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: .9, ease: E }, 5.6);
+  tl.fromTo('#ones', { yPercent: 0 }, { yPercent: -95, duration: 1.8, ease: EIO }, 5.7);
+  tl.fromTo('#tens', { yPercent: 0 }, { yPercent: -50, duration: 1.4, ease: EIO }, 6.0);
+  rise(chars('.ans'), 6.9, { stagger: .05 });
+  rise(ins('.profile'), 7.0, { stagger: .1 });
+  wipe('#wipeR', 8.6, '#s-age', '#s-sum');
+
+  // 2 · sommaire
+  rise(ins('.sum'), 9.25, { stagger: .16, duration: 1 });
+  tl.fromTo('.sum .rule', { scaleX: 0 }, { scaleX: 1, duration: 1, ease: EIO, stagger: .16 }, 9.3);
+  tl.fromTo('.sum .num, .sum .desc', { autoAlpha: 0, x: -16 }, { autoAlpha: 1, x: 0, duration: .6, ease: E, stagger: .08 }, 9.7);
+  leave(ins('.sum'), 13.2, { stagger: .07 });
+  tl.to('.sum .rule', { scaleX: 0, transformOrigin: '100% 50%', duration: .6, ease: EI, stagger: .07 }, 13.2);
+  tl.to('.sum .num, .sum .desc', { autoAlpha: 0, duration: .3 }, 13.4);
+  hide('#s-sum', 14.0);
+
+  // chapter card
+  const chapter = (id, t) => {
+    show(id, t);
+    rise(chars(id + ' .chap-num'), t + .05, { stagger: .08, duration: 1 });
+    rise(chars(id + ' .chap-ttl'), t + .2, { stagger: .035 });
+    tl.fromTo(id + ' .chap-ttl', { '--wd': 72 }, { '--wd': 100, duration: 1.5, ease: 'power3.out' }, t + .2);
+    tl.fromTo(id + ' .kicker', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .6, ease: E }, t + .5);
+    leave(chars(id + ' .chap-num'), t + 1.7, { stagger: .05 });
+    leave(chars(id + ' .chap-ttl'), t + 1.75, { stagger: .015 });
+    tl.to(id + ' .kicker', { autoAlpha: 0, duration: .3 }, t + 1.75);
+    hide(id, t + 2.35);
+  };
+
+  // 3 · stages
+  chapter('#s-c1', 14.0);
+  show('#s-stages', 16.2);
+  rise(ins('.s3-text'), 16.3, { stagger: .09, duration: 1 });
+  tl.fromTo('#axis, #zero', { scaleX: 0, svgOrigin: '0 0' }, { scaleX: 1, duration: .9, ease: EIO }, 16.7);
+  tl.fromTo('#zone', { scaleY: 0, svgOrigin: '0 240' }, { scaleY: 1, duration: .8, ease: E }, 17.0);
+  tl.fromTo('.chart .ax', { autoAlpha: 0 }, { autoAlpha: 1, duration: .4, stagger: .08 }, 17.1);
+  const draw = { p: 0 };
+  tl.fromTo(draw, { p: 0 }, { p: 1, duration: 2.8, ease: 'power2.inOut' }, 17.4);
+  tl.fromTo('#pt', { autoAlpha: 0 }, { autoAlpha: 1, duration: .2 }, 17.4);
+  tl.fromTo('#lblDef', { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: .5, ease: E }, 18.4);
+  tl.fromTo('#lblRed', { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: .5, ease: E }, 19.9);
+  wipe('#wipeK', 22.5, '#s-stages', '#s-c2');
+
+  // 4 · ateliers
+  chapter('#s-c2', 23.0);
+  show('#s-frjp', 25.25);
+  rise(ins('.s4-text'), 25.3, { stagger: .1, duration: 1 });
+  tl.fromTo('.flag', { scaleY: 0 }, { scaleY: 1, duration: .9, ease: E, stagger: .1 }, 25.6);
+  tl.fromTo('.fr-lbl, .jp-lbl', { autoAlpha: 0 }, { autoAlpha: 1, duration: .5, stagger: .2 }, 26.2);
+  tl.fromTo('#sun', { scale: 0 }, { scale: 1, duration: 1, ease: 'back.out(1.6)' }, 26.0);
+  tl.fromTo('#times', { rotate: -180, scale: 0 }, { rotate: 0, scale: 1, duration: .9, ease: E }, 26.4);
+  leave(ins('.s4-text'), 29.4, { stagger: .05 });
+  tl.to('.flag', { scaleY: 0, transformOrigin: '50% 0%', duration: .5, ease: EI, stagger: .06 }, 29.4);
+  tl.to('#times, .fr-lbl, .jp-lbl', { autoAlpha: 0, duration: .3 }, 29.4);
+  // match cut: the Japanese sun floods the frame and becomes Heinz red
+  tl.to('#sun', { scale: 12.5, duration: .8, ease: EI }, 29.7);
+  tl.fromTo(stage, { '--hud': '#121214', '--tick': '#E2261C' }, { '--hud': '#F3F3F0', '--tick': '#F3F3F0', duration: .3, immediateRender: false }, 30.2);
+  hide('#s-frjp', 30.5); show('#s-hx', 30.5);
+  tl.fromTo('#halfR', { xPercent: 101 }, { xPercent: 0, duration: .8, ease: EIO }, 30.5);
+  rise(chars('.half.l .nm'), 30.85, { stagger: .05 });
+  rise(chars('.half.r .nm'), 31.05, { stagger: .04 });
+  tl.fromTo('.half .tag', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .6, ease: E, stagger: .15 }, 31.5);
+  tl.fromTo('#badge', { scale: 0, rotate: 180 }, { scale: 1, rotate: 0, duration: .9, ease: 'back.out(2)' }, 31.3);
+  tl.fromTo('#hxKick', { autoAlpha: 0 }, { autoAlpha: 1, duration: .5 }, 31.6);
+  rise(ins('#s-hx'), 31.9);
+  tl.to('#badge', { scale: 0, rotate: -180, duration: .4, ease: EI }, 35.0);
+  tl.to('#hxCap, #hxKick', { autoAlpha: 0, duration: .3 }, 35.0);
+  tl.to('#halfL', { yPercent: -101, duration: .8, ease: EIO }, 35.1);
+  tl.to('#halfR', { yPercent: 101, duration: .8, ease: EIO }, 35.1);
+  tl.fromTo(stage, { '--hud': '#F3F3F0', '--tick': '#F3F3F0' }, { '--hud': '#121214', '--tick': '#E2261C', duration: .3, immediateRender: false }, 35.5);
+  hide('#s-hx', 35.95);
+
+  // 5 · projets perso
+  chapter('#s-c3', 35.95);
+  show('#s-proj', 38.15);
+  rise(ins('.s5'), 38.2, { stagger: .12, duration: 1 });
+  [39.3, 39.85, 40.4, 40.95].forEach((t, i) =>
+    tl.fromTo('#words', { yPercent: -20 * i }, { yPercent: -20 * (i + 1), duration: .45, ease: EIO, immediateRender: false }, t));
+  gsap.set('#words', { yPercent: 0 });
+  wipe('#wipeR', 42.3, '#s-proj', '#s-outro');
+
+  // 6 · outro
+  rise(ins('.outro').slice(0, 1), 42.9);
+  rise(chars('#name2'), 43.0, { stagger: .05 });
+  tl.fromTo('#name2', { '--wd': 62 }, { '--wd': 112, duration: 1.7, ease: 'power3.inOut' }, 43.0);
+  tl.to('#period2', { scale: 1, duration: .5, ease: 'back.out(4)' }, 44.1);
+  rise(ins('.outro').slice(1), 44.3, { stagger: .25, duration: 1 });
+  tl.to({}, { duration: .001 }, DUR - .001);
+
+  // sync the HUD, chart and controls from the playhead
+  const curve = $('#curve'), pt = $('#pt');
+  const LEN = curve.getTotalLength();
+  curve.style.strokeDasharray = LEN;
+  const chapters = [[0, '00 — Intro', 0], [9.05, 'Sommaire', 0], [14, '01 — Stages', 1], [22.95, '02 — Ateliers', 2], [35.95, '03 — Projets perso', 3], [42.75, 'Fin', -1]];
+  const ticks = $$('#hudTicks span');
+  const hudChap = $('#hudChap'), hudTc = $('#hudTc'), bar = $('#bar');
+  const scrub = $('#scrub'), timeLabel = $('#timeLabel');
+  const pad = n => String(n).padStart(2, '0');
+  let lastChap = '';
+  let dragging = false;
+  function sync() {
+    const t = tl.time();
+    const s = Math.floor(t), f = Math.floor((t - s) * 30);
+    hudTc.textContent = `${pad(Math.floor(s / 60))}:${pad(s % 60)}:${pad(f)}`;
+    bar.style.transform = `scaleX(${t / DUR})`;
+    let cur = chapters[0];
+    for (const c of chapters) if (t >= c[0]) cur = c;
+    if (cur[1] !== lastChap) {
+      lastChap = cur[1];
+      hudChap.textContent = cur[1];
+      ticks.forEach((el, i) => el.classList.toggle('on', i === cur[2]));
+    }
+    curve.style.strokeDashoffset = LEN * (1 - draw.p);
+    const p = curve.getPointAtLength(LEN * draw.p);
+    pt.setAttribute('cx', p.x);
+    pt.setAttribute('cy', p.y);
+    pt.setAttribute('fill', p.y > 240 ? '#E2261C' : '#121214');
+    if (!dragging) scrub.value = Math.round(t / DUR * 1000);
+    timeLabel.textContent = `00:${pad(s)} / 00:${pad(DUR)}`;
+    btnPlay.textContent = tl.isActive() ? 'Pause' : 'Lecture';
+  }
+
+  const btnPlay = $('#btnPlay');
+  const play = () => { if (tl.time() >= DUR - .01) tl.restart(); else tl.play(); };
+  btnPlay.addEventListener('click', () => tl.isActive() ? tl.pause() : play());
+  $('#btnReplay').addEventListener('click', () => tl.restart());
+  scrub.addEventListener('pointerdown', () => { dragging = true; });
+  scrub.addEventListener('input', () => { tl.pause(); tl.seek(scrub.value / 1000 * DUR); });
+  scrub.addEventListener('change', () => { dragging = false; });
+  $('#btnFs').addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else screen.requestFullscreen?.().catch(() => {});
+  });
+  document.addEventListener('keydown', e => {
+    if (e.code !== 'Space' || e.target.closest('button, input')) return;
+    e.preventDefault();
+    tl.isActive() ? tl.pause() : play();
+  });
+
+  if (RENDER) {
+    window.__seek = t => { tl.seek(t); sync(); };
+    window.__DUR = DUR;
+    return;
+  }
+  gsap.ticker.add(sync);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const start = () => reduced ? tl.seek(DUR) : tl.play(0);
+  tl.seek(4.4); // poster frame until fonts are ready
+  sync();
+  (document.fonts?.ready ?? Promise.resolve()).then(() => setTimeout(start, 300));
+})();
+</script>
