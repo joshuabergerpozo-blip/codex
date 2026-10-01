@@ -13,7 +13,6 @@ rng = np.random.default_rng(19)
 
 dry = np.zeros((N, 2))
 send = np.zeros((N, 2))  # reverb bus
-bed = np.zeros((N, 2))   # music bed, ducked by impacts
 duck = np.ones(N)
 
 
@@ -69,6 +68,10 @@ def expo_in_out(x):
 def cubic_in_out(x):
     x = np.clip(x, 0, 1)
     return np.where(x < .5, 4 * x ** 3, 1 - (-2 * x + 2) ** 3 / 2)
+
+
+def note(m):
+    return 440 * 2 ** ((m - 69) / 12)
 
 
 # ---------- instruments ----------
@@ -152,69 +155,6 @@ def riser(t0, d, gain=.6):
     sig = n * .7 + tone * x ** 2 * .45
     out(t0, sig, gain, rev=.4)
 
-
-# ---------- music bed ----------
-def note(f):
-    return 440 * 2 ** ((f - 69) / 12)
-
-
-def pad_chord(t0, t1, midis, gain=.07):
-    d = t1 - t0 + 1.5
-    t = tt(d)
-    env = np.minimum(1, t / 1.2) * np.clip((d - t) / 1.5, 0, 1)
-    l = np.zeros(len(t))
-    r = np.zeros(len(t))
-    for m in midis:
-        f = note(m)
-        for det, side in ((-.11, 0), (.09, 1), (0, 2)):
-            ph = rng.uniform(0, 2 * np.pi)
-            w = 2 * ((f * (1 + det / 100) * t + ph / (2 * np.pi)) % 1) - 1  # saw
-            if side == 0:
-                l += w
-            elif side == 1:
-                r += w
-            else:
-                l += .5 * w
-                r += .5 * w
-    l = lp(l, 900, 2) * env
-    r = lp(r, 900, 2) * env
-    sig = np.stack([l, r], axis=1) / len(midis)
-    place(bed, t0, sig, gain)
-    place(send, t0, sig, gain * .5)
-
-
-def kick(t0, gain=.35):
-    t = tt(.35)
-    f = 45 + 80 * np.exp(-t * 30)
-    sig = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 9)
-    place(bed, t0, np.stack([sig, sig], 1), gain)
-
-
-def hat(t0, gain=.05, pan=.2):
-    t = tt(.06)
-    sig = hp(rng.standard_normal(len(t)), 8000) * np.exp(-t * 90)
-    place(bed, t0, sig, gain, pan)
-
-
-# chords (MIDI): D minor world, resolving to D major on the outro
-pad_chord(0.0, 9.05, [38, 45, 50, 57], .06)                 # D drone
-pad_chord(9.05, 14.0, [46, 53, 57, 62, 65], .07)            # Bbmaj7
-pad_chord(14.0, 22.95, [50, 57, 60, 65, 69], .07)           # Dm7
-pad_chord(22.95, 30.5, [43, 50, 53, 58, 62], .07)           # Gm
-pad_chord(30.5, 35.95, [45, 52, 55, 61, 64], .075)          # A7 (tension under Heinz × Absolut)
-pad_chord(35.95, 42.75, [46, 53, 57, 60, 65], .07)          # Bb6/9
-pad_chord(42.75, 49.0, [38, 50, 54, 57, 62, 66], .085)      # D major, resolution
-
-beat = .5  # 120 BPM grid from the sommaire to the last wipe
-b = 9.05
-i = 0
-while b < 42.3:
-    if not (29.6 < b < 30.6):  # drop the pulse during the sun riser
-        kick(b, .26 if b < 14 else .32)
-        if b >= 14.0:
-            hat(b + beat / 2, .045, .25 if i % 2 else -.25)
-    b += beat
-    i += 1
 
 # ---------- sound effects, cued to the timeline ----------
 # 0 · intro
@@ -345,8 +285,266 @@ for k, m in enumerate([62, 66, 69, 74]):
     pluck(44.35 + .12 * k, note(m), .2, -.3 + .2 * k)
 bell(44.75, note(74), .18, 0, decay=.6)
 
+# ---------- music: a 120 BPM D-minor groove, arranged on the visual cut points ----------
+BPM = 120
+BEAT = 60 / BPM          # .5 s: every chapter hit lands on this grid
+S16 = BEAT / 4
+drums = np.zeros((N, 2))
+music = np.zeros((N, 2))  # pumped by the kick (sidechain) and filtered by the automation below
+delay_bus = np.zeros((N, 2))
+side = np.ones(N)
+
+
+def saw(f, t, ph=0.0):
+    return 2 * ((f * t + ph) % 1) - 1
+
+
+def section(t):
+    """Arrangement map: which layers play at time t."""
+    if t < 1.5:
+        return 'pre'
+    if t < 5.5:
+        return 'intro'
+    if t < 9.0:
+        return 'build'
+    if t < 13.0:
+        return 'groove'
+    if t < 14.0:
+        return 'break'
+    if t < 29.5:
+        return 'groove'
+    if t < 30.5:
+        return 'silence'
+    if t < 35.0:
+        return 'drop'
+    if t < 36.0:
+        return 'break'
+    if t < 46.0:
+        return 'groove'
+    return 'end'
+
+
+PROG = [  # (bass root, chord tones) per 2 s bar: Dm – Bb – F – C
+    (38, [62, 65, 69]),
+    (34, [58, 62, 65]),
+    (41, [60, 65, 69]),
+    (36, [60, 64, 67]),
+]
+HIRAJOSHI = [62, 64, 65, 69, 70]  # D E F A Bb, for the franco-japanese chapter
+
+
+def chord_at(t):
+    return PROG[int(t // (4 * BEAT)) % 4]
+
+
+# drums
+def d_kick(t0, gain=1.0):
+    t = tt(.4)
+    f = 48 + 110 * np.exp(-t * 32)
+    sig = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 7.5)
+    sig += hp(rng.standard_normal(len(t)), 3000) * np.exp(-t * 300) * .25
+    sig = np.tanh(sig * 1.8)
+    place(drums, t0, sig, gain * .9)
+    i = int(t0 * SR)
+    k = np.arange(int(SR * .32))
+    j = min(N, i + len(k))
+    side[i:j] = np.minimum(side[i:j], 1 - .78 * np.exp(-k[:j - i] / SR / .07))
+
+
+def d_clap(t0, gain=1.0):
+    t = tt(.35)
+    n = bp(rng.standard_normal(len(t)), 900, 4500)
+    env = np.zeros(len(t))
+    for o in (0, .011, .022):
+        k = int(o * SR)
+        env[k:] += np.exp(-(t[: len(t) - k]) * 70)
+    env += np.exp(-t * 13) * .5
+    place(drums, t0, n * env, gain * .45, -.05)
+    place(send, t0, n * env, gain * .12)
+
+
+def d_hat(t0, gain=1.0, open_=False, pan=.25):
+    t = tt(.35 if open_ else .05)
+    sig = hp(rng.standard_normal(len(t)), 7500) * np.exp(-t * (14 if open_ else 110))
+    place(drums, t0, sig, gain * (.16 if open_ else .11), pan)
+
+
+def d_crash(t0, gain=1.0, rev=False):
+    t = tt(1.8)
+    sig = hp(rng.standard_normal(len(t)), 4000) * np.exp(-t * 2.4)
+    sig2 = hp(rng.standard_normal(len(t)), 4000) * np.exp(-t * 2.4)
+    s = np.stack([sig, sig2], 1)
+    if rev:
+        s = s[::-1] * np.linspace(0, 1, len(t))[:, None] ** 2
+        place(drums, t0 - 1.8, s, gain * .22)
+    else:
+        place(drums, t0, s, gain * .22)
+        place(send, t0, s, gain * .08)
+
+
+def d_snare(t0, gain=1.0, pitch=200):
+    t = tt(.16)
+    body = np.sin(2 * np.pi * pitch * t) * np.exp(-t * 30)
+    sig = (bp(rng.standard_normal(len(t)), 1500, 7000) * .8 + body * .5) * np.exp(-t * 26)
+    place(drums, t0, sig, gain * .32)
+    place(send, t0, sig, gain * .07)
+
+
+def snare_roll(t0, t1, gain=1.0):
+    """Accelerating roll: 8ths, then 16ths, then 32nds, rising in level and pitch."""
+    t = t0
+    while t < t1 - 1e-6:
+        x = (t - t0) / (t1 - t0)
+        step = BEAT / 2 if x < .4 else (S16 if x < .75 else S16 / 2)
+        d_snare(t, gain * (.25 + .75 * x ** 1.5), 180 + 160 * x)
+        t += step
+
+
+# synths
+def s_bass(t0, m, d=S16 * .9, gain=1.0, grit=1.0):
+    t = tt(d + .03)
+    f = note(m)
+    sig = saw(f, t) * .6 + np.sign(np.sin(2 * np.pi * f * .5 * t)) * .5
+    env = np.minimum(1, t / .003) * np.clip((d + .03 - t) / .03, 0, 1) * np.exp(-t * 6)
+    sig = lp(sig, 420 + 900 * grit, 2) * env
+    sig = np.tanh(sig * (1.5 + grit))
+    place(music, t0, sig, gain * .3)
+
+
+def s_sub(t0, m, d, gain=1.0):
+    t = tt(d)
+    env = np.minimum(1, t / .02) * np.clip((d - t) / .05, 0, 1)
+    place(music, t0, np.sin(2 * np.pi * note(m) * t) * env, gain * .35)
+
+
+def s_arp(t0, m, cutoff, gain=1.0, pan=0.0):
+    t = tt(.2)
+    f = note(m)
+    sig = np.sign(np.sin(2 * np.pi * f * t)) * .5 + saw(f * 1.004, t) * .5
+    sig = lp(sig, cutoff, 2) * np.exp(-t * 22) * np.minimum(1, t / .002)
+    place(music, t0, sig, gain * .085, pan)
+    place(delay_bus, t0, sig, gain * .05, -pan)
+
+
+def s_pad(t0, d, midis, gain=1.0):
+    t = tt(d + .4)
+    env = np.minimum(1, t / .08) * np.clip((d + .4 - t) / .4, 0, 1)
+    l = sum(saw(note(m) * (1 - .0012), t, .1 * k) for k, m in enumerate(midis))
+    r = sum(saw(note(m) * (1 + .0012), t, .37 * k) for k, m in enumerate(midis))
+    s = np.stack([lp(l, 1800), lp(r, 1800)], 1) * env[:, None] / len(midis)
+    place(music, t0, s, gain * .11)
+    place(send, t0, s, gain * .03)
+
+
+def s_stab(t0, midis, gain=1.0):
+    t = tt(.22)
+    s = sum(saw(note(m), t) + saw(note(m) * 1.005, t) for m in midis) / (2 * len(midis))
+    s = lp(s, 3200) * np.exp(-t * 16)
+    place(music, t0, s, gain * .2, .15)
+    place(delay_bus, t0, s, gain * .07)
+
+
+# arrangement, one 16th at a time
+n16 = int(48 / S16)
+arp_pat = [0, 1, 2, 3, 2, 1, 0, 2]
+for i in range(n16):
+    t = i * S16
+    sec = section(t)
+    pos = i % 4            # 16th within the beat
+    beat_i = i // 4
+    root, tones = chord_at(t)
+    on_beat = pos == 0
+    full = sec in ('groove', 'drop')
+    # kick
+    if on_beat and (full or sec == 'build' or (sec == 'intro' and beat_i % 2 == 1) or (sec == 'end' and t < 46.01)):
+        d_kick(t, 1.12 if sec == 'drop' else 1.0)
+    # claps on 2 and 4
+    if on_beat and full and beat_i % 2 == 1:
+        d_clap(t, 1.15 if sec == 'drop' else 1.0)
+    # hats
+    if sec in ('groove', 'drop', 'build') and pos == 2:
+        d_hat(t, 1.0, True, .2)
+    if (full or sec == 'build') and pos != 2:
+        d_hat(t, .8 if pos else .5, False, -.3 if pos % 2 else .3)
+    if sec == 'intro' and pos == 2:
+        d_hat(t, .7, False, .3)
+    # bass
+    if full and not on_beat:
+        s_bass(t, root + (12 if pos == 2 else 0), gain=1.15 if sec == 'drop' else 1.0, grit=1.6 if sec == 'drop' else 1.0)
+    if sec in ('intro', 'build') and on_beat:
+        s_sub(t, root, BEAT * .95, .9)
+    if sec == 'build' and pos == 2:
+        s_bass(t, root, gain=.8)
+    # arp (16ths); pentatonic over the franco-japanese scene
+    if sec in ('intro', 'build', 'groove', 'drop', 'break'):
+        if 25.5 <= t < 29.5:
+            scale = HIRAJOSHI
+            m = scale[(i * 2) % 5] + (12 if (i // 5) % 2 else 0)
+        else:
+            k = arp_pat[i % 8]
+            m = tones[k % 3] + 12 * (k // 3) + (12 if sec == 'drop' else 0)
+        cut = 900 + 3000 * min(1, max(0, (t - 1.5) / 7.5)) if sec in ('intro', 'build') else 3800
+        s_arp(t, m, cut, .8 if sec == 'break' else 1.0, .45 if i % 2 else -.45)
+    # pad per bar
+    if i % 16 == 0 and sec not in ('pre', 'silence', 'end'):
+        s_pad(t, 4 * BEAT, [root + 12] + tones, 1.0 if sec != 'intro' else .7)
+    # drop stabs on the off-beats
+    if sec == 'drop' and pos == 2:
+        s_stab(t, tones, 1.0)
+
+# pre-roll: filtered swell into the first hit
+s_pad(0.0, 1.5, [50, 57, 62, 65], .6)
+# builds, crashes and turnarounds at every visual cut
+snare_roll(7.0, 9.0, 1.0)
+for tc in (9.0, 14.0, 23.0, 30.5, 36.0, 43.0):
+    d_crash(tc, 1.0)
+    d_crash(tc, .8, rev=True)
+snare_roll(21.0, 23.0, .9)
+snare_roll(29.5, 30.5, 1.2)
+snare_roll(41.0, 43.0, .9)
+d_kick(30.5, 1.25)
+# the end: one last D-major chord, rung out
+d_kick(46.0, 1.2)
+d_crash(46.0, 1.2)
+s_sub(46.0, 38, 2.5, 1.0)
+s_pad(46.0, 2.2, [50, 62, 66, 69, 74], 1.3)
+s_stab(46.0, [62, 66, 69, 74], 1.4)
+
+# filter automation on the music bus (Hz, log-interpolated)
+keys = [(0, 250), (1.5, 700), (8.4, 7000), (8.95, 900), (9.0, 16000), (13.0, 16000), (13.95, 450),
+        (14.0, 16000), (17.3, 16000), (20.3, 16000), (29.4, 16000), (29.6, 300), (30.45, 300),
+        (30.5, 18000), (34.95, 18000), (35.95, 500), (36.0, 16000), (42.2, 16000), (42.7, 1500),
+        (43.0, 16000), (49, 16000)]
+kt = np.array([k[0] for k in keys])
+kf = np.log(np.array([k[1] for k in keys]))
+time = np.arange(N) / SR
+cut = np.exp(np.interp(time, kt, kf))
+# during the chart, the whole track sinks with the deficit and opens up with the recovery
+cut_chart = 380 * 45 ** ((440 - y) / 384)
+i0 = int(17.4 * SR)
+cut[i0:i0 + len(cut_chart)] = cut_chart
+
+
+def tv_lowpass(x, fc, block=256):
+    """2nd-order low-pass whose cutoff follows fc, updated every block."""
+    y = np.zeros_like(x)
+    zi = np.zeros((1, 2))
+    for s in range(0, len(x), block):
+        f = float(np.clip(fc[s], 40, SR / 2.2))
+        sos = butter(2, f, 'low', fs=SR, output='sos')
+        y[s:s + block], zi = sosfilt(sos, x[s:s + block], zi=zi)
+    return y
+
 # ---------- mix ----------
-mix = dry + bed * duck[:, None]
+# feedback delay (dotted 8th) on the arp and stabs
+dl = int(SR * 3 * S16)
+for _ in range(4):
+    delay_bus[dl:] += delay_bus[:-dl] * .42
+    delay_bus = delay_bus[:, ::-1].copy()  # ping-pong
+mb = music + lp(delay_bus.T, 4000).T * .9
+mb = np.stack([tv_lowpass(mb[:, c], cut) for c in range(2)], 1)
+mb *= side[:, None]
+mix = dry * 1.9 + (drums * .55 + mb * 1.1) * duck[:, None]
 ir_t = tt(2.2)
 ir = np.stack([rng.standard_normal(len(ir_t)), rng.standard_normal(len(ir_t))], 1) * np.exp(-ir_t * 3.0)[:, None]
 ir[:, 0] = lp(ir[:, 0], 6000)
