@@ -117,6 +117,7 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
   background: var(--wall-fallback) var(--wallpaper) center / cover no-repeat;
   transition: background-image .6s ease;
 }
+#desk[data-wall="fjord"] { background-image: url("assets/fond-fjord.webp"); }
 #desk[data-wall="day"] { background-image: url("assets/fond-jour.webp"); }
 #desk[data-wall="night"] { background-image: url("assets/fond-nuit.webp"); }
 #icons { position: absolute; inset: 0; pointer-events: none; }
@@ -130,7 +131,7 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
 .icon svg { width: 64px; height: 64px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.3)); pointer-events: none; }
 .icon span.n {
   font-size: 12px; font-weight: 600; line-height: 1.25; text-align: center; color: #fff;
-  text-shadow: 0 1px 2px rgba(0,0,0,.85), 0 0 6px rgba(0,0,0,.35);
+  text-shadow: 0 1px 2px rgba(0,0,0,.9), 0 0 7px rgba(0,0,0,.55), 0 0 14px rgba(0,0,0,.3);
   padding: 1px 5px 2px; border-radius: 4px; max-width: 100%; overflow-wrap: anywhere; pointer-events: none;
 }
 .icon.sel .pic { background: rgba(0,0,0,.22); border-color: rgba(255,255,255,.28); }
@@ -417,6 +418,7 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
 .thumb.t-dark { background: linear-gradient(#2a2a2d 0 20%, #1e1e20 20%); }
 .thumb.t-auto { background: linear-gradient(90deg, #fff 50%, #1e1e20 50%); }
 .thumb.t-light::after, .thumb.t-dark::after, .thumb.t-auto::after { content: ""; position: absolute; left: 14%; right: 14%; top: 34%; height: 12%; border-radius: 3px; background: var(--accent); opacity: .85; }
+.thumb.w-fjord { background-image: url("assets/fond-fjord.webp"); }
 .thumb.w-day { background-image: url("assets/fond-jour.webp"); }
 .thumb.w-night { background-image: url("assets/fond-nuit.webp"); }
 .thumb.w-auto { background-image: linear-gradient(90deg, transparent 50%, rgba(0,0,0,0) 50%), url("assets/fond-jour.webp"); }
@@ -1597,7 +1599,7 @@ function openSettings() {
   if (ex) return showWin(ex);
   bounceDock('settings');
   createWin({
-    key: 'settings', app: 'settings', title: 'Réglages', icon: APP_ICONS.settings(), w: 480, h: 470,
+    key: 'settings', app: 'settings', title: 'Réglages', icon: APP_ICONS.settings(), w: 520, h: 640,
     body: '<div class="prefs"></div>',
     onMount: win => { renderSettings(win); win.body.addEventListener('click', e => {
       const b = e.target.closest('[data-set]');
@@ -1615,7 +1617,7 @@ function renderSettings(win) {
   const opt = (k, v, cls, label, on) => `<button class="pref-opt${on ? ' on' : ''}" data-set="${k}:${v}"><span class="thumb ${cls}"></span>${label}</button>`;
   $('.prefs', win.el).innerHTML = `
     <section><h3>Apparence</h3><div class="pref-row">${opt('theme', 'light', 't-light', 'Clair', t === 'light')}${opt('theme', 'dark', 't-dark', 'Sombre', t === 'dark')}${opt('theme', 'auto', 't-auto', 'Automatique', t === 'auto')}</div></section>
-    <section><h3>Fond d’écran · Hossegor</h3><div class="pref-row">${opt('wall', 'day', 'w-day', 'Jour', w === 'day')}${opt('wall', 'night', 'w-night', 'Crépuscule', w === 'night')}${opt('wall', 'auto', 'w-auto', 'Selon l’apparence', w === 'auto')}</div></section>
+    <section><h3>Fond d’écran</h3><div class="pref-row">${opt('wall', 'fjord', 'w-fjord', 'Fjord', w === 'fjord')}${opt('wall', 'day', 'w-day', 'Hossegor, jour', w === 'day')}${opt('wall', 'night', 'w-night', 'Hossegor, crépuscule', w === 'night')}${opt('wall', 'auto', 'w-auto', 'Selon l’apparence', w === 'auto')}</div></section>
     <section><h3>Dock</h3><div class="toggle-row"><span>Agrandissement<small>Les icônes grossissent au survol</small></span><button class="switch" role="switch" aria-checked="${magnify}" aria-label="Agrandissement du dock" data-set="mag:x"></button></div></section>`;
 }
 
@@ -2074,6 +2076,7 @@ const MENUS = {
       { label: 'Automatique', check: t === 'auto', action: () => setTheme('auto') },
       '-',
       { head: 'Fond d’écran' },
+      { label: 'Fjord', check: w === 'fjord', action: () => setWall('fjord') },
       { label: 'Hossegor, jour', check: w === 'day', action: () => setWall('day') },
       { label: 'Hossegor, crépuscule', check: w === 'night', action: () => setWall('night') },
       { label: 'Selon l’apparence', check: w === 'auto', action: () => setWall('auto') },
@@ -2215,13 +2218,13 @@ function setTheme(t) {
 }
 function setWall(w) {
   if (w === 'auto') delete desk.dataset.wall; else desk.dataset.wall = w;
-  store.set('wall', w);
+  store.set('wall2', w);
   refreshPrefs();
 }
 function refreshPrefs() { const w = WM.list.find(x => x.key === 'settings'); if (w) renderSettings(w); }
 const savedTheme = store.get('theme', null);
 if (savedTheme && savedTheme !== 'auto') root.dataset.theme = savedTheme;
-const savedWall = store.get('wall', 'auto');
+const savedWall = store.get('wall2', 'fjord');
 if (savedWall !== 'auto') desk.dataset.wall = savedWall;
 
 /* =========================================================
