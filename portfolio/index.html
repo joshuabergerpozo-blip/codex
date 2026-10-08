@@ -990,7 +990,7 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
   <div id="windows"></div>
   <header id="menubar">
     <button class="mb-btn" data-menu="logo" aria-label="Menu JoshOS" id="mb-logo"></button>
-    <button class="mb-btn mb-app" data-menu="app" id="mb-app">Fichiers</button>
+    <button class="mb-btn mb-app" data-menu="app" id="mb-app">Finder</button>
     <button class="mb-btn mb-opt" data-menu="file">Fichier</button>
     <button class="mb-btn mb-opt" data-menu="edit">Édition</button>
     <button class="mb-btn mb-opt" data-menu="view">Présentation</button>
@@ -1172,7 +1172,8 @@ const APP_ICONS = {
 };
 /* Icônes fournies (images) : elles remplacent les dessins correspondants */
 const imgIcon = src => `<svg viewBox="0 0 64 64" aria-hidden="true"><image href="${src}" x="0" y="0" width="64" height="64" preserveAspectRatio="xMidYMid meet"/></svg>`;
-const REAL_ICONS = { orbit: 'chrome', launchpad: 'launchpad', music: 'musique', mail: 'mail', appstore: 'appstore', notes: 'notes', compass: 'safari', settings: 'reglages' };
+const REAL_ICONS = { orbit: 'chrome', launchpad: 'launchpad', music: 'musique', mail: 'mail', appstore: 'appstore', notes: 'notes', compass: 'safari', settings: 'reglages', finder: 'finder', terminal: 'terminal' };
+const JOSH_ICON = APP_ICONS.finder;
 Object.entries(REAL_ICONS).forEach(([k, f]) => { APP_ICONS[k] = () => imgIcon(`assets/icons/${f}.webp`); });
 
 const SIDE_ICONS = {
@@ -1484,7 +1485,7 @@ function iconSvg(id) {
 }
 
 const APPS = {
-  finder: { name: 'Fichiers' },
+  finder: { name: 'Finder' },
   notes: { name: 'Notes', w: 620, h: 620 },
   pdf: { name: 'Aperçu', w: 780, h: 660, tools: () => `<span class="zoom-tools" style="display:contents"><button class="tb" data-z="-" aria-label="Réduire le zoom">−</button><span class="tb-label zoom-v">100 %</span><button class="tb" data-z="+" aria-label="Agrandir le zoom">+</button></span>`, mount: mountPdf },
   tiktok: { name: 'TikTok Droit', w: 860, h: 680, mount: mountTabs },
@@ -1683,7 +1684,7 @@ function restoreWin(win) {
 }
 function showWin(win) { win.min ? restoreWin(win) : focusWin(win); return win; }
 
-function setAppName(app) { $('#mb-app').textContent = app ? APPS[app].name : 'Fichiers'; }
+function setAppName(app) { $('#mb-app').textContent = app ? APPS[app].name : 'Finder'; }
 
 /* ---------- Ouvrir un élément ---------- */
 function openNode(id) {
@@ -1847,7 +1848,7 @@ function openAbout() {
   if (ex) return showWin(ex);
   createWin({
     key: 'about', app: 'about', title: 'À propos de JoshOS', w: 380, h: 480,
-    body: `<div class="info selectable">${APP_ICONS.finder().replace('<svg ', '<svg class="big" ')}<h2>JoshOS 19</h2><p>Édition BTS Communication</p>
+    body: `<div class="info selectable">${JOSH_ICON().replace('<svg ', '<svg class="big" ')}<h2>JoshOS 19</h2><p>Édition BTS Communication</p>
       <dl>
         <div><dt>Utilisateur</dt><dd>Joshua Berger, 19 ans</dd></div>
         <div><dt>École</dt><dd>Saint-Jo Sup</dd></div>
@@ -2296,7 +2297,7 @@ const MENUS = {
     { label: 'Fermer la session de Joshua Berger…', action: logout },
   ],
   app: () => {
-    const app = WM.active?.app, name = app ? APPS[app].name : 'Fichiers';
+    const app = WM.active?.app, name = app ? APPS[app].name : 'Finder';
     const mine = WM.list.filter(w => w.app === (app || 'finder'));
     return [
       { label: `À propos de ${name}`, action: openAbout },
@@ -2389,7 +2390,7 @@ function cascade() {
    ========================================================= */
 let magnify = store.get('mag', true);
 const DOCK = [
-  { k: 'finder', label: 'Fichiers', icon: APP_ICONS.finder, open: () => openFinder('desktop') },
+  { k: 'finder', label: 'Finder', icon: APP_ICONS.finder, open: () => openFinder('desktop') },
   { k: 'launchpad', label: 'Launchpad', icon: APP_ICONS.launchpad, open: () => toggleLaunch() },
   { k: 'compass', label: 'Safari', icon: APP_ICONS.compass, open: () => openBrowser('compass') },
   { k: 'orbit', label: 'Google Chrome', icon: APP_ICONS.orbit, open: () => openBrowser('orbit') },
@@ -2469,7 +2470,7 @@ const SPOT_POOL = () => [
   { name: 'Musique', sub: 'Ambiances du portfolio', kind: 'Application', icon: APP_ICONS.music(), go: () => openMusic(), hay: 'musique son ambiance vagues playlist music' },
   { name: 'Launchpad', sub: 'Toutes les applications', kind: 'Application', icon: APP_ICONS.launchpad(), go: () => openLaunch(), hay: 'applications launchpad apps grille' },
   { name: 'Réglages Système', sub: 'Apparence, fond d’écran, dock', kind: 'Application', icon: APP_ICONS.settings(), go: openSettings, hay: 'reglages apparence theme sombre clair fond ecran dock wallpaper' },
-  { name: 'À propos de JoshOS', sub: 'Infos système', kind: 'Action', icon: APP_ICONS.finder(), go: openAbout, hay: 'a propos joshos systeme' },
+  { name: 'À propos de JoshOS', sub: 'Infos système', kind: 'Action', icon: JOSH_ICON(), go: openAbout, hay: 'a propos joshos systeme' },
   { name: 'Raccourcis et astuces', sub: 'Aide', kind: 'Action', icon: APP_ICONS.info(), go: openHelp, hay: 'aide raccourcis clavier astuces help' },
 ];
 function openSpot() { closeMenus(); spot.hidden = false; spotQ.value = ''; renderSpot(); spotQ.focus(); }
@@ -2924,7 +2925,7 @@ function openAppStore() {
 
 /* ---------- Applications (grille plein écran) ---------- */
 const LP_APPS = [
-  ['finder', 'Fichiers', () => openFinder('desktop')], ['compass', 'Safari', () => openBrowser('compass')], ['orbit', 'Google Chrome', () => openBrowser('orbit')], ['mail', 'Mail', () => openMail()], ['appstore', 'App Store', () => openAppStore()],
+  ['finder', 'Finder', () => openFinder('desktop')], ['compass', 'Safari', () => openBrowser('compass')], ['orbit', 'Google Chrome', () => openBrowser('orbit')], ['mail', 'Mail', () => openMail()], ['appstore', 'App Store', () => openAppStore()],
   ['music', 'Musique', () => openMusic()], ['notes', 'Notes', () => openNode('lisezmoi')], ['pdf', 'Aperçu', () => openNode('stage1')],
   ['slides', 'Présentation', () => openNode('heinz')], ['video', 'Vidéo', () => openNode('coworking')], ['tiktok', 'TikTok Droit', () => openNode('tiktok')],
   ['shop', 'Le Vélo Havrais', () => openNode('velo')], ['saas', 'Studio IA PME', () => openNode('saas')], ['terminal', 'Terminal', () => openTerminal()],
