@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>F1 Garage Racing</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "/vendor/three/build/three.module.js",
+          "three/addons/": "/vendor/three/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+
+    <!-- Écran d'accueil -->
+    <div id="home" class="screen">
+      <div class="home-card">
+        <h1><span class="f1">F1</span> GARAGE RACING</h1>
+        <p class="tagline">
+          Commence avec une caisse en bois. Fais des tours. Construis la
+          meilleure Formule 1.
+        </p>
+        <label
+          >Ton pseudo
+          <input
+            id="nameInput"
+            maxlength="16"
+            placeholder="Pilote"
+            autocomplete="off"
+          />
+        </label>
+        <div class="home-actions">
+          <button id="createBtn" class="btn primary">Créer un groupe</button>
+          <div class="join-row">
+            <input
+              id="codeInput"
+              maxlength="5"
+              placeholder="CODE"
+              autocomplete="off"
+            />
+            <button id="joinBtn" class="btn">Rejoindre</button>
+          </div>
+        </div>
+        <p id="homeError" class="error"></p>
+        <p id="homeProfile" class="muted"></p>
+        <div class="controls-help">
+          <b>Commandes</b> — <kbd>Z</kbd> accélérer · <kbd>S</kbd> freiner /
+          reculer · <kbd>Q</kbd> <kbd>D</kbd> tourner · <kbd>Espace</kbd> frein
+          à main · <kbd>Maj</kbd> nitro · <kbd>E</kbd> DRS · <kbd>C</kbd> caméra
+          · <kbd>G</kbd> garage · <kbd>R</kbd> replacer ·
+          <kbd>Tab</kbd> classement · <kbd>Entrée</kbd> chat · <kbd>M</kbd> son
+        </div>
+      </div>
+    </div>
+
+    <!-- Chargement -->
+    <div id="loading" class="screen">
+      <div class="loader"></div>
+      <p>Construction du circuit…</p>
+    </div>
+
+    <!-- HUD en course -->
+    <div id="hud" class="hidden">
+      <div id="topLeft" class="panel">
+        <div class="row">
+          <span class="lbl">TOUR</span><span id="lapNum">–</span>
+        </div>
+        <div class="row">
+          <span class="lbl">TEMPS</span><span id="lapTime">0:00.000</span>
+        </div>
+        <div class="row">
+          <span class="lbl">MEILLEUR</span><span id="bestLap">–</span>
+        </div>
+        <div class="row">
+          <span class="lbl">DERNIER</span><span id="lastLap">–</span>
+        </div>
+        <div id="posBox" class="pos hidden">
+          P<span id="pos">1</span><small>/<span id="posTotal">1</span></small>
+        </div>
+      </div>
+
+      <div id="topRight" class="panel">
+        <div class="money">💰 <span id="money">0</span> €</div>
+        <div class="code">
+          Code du groupe : <b id="roomCode">-----</b>
+          <button id="copyCode" class="mini">copier</button>
+        </div>
+        <ul id="players"></ul>
+        <div id="hostControls" class="hidden">
+          <select id="lapsSelect">
+            <option value="1">1 tour</option>
+            <option value="3" selected>3 tours</option>
+            <option value="5">5 tours</option>
+            <option value="10">10 tours</option>
+          </select>
+          <button id="startRaceBtn" class="btn small primary">
+            🏁 Lancer la course
+          </button>
+          <button id="cancelRaceBtn" class="btn small hidden">
+            Annuler la course
+          </button>
+        </div>
+        <div class="hud-buttons">
+          <button id="garageBtn" class="btn small">🔧 Garage (G)</button>
+          <button id="menuBtn" class="btn small">☰</button>
+        </div>
+      </div>
+
+      <div id="feed"></div>
+      <div id="chatBox" class="hidden">
+        <input
+          id="chatInput"
+          maxlength="140"
+          placeholder="Message… (Entrée pour envoyer)"
+        />
+      </div>
+
+      <canvas id="minimap" width="220" height="220"></canvas>
+
+      <div id="dash">
+        <div id="gear">N</div>
+        <div id="speed">0</div>
+        <div class="unit">km/h</div>
+        <div class="bars">
+          <div class="bar">
+            <span>RPM</span>
+            <div class="track"><div id="rpmBar" class="fill rpm"></div></div>
+          </div>
+          <div class="bar">
+            <span>ÉTAT</span>
+            <div class="track"><div id="hpBar" class="fill hp"></div></div>
+          </div>
+          <div class="bar" id="nitroRow">
+            <span>NITRO</span>
+            <div class="track">
+              <div id="nitroBar" class="fill nitro"></div>
+            </div>
+          </div>
+        </div>
+        <div id="drsTag" class="tag hidden">DRS</div>
+      </div>
+
+      <div id="center-msg"></div>
+      <div id="wrongWay" class="hidden">⚠ MAUVAIS SENS</div>
+      <div id="toasts"></div>
+
+      <div id="leaderboard" class="panel hidden">
+        <h3>Classement du groupe</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Pilote</th>
+              <th>Voiture</th>
+              <th>Meilleur tour</th>
+            </tr>
+          </thead>
+          <tbody id="lbBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Garage -->
+    <div id="garage" class="hidden">
+      <div class="garage-panel">
+        <div class="garage-head">
+          <h2>🔧 Ton écurie</h2>
+          <div class="money big">💰 <span id="gMoney">0</span> €</div>
+        </div>
+        <div class="tabs">
+          <button data-tab="perf" class="tab active">Performances</button>
+          <button data-tab="paint" class="tab">Peinture & livrée</button>
+          <button data-tab="pilot" class="tab">Pilote</button>
+          <button data-tab="repair" class="tab">Réparation</button>
+        </div>
+        <div id="statsBox"></div>
+        <div id="tab-perf" class="tab-body"></div>
+        <div id="tab-paint" class="tab-body hidden"></div>
+        <div id="tab-pilot" class="tab-body hidden"></div>
+        <div id="tab-repair" class="tab-body hidden"></div>
+        <button id="closeGarage" class="btn primary wide">
+          🏎️ Retour en piste (G)
+        </button>
+      </div>
+      <div class="garage-rating">
+        Niveau de la voiture : <b id="carRating">0</b>/100
+      </div>
+    </div>
+
+    <!-- Menu -->
+    <div id="menu" class="screen hidden">
+      <div class="home-card">
+        <h2>Menu</h2>
+        <button id="resumeBtn" class="btn primary wide">Reprendre</button>
+        <button id="muteBtn" class="btn wide">🔊 Son : activé</button>
+        <button id="qualityBtn" class="btn wide">Qualité : haute</button>
+        <button id="leaveBtn" class="btn wide danger">Quitter le groupe</button>
+        <div class="controls-help">
+          <kbd>Z</kbd> accélérer · <kbd>S</kbd> freiner / reculer ·
+          <kbd>Q</kbd> <kbd>D</kbd> tourner · <kbd>Espace</kbd> frein à main ·
+          <kbd>Maj</kbd> nitro · <kbd>E</kbd> DRS · <kbd>C</kbd> caméra ·
+          <kbd>G</kbd> garage · <kbd>R</kbd> replacer ·
+          <kbd>Tab</kbd> classement · <kbd>Entrée</kbd> chat · <kbd>M</kbd> son
+        </div>
+      </div>
+    </div>
+
+    <!-- Résultats de course -->
+    <div id="results" class="screen hidden">
+      <div class="home-card">
+        <h2>🏆 Résultats de la course</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Pos.</th>
+              <th>Pilote</th>
+              <th>Temps</th>
+              <th>Prime</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+        <button id="closeResults" class="btn primary wide">Continuer</button>
+      </div>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>

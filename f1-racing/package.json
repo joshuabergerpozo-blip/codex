@@ -1,0 +1,18 @@
+{
+  "name": "f1-garage-racing",
+  "version": "1.0.0",
+  "description": "Jeu de course F1 multijoueur (4 joueurs max) avec garage, upgrades et progression.",
+  "type": "module",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "three": "0.170.0",
+    "ws": "8.18.0"
+  }
+}
