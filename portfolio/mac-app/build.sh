@@ -11,7 +11,7 @@ cp mac-app/launcher.sh "$APP/Contents/MacOS/launcher"
 chmod 755 "$APP/Contents/MacOS/launcher"
 cp mac-app/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 cp index.html "$APP/Contents/Resources/portfolio/index.html"
-cp assets/*.webp "$APP/Contents/Resources/portfolio/assets/"
+cp -R assets/. "$APP/Contents/Resources/portfolio/assets/"
 printf 'APPL????' > "$APP/Contents/PkgInfo"
 (cd dist && zip -qry -X "Portfolio-Joshua-Berger-Mac.zip" "Portfolio Joshua Berger.app")
 echo "OK : dist/Portfolio-Joshua-Berger-Mac.zip"
