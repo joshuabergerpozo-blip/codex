@@ -6,12 +6,13 @@
 <title>Portfolio Joshua Berger</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap">
 <style>
 /* Layout : un vrai bureau d'ordinateur — barre de menus translucide, icônes en haut à gauche, widgets à droite, dock en verre, fenêtres flottantes sur une photo de Hossegor. */
 :root {
   --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
   --font-display: "Bricolage Grotesque", -apple-system, "Segoe UI", sans-serif;
+  --font-round: ui-rounded, "SF Pro Rounded", "Nunito", -apple-system, sans-serif;
   --font-mono: "SF Mono", "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
   --bar-h: 26px;
   --dock-h: 72px;
@@ -646,6 +647,43 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
 .term a, .term .t-link { color: var(--term-wax); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 
 
+/* ---------- Écran de connexion ---------- */
+#lock { position: fixed; inset: 0; z-index: 9800; display: flex; flex-direction: column; align-items: center; overflow: hidden; color: #ffffff; font-family: var(--font-ui); user-select: none; -webkit-user-select: none; background: #1d2a2c; cursor: default; }
+.lk-bg { position: absolute; inset: -40px; background: #1d2a2c center / cover no-repeat; transform: scale(1.03); }
+.lk-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.16) 34%, rgba(0,0,0,.08) 58%, rgba(0,0,0,.44) 100%); }
+.lk-status { position: absolute; z-index: 1; top: calc(6px + env(safe-area-inset-top, 0px)); right: 16px; display: flex; align-items: center; gap: 16px; font-size: 13px; font-weight: 600; text-shadow: 0 1px 4px rgba(0,0,0,.25); }
+.lk-status svg { height: 13px; width: auto; display: block; filter: drop-shadow(0 1px 3px rgba(0,0,0,.25)); }
+.lk-clock { position: relative; z-index: 1; margin-top: calc(7vh + env(safe-area-inset-top, 0px)); text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,.12), 0 2px 30px rgba(0,0,0,.28); transition: transform .6s cubic-bezier(.4,0,.2,1), opacity .5s; }
+.lk-date { font: 700 clamp(18px, 2.1vw, 25px)/1.2 var(--font-round); color: rgba(255,255,255,.92); }
+.lk-time { margin-top: 0; font: 800 clamp(84px, 11vw, 140px)/1 var(--font-round); letter-spacing: -.01em; font-variant-numeric: tabular-nums; color: rgba(255,255,255,.86); }
+.lk-login { position: relative; z-index: 1; margin-top: auto; margin-bottom: calc(10vh + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; align-items: center; transition: transform .6s cubic-bezier(.4,0,.2,1), opacity .45s; }
+.lk-avatar { width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center; font: 700 32px/1 var(--font-round); letter-spacing: .02em; color: #ffffff; background: linear-gradient(180deg, #b4b4b9, #6e6e74); box-shadow: 0 8px 24px rgba(0,0,0,.28), inset 0 0 0 .5px rgba(255,255,255,.35); }
+.lk-name { margin-top: 12px; font-size: 15px; font-weight: 600; text-shadow: 0 1px 6px rgba(0,0,0,.35); }
+.lk-row { position: relative; margin-top: 12px; }
+.lk-field { position: relative; width: 222px; height: 30px; }
+#lk-pass { width: 100%; height: 100%; border: 0; outline: none; border-radius: 15px; padding: 0 32px 0 14px; font: 400 13px var(--font-ui); color: #ffffff; background: rgba(255,255,255,.2); -webkit-backdrop-filter: blur(24px) saturate(1.6); backdrop-filter: blur(24px) saturate(1.6); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.28), 0 2px 10px rgba(0,0,0,.08); caret-color: #ffffff; letter-spacing: .18em; user-select: text; }
+#lk-pass:placeholder-shown { letter-spacing: 0; }
+#lk-pass::placeholder { color: rgba(255,255,255,.72); }
+#lk-pass:focus { background: rgba(255,255,255,.26); }
+.lk-go { position: absolute; right: 4px; top: 4px; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; color: #ffffff; background: rgba(255,255,255,.32); opacity: 0; transform: scale(.5); pointer-events: none; transition: opacity .15s, transform .15s; }
+.lk-go svg { width: 12px; height: 12px; }
+.lk-go:hover { background: rgba(255,255,255,.45); }
+.lk-field.has .lk-go { opacity: 1; transform: none; pointer-events: auto; }
+.lk-field.busy .lk-go { opacity: 0; }
+.lk-spin { position: absolute; right: 7px; top: 7px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,.3); border-top-color: #ffffff; animation: lkspin .7s linear infinite; }
+@keyframes lkspin { to { transform: rotate(360deg); } }
+.lk-field.shake { animation: lkshake .52s cubic-bezier(.36,.07,.19,.97); }
+@keyframes lkshake { 10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(4px); } 30%, 50%, 70% { transform: translateX(-10px); } 40%, 60% { transform: translateX(10px); } }
+.lk-hint { position: absolute; left: calc(100% + 8px); top: 4px; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; font: 700 13px/22px var(--font-ui); color: #ffffff; background: rgba(255,255,255,.22); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.3); animation: fade .2s; }
+.lk-hint:hover { background: rgba(255,255,255,.34); }
+.lk-sub { margin: 10px 0 0; min-height: 16px; max-width: 360px; font-size: 12px; text-align: center; color: rgba(255,255,255,.78); text-shadow: 0 1px 4px rgba(0,0,0,.35); }
+#lock.out { pointer-events: none; animation: lkout .55s .1s ease forwards; }
+#lock.out .lk-clock { transform: translateY(-36px); opacity: 0; }
+#lock.out .lk-login { transform: translateY(26px); opacity: 0; }
+@keyframes lkout { to { opacity: 0; } }
+#os.waking { animation: wake .75s cubic-bezier(.2,.8,.3,1); }
+@keyframes wake { from { transform: scale(1.05); filter: blur(10px) brightness(.85); } }
+
 /* ---------- Téléphone ---------- */
 @media (max-width: 1040px) { #widgets { display: none; } }
 @media (max-width: 700px) {
@@ -769,6 +807,24 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
       <div class="spot-res" id="spot-res" role="listbox"></div>
     </div>
   </div>
+</div>
+<div id="lock" role="dialog" aria-label="Écran de connexion">
+  <div class="lk-bg"></div>
+  <div class="lk-status" aria-hidden="true"><span>FR</span><span id="lk-batt"></span><span id="lk-wifi"></span></div>
+  <div class="lk-clock" aria-live="off"><div class="lk-date" id="lk-date"></div><div class="lk-time" id="lk-time"></div></div>
+  <form class="lk-login" id="lk-form" autocomplete="off">
+    <div class="lk-avatar" aria-hidden="true">JB</div>
+    <div class="lk-name">Joshua Berger</div>
+    <div class="lk-row">
+      <div class="lk-field" id="lk-field">
+        <input id="lk-pass" type="password" placeholder="Saisissez le mot de passe" aria-label="Mot de passe" autocomplete="off" spellcheck="false">
+        <button type="submit" class="lk-go" aria-label="Se connecter"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6.5 2.5 10 6l-3.5 3.5"/></svg></button>
+        <span class="lk-spin" hidden></span>
+      </div>
+      <button type="button" class="lk-hint" id="lk-hint" aria-label="Afficher l’indice du mot de passe" hidden>?</button>
+    </div>
+    <p class="lk-sub" id="lk-sub">Touch ID ou saisissez le mot de passe</p>
+  </form>
 </div>
 <div id="boot">
   <div class="boot-inner">
@@ -2011,6 +2067,9 @@ const MENUS = {
     '-',
     { label: 'Tout réduire', disabled: !WM.list.some(w => !w.min), action: () => WM.list.filter(w => !w.min).forEach(minimizeWin) },
     { label: 'Redémarrer…', action: restart },
+    '-',
+    { label: 'Verrouiller l’écran', kbd: isMac ? '⌃⌘Q' : 'Ctrl Alt L', action: showLock },
+    { label: 'Fermer la session de Joshua Berger…', action: logout },
   ],
   app: () => {
     const app = WM.active?.app, name = app ? APPS[app].name : 'Fichiers';
@@ -2239,7 +2298,9 @@ function tick() {
 }
 
 document.addEventListener('keydown', e => {
+  if (isLocked()) return;
   const k = e.key.toLowerCase();
+  if (e.ctrlKey && (e.metaKey || e.altKey) && (k === 'q' || k === 'l')) { e.preventDefault(); showLock(); return; }
   if ((e.metaKey || e.ctrlKey) && k === 'k') { e.preventDefault(); spot.hidden ? openSpot() : closeSpot(); return; }
   if ((e.metaKey || e.ctrlKey) && k === 'i') {
     const id = selectedIcons()[0] || WM.active?.node;
@@ -2286,6 +2347,78 @@ addEventListener('resize', () => {
 mqMobile.addEventListener?.('change', layoutIcons);
 
 /* =========================================================
+   Écran de connexion
+   ========================================================= */
+const lock = $('#lock'), lkForm = $('#lk-form'), lkPass = $('#lk-pass'), lkField = $('#lk-field'), lkSub = $('#lk-sub'), lkHint = $('#lk-hint');
+const LK_SUB = 'Touch ID ou saisissez le mot de passe';
+const LK_HINT = 'Indice : n’importe quel mot de passe ouvre la session.';
+let fails = 0, hintTimer = 0, welcomed = false;
+const isLocked = () => !lock.hidden;
+function lockTick() {
+  const d = new Date();
+  const ds = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  $('#lk-date').textContent = ds.charAt(0).toUpperCase() + ds.slice(1);
+  $('#lk-time').textContent = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+}
+function showLock() {
+  closeMenus(); closeSpot();
+  $('.lk-bg', lock).style.backgroundImage = getComputedStyle(desk).backgroundImage;
+  lock.hidden = false;
+  lock.classList.remove('out');
+  lkPass.value = ''; lkPass.disabled = false;
+  lkField.classList.remove('has', 'busy', 'shake');
+  $('.lk-spin', lock).hidden = true;
+  lkHint.hidden = true; lkSub.textContent = LK_SUB; fails = 0;
+  lockTick();
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() => { lkHint.hidden = false; }, 6000);
+  if (!isMobile()) setTimeout(() => lkPass.focus({ preventScroll: true }), 80);
+}
+function unlock() {
+  lkField.classList.add('busy');
+  $('.lk-spin', lock).hidden = false;
+  lkPass.disabled = true;
+  clearTimeout(hintTimer);
+  setTimeout(() => {
+    lock.classList.add('out');
+    if (!mqReduce.matches) $('#os').classList.add('waking');
+    setTimeout(() => {
+      lock.hidden = true;
+      $('#os').classList.remove('waking');
+      lkPass.blur();
+      if (!welcomed) { welcomed = true; setTimeout(welcomeToast, 500); }
+    }, mqReduce.matches ? 0 : 650);
+  }, 700);
+}
+function logout() {
+  [...WM.list].forEach(w => w.el.remove());
+  WM.list = []; WM.active = null; WM.n = 0;
+  blurWins(); refreshDock(); selectIcons([]);
+  showLock();
+}
+lkForm.addEventListener('submit', e => {
+  e.preventDefault();
+  if (lkField.classList.contains('busy')) return;
+  if (lkPass.value) return unlock();
+  fails++;
+  lkField.classList.remove('shake'); void lkField.offsetWidth; lkField.classList.add('shake');
+  lkHint.hidden = false;
+  if (fails >= 2) lkSub.textContent = LK_HINT;
+  lkPass.focus();
+});
+lkField.addEventListener('animationend', () => lkField.classList.remove('shake'));
+lkPass.addEventListener('input', () => lkField.classList.toggle('has', !!lkPass.value));
+lkHint.addEventListener('click', () => { lkSub.textContent = LK_HINT; lkPass.focus(); });
+lock.addEventListener('pointerdown', e => { if (!e.target.closest('button, input')) { e.preventDefault(); if (!isMobile()) lkPass.focus(); } });
+document.addEventListener('keydown', e => {
+  if (!isLocked() || document.activeElement === lkPass) return;
+  if (e.key.length === 1 && !e.metaKey && !e.ctrlKey) lkPass.focus();
+}, true);
+$('#lk-batt').innerHTML = UI.batt;
+$('#lk-wifi').innerHTML = UI.wifi;
+setInterval(() => { if (isLocked()) lockTick(); }, 5000);
+
+/* =========================================================
    Démarrage
    ========================================================= */
 function welcomeToast() {
@@ -2315,7 +2448,8 @@ function restart() {
   [...WM.list].forEach(w => { w.el.remove(); });
   WM.list = []; WM.active = null; WM.n = 0;
   blurWins(); refreshDock();
-  bootScreen(() => setTimeout(welcomeToast, 900));
+  showLock();
+  bootScreen(() => { if (!isMobile()) lkPass.focus({ preventScroll: true }); });
 }
 
 $('#mb-logo').innerHTML = UI.logo;
@@ -2330,8 +2464,9 @@ tick(); setInterval(tick, 15000);
 
 let booted = false;
 try { booted = sessionStorage.getItem('joshos:boot') === '1'; sessionStorage.setItem('joshos:boot', '1'); } catch { /* stockage indisponible */ }
-if (booted || mqReduce.matches) { $('#boot').remove(); setTimeout(welcomeToast, 700); }
-else bootScreen(() => setTimeout(welcomeToast, 900));
+showLock();
+if (booted || mqReduce.matches) $('#boot').remove();
+else bootScreen(() => { if (!isMobile()) lkPass.focus({ preventScroll: true }); });
 })();
 </script>
 </body>

@@ -1,7 +1,8 @@
 # Portfolio Joshua Berger · JoshOS
 
 Portfolio de BTS Communication présenté comme un faux système d'exploitation :
-bureau, dossiers, fenêtres déplaçables, dock, corbeille, recherche et terminal.
+écran de connexion, bureau, dossiers, fenêtres déplaçables, dock, corbeille, recherche et terminal.
+N’importe quel mot de passe ouvre la session.
 
 Le site tient dans `index.html`, avec les fonds d’écran dans `assets/`. Ouvrez `index.html` dans un navigateur : aucune installation n’est nécessaire.
 
