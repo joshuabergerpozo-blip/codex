@@ -28,3 +28,15 @@ son identifiant et son contenu, puis ajoutez cet identifiant dans le `children` 
 ## Mettre en ligne
 
 Le dossier `portfolio/` peut être publié tel quel sur GitHub Pages, Netlify ou Vercel.
+
+## Application Mac (plein écran)
+
+`dist/Portfolio-Joshua-Berger-Mac.zip` contient **Portfolio Joshua Berger.app** :
+
+1. Décompressez le fichier, puis glissez l’app dans **Applications** (ou sur le bureau).
+2. Premier lancement : clic droit sur l’app → **Ouvrir** → **Ouvrir**. Sur les versions récentes de macOS, si l’app est bloquée : **Réglages Système → Confidentialité et sécurité → Ouvrir quand même**.
+3. Le portfolio s’ouvre en plein écran, sans barre d’adresse ni onglets. **⌘Q** pour quitter.
+
+L’app utilise le moteur de Google Chrome (ou Edge, Brave, Chromium) en mode kiosque, sans afficher son interface. Sans aucun de ces navigateurs, elle ouvre Safari et indique le raccourci du plein écran.
+
+Après une modification du portfolio, relancez `mac-app/build.sh` pour mettre à jour l’app.
