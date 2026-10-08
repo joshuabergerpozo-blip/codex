@@ -3,7 +3,7 @@
 Portfolio de BTS Communication présenté comme un faux système d'exploitation :
 bureau, dossiers, fenêtres déplaçables, dock, corbeille, recherche et terminal.
 
-Tout tient dans un seul fichier : `index.html`. Ouvrez-le dans un navigateur, aucune installation n'est nécessaire.
+Le site tient dans `index.html`, avec les fonds d’écran dans `assets/`. Ouvrez `index.html` dans un navigateur : aucune installation n’est nécessaire.
 
 ## Modifier le contenu
 
@@ -26,4 +26,4 @@ son identifiant et son contenu, puis ajoutez cet identifiant dans le `children` 
 
 ## Mettre en ligne
 
-Le fichier peut être publié tel quel sur GitHub Pages, Netlify ou Vercel.
+Le dossier `portfolio/` peut être publié tel quel sur GitHub Pages, Netlify ou Vercel.
