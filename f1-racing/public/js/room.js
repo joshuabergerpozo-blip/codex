@@ -11,7 +11,7 @@ import {
   UPGRADES,
   upgradeLevel,
   carRating,
-} from "/shared/catalog.js";
+} from "../shared/catalog.js";
 import { cleanName } from "./profile.js";
 
 // Les infos viennent d'autres navigateurs : on ne garde que des valeurs connues.

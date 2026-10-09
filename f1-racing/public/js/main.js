@@ -6,7 +6,7 @@ import {
   upgradeLevel,
   carRating,
   PAINTS,
-} from "/shared/catalog.js";
+} from "../shared/catalog.js";
 import { Track, WALL } from "./track.js";
 import { CarModel } from "./car.js";
 import { CarPhysics } from "./physics.js";

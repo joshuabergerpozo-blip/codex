@@ -13,7 +13,7 @@ import {
   upgradeLevel,
   carRating,
   repairCost,
-} from "/shared/catalog.js";
+} from "../shared/catalog.js";
 import { CarModel } from "./car.js";
 import { buildAvatar, animateIdle } from "./avatar.js";
 import { fmtMoney, escapeHtml } from "./hud.js";

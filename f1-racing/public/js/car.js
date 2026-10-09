@@ -1,7 +1,7 @@
 // Modèle 3D de la voiture : son apparence dépend des améliorations achetées.
 // Repère local : +Z = avant, +Y = haut, +X = gauche.
 import * as THREE from "three";
-import { PAINTS, upgradeLevel } from "/shared/catalog.js";
+import { PAINTS, upgradeLevel } from "../shared/catalog.js";
 import { buildAvatar } from "./avatar.js";
 import * as TX from "./textures.js";
 

@@ -13,7 +13,7 @@ import {
   lapReward,
   repairCost,
   carRating,
-} from "/shared/catalog.js";
+} from "../shared/catalog.js";
 
 const KEY = "f1gr_profile";
 
