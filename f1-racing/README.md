@@ -6,35 +6,51 @@ Tout le monde commence dans sa propre écurie avec une **caisse à savon en bois
 charrette, barre de bateau en guise de volant…). Chaque tour de circuit rapporte de l'argent, qui sert à
 améliorer la voiture pièce par pièce jusqu'à la vraie Formule 1 en carbone.
 
-## Lancer le jeu
+## Mettre le jeu en ligne sur Netlify
 
-Il faut [Node.js](https://nodejs.org) 18 ou plus récent.
+Le jeu est un **site 100 % statique** (dossier `public/`) : il n'y a aucun serveur de jeu à faire tourner.
+Le multijoueur passe directement entre les navigateurs (WebRTC, via [PeerJS](https://peerjs.com)) :
+celui qui crée le groupe fait office d'hôte.
 
-```bash
-cd f1-racing
-npm install
-npm start
-```
+**Méthode 1 — glisser-déposer (la plus simple)**
 
-Ouvre ensuite <http://localhost:3000> dans ton navigateur (Chrome, Edge ou Firefox récents).
+1. Va sur <https://app.netlify.com/drop> (connecte-toi ou crée un compte gratuit).
+2. Glisse le dossier **`f1-racing/public`** dans la page.
+3. Netlify te donne une adresse du type `https://nom-au-hasard.netlify.app` : c'est ton jeu, partage-la à tes amis.
+   (Dans _Site configuration → Change site name_ tu peux choisir un nom, par ex. `mon-f1.netlify.app`.)
+
+**Méthode 2 — relié à GitHub (mise à jour automatique à chaque modification)**
+
+1. Sur <https://app.netlify.com> : **Add new site → Import an existing project → GitHub**.
+2. Choisis le dépôt et la branche qui contient le jeu.
+3. Laisse les réglages proposés : le fichier `netlify.toml` à la racine du dépôt indique déjà
+   le dossier de base (`f1-racing`) et le dossier publié (`public`). Clique sur **Deploy**.
 
 ## Jouer avec tes amis
 
-1. Clique sur **« Créer un groupe »** : un **code à 5 caractères** s'affiche en haut à droite (bouton « copier »).
-2. Tes amis ouvrent le jeu, entrent ce code puis cliquent sur **« Rejoindre »** (4 pilotes maximum).
+1. Ouvre l'adresse Netlify du jeu, entre ton pseudo et clique sur **« Créer un groupe »** : un **code à
+   5 caractères** s'affiche en haut à droite (bouton « copier »).
+2. Tes amis ouvrent la même adresse, entrent ce code puis cliquent sur **« Rejoindre »** (4 pilotes maximum).
 3. Vous roulez tous en même temps sur le circuit (essais libres). L'hôte (★) peut lancer une **course**
    de 1, 3, 5 ou 10 tours : tout le monde est placé sur la grille, les 5 feux rouges s'allument puis s'éteignent… GO !
 
-Pour que tes amis puissent se connecter, le serveur doit être accessible depuis chez eux :
+⚠️ Le groupe vit dans le navigateur de celui qui l'a créé : s'il ferme son onglet, la partie s'arrête pour
+tout le monde (il suffit de recréer un groupe). Garde l'onglet de l'hôte au premier plan pendant les courses.
 
-- **Même Wi-Fi / même maison** : ils ouvrent `http://<adresse-IP-de-ton-PC>:3000`.
-- **Par Internet** : héberge le dossier `f1-racing` sur un service Node.js (Render, Railway, Fly.io…) avec
-  `npm install` comme commande de build et `npm start` comme commande de démarrage (le port est lu dans la
-  variable `PORT`). Pour un test rapide, un tunnel (ngrok, localtunnel…) vers le port 3000 fonctionne aussi.
+Chaque écurie (argent, pièces, peinture, personnage) est **sauvegardée dans le navigateur** du joueur : on la
+retrouve en revenant sur le site avec le même navigateur (mais pas en navigation privée ni sur un autre appareil).
 
-Les écuries (argent, pièces, peinture, personnage) sont sauvegardées par le serveur dans `data/profiles.json`
-et retrouvées automatiquement par chaque navigateur. Sur un hébergeur gratuit sans disque persistant, ce
-fichier est remis à zéro à chaque redéploiement.
+## Jouer en local (optionnel)
+
+Avec [Node.js](https://nodejs.org) 18 ou plus récent :
+
+```bash
+cd f1-racing
+npm start
+```
+
+puis ouvre <http://localhost:3000>. Une connexion Internet reste nécessaire pour créer ou rejoindre un groupe
+(mise en relation PeerJS).
 
 ## Commandes
 
@@ -88,14 +104,18 @@ téléchargement d'image.
 
 ## Organisation du code
 
-| Fichier                                       | Rôle                                                                            |
-| --------------------------------------------- | ------------------------------------------------------------------------------- |
-| `server.js`                                   | Serveur HTTP + WebSocket : groupes, courses, gains, achats, sauvegarde          |
-| `shared/catalog.js`                           | Catalogue des pièces, cosmétiques et calcul des performances (client + serveur) |
-| `public/js/main.js`                           | Boucle de jeu, caméra, réseau, tours et course                                  |
-| `public/js/physics.js`                        | Physique de la voiture                                                          |
-| `public/js/track.js` / `trackdata.js`         | Tracé et décor du circuit                                                       |
-| `public/js/car.js`                            | Modèle 3D de la voiture selon les pièces                                        |
-| `public/js/avatar.js`                         | Personnages façon Roblox                                                        |
-| `public/js/garage.js`                         | Garage (boutique + aperçu 3D)                                                   |
-| `public/js/hud.js`, `audio.js`, `textures.js` | Interface, sons et textures procédurales                                        |
+| Fichier                                       | Rôle                                                                 |
+| --------------------------------------------- | -------------------------------------------------------------------- |
+| `server.js`                                   | Petit serveur de fichiers pour jouer en local                        |
+| `public/js/net.js`                            | Multijoueur pair-à-pair (PeerJS)                                     |
+| `public/js/room.js`                           | Groupe hébergé par le navigateur de l'hôte : relais, courses, primes |
+| `public/js/profile.js`                        | Écurie du joueur (économie, achats), sauvegardée dans le navigateur  |
+| `public/shared/catalog.js`                    | Catalogue des pièces, cosmétiques et calcul des performances         |
+| `public/vendor/`                              | Three.js et PeerJS (inclus, aucun téléchargement externe)            |
+| `public/js/main.js`                           | Boucle de jeu, caméra, réseau, tours et course                       |
+| `public/js/physics.js`                        | Physique de la voiture                                               |
+| `public/js/track.js` / `trackdata.js`         | Tracé et décor du circuit                                            |
+| `public/js/car.js`                            | Modèle 3D de la voiture selon les pièces                             |
+| `public/js/avatar.js`                         | Personnages façon Roblox                                             |
+| `public/js/garage.js`                         | Garage (boutique + aperçu 3D)                                        |
+| `public/js/hud.js`, `audio.js`, `textures.js` | Interface, sons et textures procédurales                             |

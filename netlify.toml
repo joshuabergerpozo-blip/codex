@@ -1,0 +1,11 @@
+# Déploiement Netlify du jeu F1 Garage Racing (dossier f1-racing).
+# Le site est 100 % statique : aucune commande de build n'est nécessaire.
+[build]
+  base = "f1-racing"
+  publish = "public"
+  command = "echo 'Aucun build : site statique'"
+
+[[headers]]
+  for = "/vendor/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

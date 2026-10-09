@@ -150,7 +150,6 @@ function updateParticles(dt) {
 // --- État du jeu --------------------------------------------------------------
 
 const state = {
-  token: localStorage.getItem("f1gr_token") || "",
   profile: null,
   myId: null,
   room: null,
@@ -778,8 +777,6 @@ function renderPlayers() {
 // --- Réseau ---------------------------------------------------------------------------------
 
 net.on("welcome", (m) => {
-  state.token = m.token;
-  localStorage.setItem("f1gr_token", m.token);
   setProfile(m.profile);
   const p = m.profile;
   $("homeProfile").innerHTML =
@@ -891,12 +888,12 @@ net.on("raceResults", (m) => {
   $("results").classList.remove("hidden");
 });
 
-net.on("close", () => {
-  $("homeError").textContent = "Connexion au serveur perdue. Recharge la page.";
-  $("home").classList.remove("hidden");
-  $("hud").classList.add("hidden");
-  garage.close();
-  state.inGame = false;
+net.on("close", (m) => {
+  if (!state.inGame) return;
+  // On repart d'une page propre en affichant la raison sur l'accueil.
+  sessionStorage.setItem("f1gr_msg", m.reason || "Connexion au groupe perdue.");
+  location.hash = "";
+  location.reload();
 });
 
 // --- Boutons -------------------------------------------------------------------------------
@@ -904,7 +901,7 @@ net.on("close", () => {
 function sendHello() {
   const name = $("nameInput").value.trim();
   if (name) localStorage.setItem("f1gr_name", name);
-  net.send({ t: "hello", token: state.token, name });
+  net.send({ t: "hello", name });
 }
 
 $("createBtn").addEventListener("click", () => {
@@ -1124,14 +1121,15 @@ async function boot() {
   frame();
   try {
     await net.connect();
-    net.send({
-      t: "hello",
-      token: state.token,
-      name: $("nameInput").value.trim(),
-    });
+    net.send({ t: "hello", name: $("nameInput").value.trim() });
   } catch {
     $("homeError").textContent =
-      "Impossible de joindre le serveur. Lance « npm start » puis recharge.";
+      "Le module multijoueur n'a pas pu se charger. Recharge la page.";
+  }
+  const msg = sessionStorage.getItem("f1gr_msg");
+  if (msg) {
+    sessionStorage.removeItem("f1gr_msg");
+    $("homeError").textContent = msg;
   }
 }
 
