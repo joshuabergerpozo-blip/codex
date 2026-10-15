@@ -844,6 +844,278 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
 }
 .dock-item .badge { position: absolute; top: -3px; right: -5px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: #ffffff; background: #ff3b30; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 
+/* ---------- Intro : faux piratage ---------- */
+#hack { position: fixed; inset: 0; z-index: 9850; overflow: hidden; cursor: none; }
+.hk-noise { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; opacity: .06; mix-blend-mode: overlay; pointer-events: none; transition: opacity .3s; }
+.hk-scan { position: absolute; inset: 0; pointer-events: none; opacity: .55; background: repeating-linear-gradient(0deg, rgba(0,0,0,.24) 0 1px, transparent 1px 3px); }
+.hk-stripes { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+.hk-stripe { position: absolute; left: -40px; right: -40px; mix-blend-mode: difference; }
+#os.hk-jitter { animation: hkJitter .16s steps(2) infinite; }
+@keyframes hkJitter {
+  0% { transform: none; filter: none; }
+  25% { transform: translate(-7px, 2px) skewX(-2deg); filter: hue-rotate(90deg) saturate(2); }
+  50% { transform: translate(6px, -3px); filter: invert(1) contrast(1.4); }
+  75% { transform: translate(-3px, 4px) skewX(3deg); filter: hue-rotate(-70deg); }
+  100% { transform: none; filter: none; }
+}
+#desk.hk-tint { filter: hue-rotate(150deg) saturate(2.2) contrast(1.3) brightness(.85); }
+.hk-alert { position: absolute; z-index: 3; left: 50%; top: 32%; transform: translate(-50%, -50%); width: min(300px, calc(100% - 32px)); padding: 20px 18px 16px; display: grid; justify-items: center; gap: 8px; text-align: center; border-radius: 14px; font-family: var(--font-ui); color: #1d1d1f; background: rgba(246,246,248,.95); -webkit-backdrop-filter: blur(40px); backdrop-filter: blur(40px); box-shadow: 0 0 0 .5px rgba(0,0,0,.2), 0 30px 80px rgba(0,0,0,.5); animation: hkPop .18s cubic-bezier(.2,.9,.3,1.3); cursor: default; }
+.hk-alert svg { width: 56px; height: 56px; }
+.hk-alert b { font-size: 14px; }
+.hk-alert p { margin: 0; font-size: 12.5px; line-height: 1.4; color: #55555a; }
+.hk-alert .acts { display: grid; gap: 6px; width: 100%; margin-top: 6px; }
+.hk-alert button { padding: 5px; border: 0; border-radius: 6px; font: 500 13px var(--font-ui); color: #1d1d1f; background: rgba(0,0,0,.08); }
+.hk-alert button.p { color: #ffffff; background: #007aff; }
+@keyframes hkPop { from { opacity: 0; transform: translate(-50%, -50%) scale(.85); } }
+.hk-term { position: absolute; z-index: 2; width: min(440px, calc(100vw - 24px)); height: 230px; overflow: hidden; border-radius: 10px; background: rgba(12,12,13,.95); box-shadow: 0 0 0 .5px rgba(255,255,255,.14), 0 24px 60px rgba(0,0,0,.6); font: 12px/1.5 var(--font-mono); color: #e5e5ea; animation: hkTerm .14s ease-out; }
+@keyframes hkTerm { from { opacity: 0; transform: scale(.9); } }
+.hk-term header { position: relative; height: 26px; display: flex; align-items: center; gap: 7px; padding: 0 10px; background: #2a2a2d; color: #a1a1a6; font: 600 11px var(--font-ui); }
+.hk-term header i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+.hk-term header i:nth-child(2) { background: #febc2e; }
+.hk-term header i:nth-child(3) { background: #28c840; }
+.hk-term header span { position: absolute; left: 0; right: 0; text-align: center; pointer-events: none; }
+.hk-term pre { height: calc(100% - 26px); margin: 0; padding: 8px 10px; overflow: hidden; white-space: pre-wrap; word-break: break-all; font: inherit; }
+.hk-term .g { color: #4ade80; }
+.hk-term .r { color: #ff5f57; font-weight: 600; }
+.hk-term .d { color: #6e6e73; }
+.hk-big { position: absolute; z-index: 4; left: 50%; top: 50%; transform: translate(-50%, -50%); width: max-content; max-width: calc(100vw - 32px); text-align: center; font: 800 clamp(40px, 9vw, 132px)/.95 var(--font-display); font-variation-settings: "wdth" 75; letter-spacing: -.02em; color: #ffffff; text-shadow: 0 0 40px rgba(255,40,70,.7); }
+.hk-big::before, .hk-big::after { content: attr(data-text); position: absolute; inset: 0; mix-blend-mode: screen; }
+.hk-big::before { color: #ff2d55; animation: hkSlice .32s steps(3) infinite; }
+.hk-big::after { color: #2de2e6; animation: hkSlice .26s steps(3) infinite reverse; }
+@keyframes hkSlice {
+  0% { clip-path: inset(0 0 70% 0); transform: translate(-7px, 0); }
+  33% { clip-path: inset(40% 0 30% 0); transform: translate(6px, 0); }
+  66% { clip-path: inset(75% 0 5% 0); transform: translate(-4px, 0); }
+  100% { clip-path: inset(10% 0 60% 0); transform: translate(7px, 0); }
+}
+
+/* Écran noir et message de bienvenue */
+#intro-black { position: fixed; inset: 0; z-index: 9900; display: grid; place-items: center; padding: 24px 16px; overflow: hidden; color: #f5f5f7; background: #000000; transition: opacity .75s ease; cursor: default; }
+#intro-black.out { opacity: 0; pointer-events: none; }
+.crt { position: absolute; inset: 0; background: #e9fffb; transform-origin: center; animation: crtOff .62s cubic-bezier(.6,0,.4,1) forwards; pointer-events: none; }
+@keyframes crtOff { 0% { opacity: .9; transform: scale(1, 1); } 55% { opacity: 1; transform: scale(1, .004); } 85% { transform: scale(.02, .004); } 100% { opacity: 0; transform: scale(0, 0); } }
+.ib-inner { position: relative; display: grid; justify-items: center; gap: 18px; max-width: 980px; text-align: center; opacity: 0; transition: opacity .4s; }
+.ib-inner.on { opacity: 1; }
+.ib-pre { margin: 0; font: 500 12px var(--font-mono); letter-spacing: .16em; text-transform: uppercase; color: #64d2c4; }
+.ib-title { min-height: 1em; margin: 0; font: 800 clamp(40px, 7.4vw, 108px)/1 var(--font-display); font-variation-settings: "wdth" 80; letter-spacing: -.03em; text-wrap: balance; }
+.ib-caret { display: inline-block; width: .07em; height: .86em; margin-left: .06em; vertical-align: -.06em; background: #f2b705; animation: ibBlink 1s steps(1) infinite; }
+@keyframes ibBlink { 50% { opacity: 0; } }
+.ib-sub, .ib-enter { opacity: 0; transform: translateY(8px); transition: opacity .6s, transform .6s; }
+.ib-inner.done .ib-sub, .ib-inner.done .ib-enter { opacity: 1; transform: none; }
+.ib-sub { margin: 0; font: 500 13px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: rgba(245,245,247,.6); }
+.ib-enter { margin-top: 8px; display: inline-flex; gap: 8px; padding: 10px 24px; border: 1px solid rgba(255,255,255,.35); border-radius: 99px; background: none; color: #ffffff; font: 600 14px var(--font-ui); cursor: pointer; }
+.ib-enter:hover { background: rgba(255,255,255,.1); }
+
+/* ---------- Site du portfolio ---------- */
+#site {
+  /* Un site à part entière, à l'apparence fixe : encre profonde, papier gris-vert, sarcelle de l'océan et jaune « wax » de surf. */
+  --s-bg: #f1f3f0; --s-bg-2: #e5e9e5; --s-ink: #0f1a1c; --s-ink-2: #4b5957; --s-ink-3: #7d8a86; --s-line: rgba(15,26,28,.13);
+  --s-dark: #0a1012; --s-on-dark: #eef2ef; --s-on-dark-2: #9aaca7; --s-dark-line: rgba(255,255,255,.13);
+  --s-teal: #0e6d77; --s-teal-2: #64d2c4; --s-wax: #f2b705; --s-red: #d6402a;
+  --s-display: "Bricolage Grotesque", -apple-system, "Segoe UI", sans-serif;
+  --s-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  position: fixed; inset: 0; z-index: 9750; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--s-bg); color: var(--s-ink); color-scheme: light;
+  font: 400 17px/1.6 var(--s-display);
+  user-select: text; -webkit-user-select: text; cursor: auto;
+}
+#site.s-enter { animation: sIn .9s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes sIn { from { opacity: 0; transform: translateY(26px); } }
+#site a, #site button { cursor: pointer; }
+#site :focus-visible { outline: 2px solid var(--s-wax); outline-offset: 3px; }
+.s-wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 48px); }
+.s-nav { position: sticky; top: 0; z-index: 5; color: var(--s-on-dark); background: rgba(10,16,18,.8); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); border-bottom: 1px solid var(--s-dark-line); padding-top: env(safe-area-inset-top, 0px); }
+.s-nav .s-wrap { display: flex; align-items: center; gap: 16px; height: 60px; }
+.s-brand { display: flex; align-items: center; gap: 10px; flex: none; font-size: 15px; font-weight: 700; color: inherit; text-decoration: none; white-space: nowrap; }
+.s-brand i { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; font-style: normal; font-size: 12px; font-weight: 800; letter-spacing: .03em; color: #ffffff; background: var(--s-teal); }
+.s-links { display: flex; gap: 2px; min-width: 0; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
+.s-links::-webkit-scrollbar { display: none; }
+.s-links a { padding: 6px 10px; border-radius: 6px; font: 500 12px var(--s-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; color: var(--s-on-dark-2); text-decoration: none; }
+.s-links a:hover { color: #ffffff; }
+.s-links a.on { color: #ffffff; background: rgba(255,255,255,.08); box-shadow: inset 0 -2px 0 var(--s-wax); }
+.s-os { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--s-dark-line); border-radius: 99px; background: none; color: var(--s-on-dark); font: 600 13px var(--font-ui); }
+.s-os:hover { background: rgba(255,255,255,.08); }
+.s-os svg { width: 14px; height: 14px; }
+
+.s-hero { position: relative; overflow: hidden; padding-block: clamp(56px, 10vw, 120px) clamp(48px, 7vw, 88px); color: var(--s-on-dark); background: var(--s-dark); }
+.s-hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0 1px, transparent 1px 4px); }
+.s-hero .s-wrap { position: relative; }
+.s-eyebrow { margin: 0 0 18px; font: 500 12px var(--s-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--s-teal-2); }
+.s-title { margin: 0; font-size: clamp(66px, 15vw, 222px); font-weight: 800; line-height: .82; letter-spacing: -.045em; font-variation-settings: "wdth" 75, "opsz" 96; }
+.s-title span { display: block; }
+.s-title .echo { text-shadow: -.03em 0 rgba(214,64,42,.6), .03em 0 rgba(100,210,196,.6); }
+#site.s-enter .s-title span { animation: sRise .9s cubic-bezier(.2,.8,.2,1) both; }
+#site.s-enter .s-title span + span { animation-delay: .08s; }
+@keyframes sRise { from { opacity: 0; transform: translateY(.25em); } }
+.s-hero-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: clamp(24px, 5vw, 64px); align-items: end; margin-top: clamp(32px, 5vw, 56px); }
+.s-lead { max-width: 30ch; margin: 0; font-size: clamp(20px, 2.3vw, 28px); font-weight: 500; line-height: 1.35; }
+.s-term { overflow: hidden; border-radius: 12px; background: #050909; box-shadow: inset 0 0 0 1px var(--s-dark-line); font: 13px/1.7 var(--s-mono); }
+.s-term header { display: flex; gap: 7px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.06); }
+.s-term header i { width: 10px; height: 10px; border-radius: 50%; background: #3a4446; }
+.s-term pre { margin: 0; padding: 14px 16px 16px; white-space: pre-wrap; font: inherit; color: #d7e4df; }
+.s-term .p { color: var(--s-teal-2); }
+.s-term .y { color: var(--s-wax); }
+.s-kpis { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: clamp(40px, 6vw, 72px); border-top: 1px solid var(--s-dark-line); }
+.s-kpi { padding: 20px 20px 0 0; }
+.s-kpi + .s-kpi { padding-left: 20px; border-left: 1px solid var(--s-dark-line); }
+.s-kpi b { display: block; font-size: clamp(30px, 3.6vw, 48px); font-weight: 760; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.s-kpi span { display: block; margin-top: 8px; font: 500 12px/1.45 var(--s-mono); letter-spacing: .04em; color: var(--s-on-dark-2); }
+.s-kpi.hl b { color: var(--s-wax); }
+
+.s-sec { padding-block: clamp(64px, 9vw, 120px); }
+.s-sec + .s-sec { border-top: 1px solid var(--s-line); }
+.s-head { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.3fr); gap: clamp(20px, 4vw, 56px); align-items: end; margin-bottom: clamp(36px, 5vw, 64px); }
+.s-kicker { margin: 0 0 14px; font: 500 12px var(--s-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--s-teal); }
+.s-h2 { margin: 0; font-size: clamp(42px, 6.4vw, 90px); font-weight: 780; line-height: .92; letter-spacing: -.035em; font-variation-settings: "wdth" 80; text-wrap: balance; }
+.s-intro { max-width: 46ch; margin: 0; font-size: clamp(18px, 1.6vw, 21px); line-height: 1.55; color: var(--s-ink-2); }
+.s-p { max-width: 62ch; margin: 0 0 14px; color: var(--s-ink-2); }
+.s-h3 { margin: 0 0 14px; font-size: clamp(28px, 3.2vw, 42px); font-weight: 760; line-height: 1.02; letter-spacing: -.025em; text-wrap: balance; }
+
+.s-profile { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: clamp(32px, 6vw, 80px); }
+.s-big { margin: 0 0 22px; font-size: clamp(26px, 3.2vw, 40px); font-weight: 600; line-height: 1.2; letter-spacing: -.015em; text-wrap: balance; }
+.s-big em { font-style: normal; color: var(--s-teal); }
+.s-toc { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--s-line); }
+.s-toc a { display: grid; grid-template-columns: 44px minmax(0,1fr) auto; gap: 12px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid var(--s-line); font-size: 21px; font-weight: 650; color: inherit; text-decoration: none; }
+.s-toc a .n, .s-toc a small { font: 500 12px var(--s-mono); color: var(--s-ink-3); }
+.s-toc a:hover { color: var(--s-teal); }
+.s-toc-title { margin: 0 0 12px; font: 500 12px var(--s-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--s-ink-3); }
+
+.s-stage { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+.s-photo { position: relative; max-width: 100%; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 4px; background: #cfd8d6 center / cover no-repeat; }
+.s-photo span { position: absolute; left: 14px; bottom: 14px; font: 500 11px var(--s-mono); letter-spacing: .14em; text-transform: uppercase; color: #ffffff; text-shadow: 0 1px 4px rgba(0,0,0,.6); }
+.s-meta { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0 20px; margin: 22px 0; border-top: 1px solid var(--s-line); }
+.s-meta div { padding: 12px 0; border-bottom: 1px solid var(--s-line); }
+.s-meta dt { font: 500 11px var(--s-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--s-ink-3); }
+.s-meta dd { margin: 2px 0 0; font-weight: 650; }
+.s-missions { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; margin-top: clamp(32px, 5vw, 56px); border: 1px solid var(--s-line); background: var(--s-line); }
+.s-mission { padding: 22px 22px 24px; background: var(--s-bg); }
+.s-k { font: 600 11px var(--s-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--s-teal); }
+.s-mission h4 { margin: 8px 0 6px; font-size: 19px; font-weight: 700; line-height: 1.2; }
+.s-mission p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--s-ink-2); }
+.s-sub { margin: clamp(40px, 5vw, 64px) 0 16px; font-size: 22px; font-weight: 700; }
+.s-cases { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+.s-case { padding: 22px; border-radius: 4px; background: var(--s-bg-2); }
+.s-case .q { margin: 6px 0 12px; font-weight: 600; line-height: 1.45; }
+.s-case .a { margin: 0; color: var(--s-ink-2); }
+.s-case .a::before { content: "→ "; color: var(--s-teal); font-weight: 700; }
+.s-quote { max-width: 34ch; margin: clamp(36px, 5vw, 56px) 0 0; padding-left: 22px; border-left: 4px solid var(--s-wax); font-size: clamp(22px, 2.6vw, 32px); font-weight: 650; line-height: 1.25; letter-spacing: -.01em; text-wrap: balance; }
+.s-todo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-top: 28px; padding: 26px; border: 1.5px dashed rgba(15,26,28,.28); border-radius: 4px; }
+.s-todo b { display: block; font-size: 22px; }
+.s-todo small { color: var(--s-ink-3); }
+.s-pill { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 99px; font: 600 11px var(--s-mono); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; color: #8a6200; background: #fbf0d0; }
+.s-pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.s-pill.done { color: #1f6b3a; background: #dcefe2; }
+.s-pill.stop { color: #a3301f; background: #f7ddd7; }
+
+.s-slide { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: 300px; aspect-ratio: 16 / 7; max-width: 100%; padding: clamp(24px, 5vw, 56px); overflow: hidden; border-radius: 4px; color: #fbf3e4; background: linear-gradient(135deg, #c22a1f, #7d130e); }
+.s-slide::after { content: ""; position: absolute; right: -10%; top: -45%; width: 60%; aspect-ratio: 1; border-radius: 50%; background: #ffffff; opacity: .1; }
+.s-slide small { position: relative; margin-bottom: 14px; font: 500 12px var(--s-mono); letter-spacing: .14em; text-transform: uppercase; opacity: .85; }
+.s-slide b { position: relative; font-size: clamp(48px, 10vw, 148px); font-weight: 800; line-height: .88; letter-spacing: -.04em; font-variation-settings: "wdth" 78; }
+.s-slide .s-pill { position: relative; align-self: flex-start; margin-top: 18px; }
+
+.s-projects { display: grid; gap: clamp(56px, 8vw, 110px); }
+.s-proj { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(24px, 5vw, 64px); align-items: center; }
+.s-proj:nth-child(even) .s-visual { order: 2; }
+.s-visual { position: relative; display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; min-height: 340px; padding: 32px; overflow: hidden; border-radius: 4px; }
+.s-visual .frame { box-shadow: 0 20px 40px -16px rgba(0,0,0,.5); }
+.s-visual > svg { width: min(220px, 60%); height: auto; filter: drop-shadow(0 20px 30px rgba(0,0,0,.35)); }
+.s-stamp { position: absolute; top: 26px; right: 22px; padding: 7px 13px; border: 2.5px solid var(--s-red); border-radius: 6px; transform: rotate(-9deg); font: 600 12px var(--s-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--s-red); background: rgba(255,255,255,.6); }
+.s-floats { position: absolute; inset: 0; pointer-events: none; }
+.s-floats span { position: absolute; padding: 6px 12px; border-radius: 99px; font: 600 12px var(--font-ui); color: #0b1119; background: rgba(255,255,255,.92); box-shadow: 0 8px 20px rgba(0,0,0,.3); }
+.s-list { display: grid; gap: 10px; margin: 18px 0 0; padding: 0; list-style: none; }
+.s-list li { display: grid; grid-template-columns: 16px minmax(0,1fr); gap: 10px; color: var(--s-ink-2); line-height: 1.5; }
+.s-list li::before { content: ""; width: 8px; height: 8px; margin-top: 9px; border-radius: 2px; background: var(--s-teal); }
+.s-list.x li::before { border-radius: 50%; background: var(--s-red); }
+.s-list b { color: var(--s-ink); }
+.s-facts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 16px 0 0; padding: 0; list-style: none; font: 500 12px var(--s-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--s-ink-3); }
+.s-facts b { color: var(--s-ink); }
+.s-steps3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin: 18px 0 0; padding: 0; list-style: none; counter-reset: st; }
+.s-steps3 li { counter-increment: st; padding: 14px; border: 1px solid var(--s-line); border-radius: 4px; font-size: 14.5px; line-height: 1.45; color: var(--s-ink-2); }
+.s-steps3 li::before { content: "Étape " counter(st); display: block; margin-bottom: 4px; font: 600 11px var(--s-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--s-teal); }
+.s-prices { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.s-price { padding: 12px 16px; border: 1px solid var(--s-line); border-radius: 4px; }
+.s-price small { display: block; font: 500 11px var(--s-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--s-ink-3); }
+.s-price b { font-size: 26px; font-weight: 760; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+
+.s-dark { color: var(--s-on-dark); background: var(--s-dark); }
+.s-sec.s-dark, .s-sec + .s-sec.s-dark, .s-dark + .s-sec { border-top: 0; }
+.s-dark .s-kicker { color: var(--s-teal-2); }
+.s-dark .s-intro, .s-dark .s-p { color: var(--s-on-dark-2); }
+.s-bars { display: grid; gap: 14px; }
+.s-bar { display: grid; grid-template-columns: 180px minmax(0,1fr) 110px; gap: 16px; align-items: center; }
+.s-bar b { display: block; font-size: 15px; }
+.s-bar small { font: 500 11px var(--s-mono); color: var(--s-on-dark-2); }
+.s-track { position: relative; height: 30px; background: linear-gradient(90deg, var(--s-dark-line) 1px, transparent 1px) 0 0 / 25% 100% repeat-x, rgba(255,255,255,.05); }
+.s-fill { position: absolute; top: 0; bottom: 0; left: 0; min-width: 3px; background: var(--s-teal-2); }
+.s-fill.now { background: var(--s-wax); }
+.s-fill.goal { background: repeating-linear-gradient(135deg, var(--s-wax) 0 2px, transparent 2px 8px); box-shadow: inset 0 0 0 1.5px var(--s-wax); }
+.s-bar .v { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.s-axis { display: grid; grid-template-columns: 180px minmax(0,1fr) 110px; gap: 16px; margin-top: 6px; font: 500 11px var(--s-mono); color: var(--s-on-dark-2); font-variant-numeric: tabular-nums; }
+.s-axis .t { position: relative; height: 16px; }
+.s-axis .t span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.s-axis .t span:first-child { transform: none; }
+.s-axis .t span:last-child { transform: translateX(-100%); }
+.s-note { margin: 14px 0 0; font: 500 12px var(--s-mono); color: var(--s-on-dark-2); }
+.s-tt-grid { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: clamp(32px, 6vw, 80px); margin-top: clamp(56px, 8vw, 96px); }
+.s-tl { margin: 0; padding: 0; list-style: none; }
+.s-tl li { display: grid; grid-template-columns: 112px 18px minmax(0,1fr); gap: 0 14px; }
+.s-tl .d { padding: 1px 0 22px; text-align: right; font: 500 12px var(--s-mono); color: var(--s-on-dark-2); }
+.s-tl .dot { position: relative; display: flex; justify-content: center; }
+.s-tl .dot::before { content: ""; position: absolute; top: 14px; bottom: 0; width: 2px; background: var(--s-dark-line); }
+.s-tl li:last-child .dot::before { display: none; }
+.s-tl .dot i { position: relative; width: 12px; height: 12px; margin-top: 4px; border-radius: 50%; border: 2px solid var(--s-teal-2); background: var(--s-dark); }
+.s-tl li.key .dot i { background: var(--s-teal-2); }
+.s-tl li.now .dot i { border-color: var(--s-wax); background: var(--s-wax); box-shadow: 0 0 0 4px rgba(242,183,5,.25); }
+.s-tl li.goal .dot i { border-style: dashed; border-color: var(--s-wax); }
+.s-tl .t { padding-bottom: 22px; }
+.s-tl .t b { display: block; font-size: 16px; }
+.s-tl .t p { margin: 3px 0 0; font-size: 14.5px; color: var(--s-on-dark-2); }
+.s-why h3 { margin: 0 0 10px; font-size: 22px; }
+.s-why p { margin: 0 0 22px; color: var(--s-on-dark-2); }
+.s-skills { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; margin-top: clamp(48px, 7vw, 88px); border: 1px solid var(--s-dark-line); background: var(--s-dark-line); }
+.s-skill { padding: 24px; background: var(--s-dark); }
+.s-skill .s-k { color: var(--s-teal-2); }
+.s-skill h4 { margin: 8px 0 10px; font-size: 20px; }
+.s-skill ul { display: grid; gap: 6px; margin: 0; padding-left: 18px; color: var(--s-on-dark-2); font-size: 15px; line-height: 1.45; }
+
+.s-amb-quote { max-width: 17ch; margin: 0 0 clamp(36px, 5vw, 60px); font-size: clamp(36px, 5.6vw, 78px); font-weight: 780; line-height: .98; letter-spacing: -.035em; text-wrap: balance; }
+.s-amb-quote span { background: linear-gradient(transparent 62%, rgba(242,183,5,.55) 62%); }
+.s-amb-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(32px, 6vw, 80px); }
+.s-steps { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--s-line); }
+.s-steps li { display: grid; grid-template-columns: 120px minmax(0,1fr); gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--s-line); }
+.s-steps .w { padding-top: 4px; font: 500 12px var(--s-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--s-teal); }
+.s-steps b { display: block; font-size: 20px; }
+.s-steps p { margin: 3px 0 0; color: var(--s-ink-2); }
+
+.s-foot { padding-block: clamp(56px, 8vw, 100px) calc(40px + env(safe-area-inset-bottom, 0px)); color: var(--s-on-dark); background: var(--s-dark); }
+.s-thanks { margin: 0; font-size: clamp(64px, 14vw, 200px); font-weight: 800; line-height: .85; letter-spacing: -.045em; font-variation-settings: "wdth" 75; }
+.s-thanks .echo { text-shadow: -.03em 0 rgba(214,64,42,.6), .03em 0 rgba(100,210,196,.6); }
+.s-foot-acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+.s-btn { padding: 10px 20px; border: 1px solid rgba(255,255,255,.3); border-radius: 99px; background: none; color: #ffffff; font: 600 14px var(--font-ui); }
+.s-btn:hover { background: rgba(255,255,255,.08); }
+.s-btn.p { border-color: var(--s-wax); color: #111111; background: var(--s-wax); }
+.s-foot-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 20px; margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--s-dark-line); font: 500 12px var(--s-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--s-on-dark-2); }
+
+@media (max-width: 1060px) { .s-missions { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 860px) {
+  .s-brand span, .s-os span { display: none; }
+  .s-hero-grid, .s-head, .s-profile, .s-stage, .s-proj, .s-tt-grid, .s-amb-grid { grid-template-columns: minmax(0,1fr); }
+  .s-proj:nth-child(even) .s-visual { order: 0; }
+  .s-kpis { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .s-kpi:nth-child(3) { padding-left: 0; border-left: 0; }
+  .s-kpi:nth-child(n+3) { margin-top: 20px; border-top: 1px solid var(--s-dark-line); }
+  .s-photo { aspect-ratio: 16 / 10; }
+  .s-missions, .s-cases, .s-skills, .s-steps3 { grid-template-columns: minmax(0,1fr); }
+  .s-bar { grid-template-columns: minmax(0,1fr) auto; }
+  .s-bar .s-track { grid-column: 1 / -1; grid-row: 2; }
+  .s-axis { grid-template-columns: minmax(0,1fr); }
+  .s-axis > span { display: none; }
+  .s-tl li { grid-template-columns: 78px 18px minmax(0,1fr); }
+  .s-steps li { grid-template-columns: minmax(0,1fr); gap: 2px; }
+  .s-visual { min-height: 260px; }
+  .s-slide { aspect-ratio: auto; }
+}
+
 /* ---------- Écran de connexion ---------- */
 #lock { position: fixed; inset: 0; z-index: 9800; display: flex; flex-direction: column; align-items: center; overflow: hidden; color: #ffffff; font-family: var(--font-ui); user-select: none; -webkit-user-select: none; background: #1d2a2c; cursor: default; }
 .lk-bg { position: absolute; inset: -40px; background: #1d2a2c center / cover no-repeat; transform: scale(1.03); }
@@ -2074,8 +2346,9 @@ const iconsEl = $('#icons');
 let iconPos = store.get('icons2', {});
 const breakName = s => esc(s).replace(/([_.])/g, '$1<wbr>');
 
+const DESK_ICONS = []; /* le bureau reste vide : le contenu est dans le site */
 function renderIcons() {
-  iconsEl.innerHTML = FS.desktop.children.map(id => `<div class="icon" role="button" tabindex="0" data-id="${id}" aria-label="${esc(FS[id].name)}"><span class="pic">${iconSvg(id)}</span><span class="n">${breakName(FS[id].name)}</span></div>`).join('');
+  iconsEl.innerHTML = DESK_ICONS.map(id => `<div class="icon" role="button" tabindex="0" data-id="${id}" aria-label="${esc(FS[id].name)}"><span class="pic">${iconSvg(id)}</span><span class="n">${breakName(FS[id].name)}</span></div>`).join('');
   layoutIcons();
 }
 function iconGrid() {
@@ -2287,6 +2560,7 @@ const activeFinder = () => WM.active?.app === 'finder' ? WM.active : null;
 const MENUS = {
   logo: () => [
     { label: 'À propos de JoshOS', action: openAbout },
+    { label: 'Afficher le portfolio', action: () => showSite(true) },
     '-',
     { label: 'Réglages…', action: openSettings },
     '-',
@@ -2470,6 +2744,7 @@ const SPOT_POOL = () => [
   { name: 'Musique', sub: 'Ambiances du portfolio', kind: 'Application', icon: APP_ICONS.music(), go: () => openMusic(), hay: 'musique son ambiance vagues playlist music' },
   { name: 'Launchpad', sub: 'Toutes les applications', kind: 'Application', icon: APP_ICONS.launchpad(), go: () => openLaunch(), hay: 'applications launchpad apps grille' },
   { name: 'Réglages Système', sub: 'Apparence, fond d’écran, dock', kind: 'Application', icon: APP_ICONS.settings(), go: openSettings, hay: 'reglages apparence theme sombre clair fond ecran dock wallpaper' },
+  { name: 'Site du portfolio', sub: 'Toutes les sections du portfolio', kind: 'Site web', icon: JOSH_ICON(), go: () => showSite(true), hay: 'site portfolio web accueil sections' },
   { name: 'À propos de JoshOS', sub: 'Infos système', kind: 'Action', icon: JOSH_ICON(), go: openAbout, hay: 'a propos joshos systeme' },
   { name: 'Raccourcis et astuces', sub: 'Aide', kind: 'Action', icon: APP_ICONS.info(), go: openHelp, hay: 'aide raccourcis clavier astuces help' },
 ];
@@ -2536,7 +2811,7 @@ function tick() {
 }
 
 document.addEventListener('keydown', e => {
-  if (isLocked()) return;
+  if (isLocked() || isSiteOpen()) return;
   const k = e.key.toLowerCase();
   if (e.ctrlKey && (e.metaKey || e.altKey) && (k === 'q' || k === 'l')) { e.preventDefault(); showLock(); return; }
   if ((e.metaKey || e.ctrlKey) && k === 'k') { e.preventDefault(); spot.hidden ? openSpot() : closeSpot(); return; }
@@ -2964,12 +3239,357 @@ lpInput.addEventListener('input', () => renderLaunch(lpInput.value));
 lpInput.addEventListener('keydown', e => { if (e.key === 'Enter') $('.lp-item', launch)?.click(); });
 
 /* =========================================================
+   Intro : faux piratage, écran noir, puis site du portfolio
+   ========================================================= */
+let hackDone = false, introStage = 'idle', introT = [], introI = [];
+const later = (ms, fn) => { introT.push(setTimeout(fn, ms)); };
+const every = (ms, fn) => { introI.push(setInterval(fn, ms)); };
+function clearIntro() { introT.forEach(clearTimeout); introI.forEach(clearInterval); introT = []; introI = []; }
+
+/* Petits effets sonores, synthétisés dans la page */
+function sfxCtx() {
+  const ctx = audioCtx();
+  if (!ctx) return null;
+  ctx.resume?.();
+  if (!audio.sfx) { audio.sfx = ctx.createGain(); audio.sfx.gain.value = .55; audio.sfx.connect(ctx.destination); }
+  return ctx;
+}
+function sfxNoise(dur = .1, vol = .15) {
+  const ctx = sfxCtx(); if (!ctx) return;
+  const n = Math.max(1, Math.floor(ctx.sampleRate * dur)), b = ctx.createBuffer(1, n, ctx.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+  const s = ctx.createBufferSource(); s.buffer = b;
+  const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 800 + Math.random() * 3000; f.Q.value = .7;
+  const g = ctx.createGain(); g.gain.value = vol;
+  s.connect(f).connect(g).connect(audio.sfx); s.start();
+}
+function sfxBeep(freq = 880, dur = .08, vol = .06, type = 'square') {
+  const ctx = sfxCtx(); if (!ctx) return;
+  const t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+  o.connect(g).connect(audio.sfx); o.start(t); o.stop(t + dur + .02);
+}
+function sfxThump() {
+  const ctx = sfxCtx(); if (!ctx) return;
+  const t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(28, t + .5);
+  g.gain.setValueAtTime(.5, t); g.gain.exponentialRampToValueAtTime(.0001, t + .6);
+  o.connect(g).connect(audio.sfx); o.start(t); o.stop(t + .65);
+  sfxNoise(.25, .2);
+}
+const sfxTick = () => sfxNoise(.012, .05);
+
+const HACK_LINES = [
+  '$ ssh root@joshos.local -p 2207',
+  'Connexion établie avec joshos.local',
+  'Contournement du pare-feu ............ OK',
+  'Élévation des privilèges ............. OK',
+  '$ cd ~/Portfolio && ls',
+  'Stages  Ateliers  Projets_perso  TikTok_Droit.app  Ambitions.txt',
+  '$ scp -r ~/Portfolio 203.0.113.42:/tmp',
+  'Copie : [##########----------] 52 %',
+  'Déchiffrement de TikTok_Droit.app .... OK',
+  '!AVERTISSEMENT : intrusion détectée',
+  '$ rm -rf ~/Bureau/*',
+  'Suppression des icônes du bureau ..... OK',
+  '$ sudo prendre-le-controle --force',
+  '!Contrôle total du système',
+  'Lecture de Ambitions.txt ............. OK',
+  'Injection de portfolio.sys ........... OK',
+];
+const hexLine = () => Array.from({ length: 8 }, () => Math.floor(Math.random() * 65536).toString(16).padStart(4, '0')).join(' ');
+function fmtLine(l) {
+  if (l.startsWith('$ ')) return `<span class="g">root@joshos:~#</span> ${esc(l.slice(2))}`;
+  if (l.startsWith('!')) return `<span class="r">${esc(l.slice(1))}</span>`;
+  return esc(l).replace(/ OK$/, ' <span class="g">OK</span>');
+}
+function spawnTerm(fx, i) {
+  const w = Math.min(440, innerWidth - 24), hh = 230;
+  const x = Math.random() * Math.max(0, innerWidth - w - 12) + 6;
+  const y = 34 + Math.random() * Math.max(10, innerHeight - hh - 130);
+  const t = h(`<div class="hk-term" style="left:${x.toFixed(0)}px;top:${y.toFixed(0)}px"><header><i></i><i></i><i></i><span>root@joshos — ssh — 80×24</span></header><pre></pre></div>`);
+  fx.append(t);
+  const pre = $('pre', t);
+  let n = (i * 5) % HACK_LINES.length;
+  every(45 + Math.random() * 40, () => {
+    pre.insertAdjacentHTML('beforeend', fmtLine(HACK_LINES[n++ % HACK_LINES.length]) + '\n');
+    if (Math.random() < .35) pre.insertAdjacentHTML('beforeend', `<span class="d">${hexLine()}</span>\n`);
+    pre.scrollTop = pre.scrollHeight;
+  });
+  sfxBeep(1200 + Math.random() * 800, .03, .04);
+}
+function scheduleHack() { clearIntro(); introStage = 'wait'; later(3000, runHack); }
+function runHack() {
+  if (isLocked()) return;
+  introStage = 'hack';
+  closeMenus(); closeSpot(); closeLaunch();
+  const reduce = mqReduce.matches, os = $('#os');
+  const fx = h('<div id="hack" aria-hidden="true"><canvas class="hk-noise" width="160" height="90"></canvas><div class="hk-scan"></div><div class="hk-stripes"></div></div>');
+  document.body.append(fx);
+  const noise = $('.hk-noise', fx), nctx = noise.getContext('2d'), img = nctx.createImageData(160, 90), stripes = $('.hk-stripes', fx);
+  const drawNoise = () => { const d = img.data; for (let i = 0; i < d.length; i += 4) { const v = Math.random() * 255 | 0; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; } nctx.putImageData(img, 0, 0); };
+  const burst = ms => {
+    sfxNoise(.06 + Math.random() * .1, .16);
+    if (reduce) return;
+    os.classList.add('hk-jitter');
+    const colors = ['rgba(255,45,85,.55)', 'rgba(45,226,230,.5)', 'rgba(255,255,255,.75)', 'rgba(0,0,0,.6)'];
+    stripes.innerHTML = Array.from({ length: 6 + (Math.random() * 6 | 0) }, () => `<i class="hk-stripe" style="top:${(Math.random() * 100).toFixed(1)}%;height:${(1 + Math.random() * 9).toFixed(1)}%;transform:translateX(${((Math.random() - .5) * 70).toFixed(0)}px);background:${colors[Math.random() * 4 | 0]}"></i>`).join('');
+    later(ms, () => { os.classList.remove('hk-jitter'); stripes.innerHTML = ''; });
+  };
+  if (!reduce) every(50, drawNoise);
+  burst(220);
+  later(350, () => {
+    fx.insertAdjacentHTML('beforeend', `<div class="hk-alert" role="alertdialog" aria-label="Alerte de sécurité"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M28.5 9.5a4 4 0 0 1 7 0l22 39a4 4 0 0 1-3.5 6H10a4 4 0 0 1-3.5-6z" fill="#febc2e"/><path d="M32 23v15" stroke="#1d1d1f" stroke-width="4.5" stroke-linecap="round"/><circle cx="32" cy="46" r="2.8" fill="#1d1d1f"/></svg><b>Alerte de sécurité</b><p>Une connexion à distance non autorisée a été détectée sur ce Mac.</p><div class="acts"><button class="p" type="button">Bloquer la connexion</button><button type="button">Ignorer</button></div></div>`);
+    $('.hk-alert .p', fx).addEventListener('click', e => { e.currentTarget.textContent = 'Accès refusé'; sfxBeep(220, .2, .1, 'sawtooth'); });
+    sfxBeep(880, .09); later(140, () => sfxBeep(660, .12));
+  });
+  if (!reduce) {
+    const loop = () => { if (introStage !== 'hack') return; burst(90 + Math.random() * 200); later(250 + Math.random() * 650, loop); };
+    later(700, loop);
+  }
+  later(1100, () => { for (let i = 0; i < 7; i++) later(i * 230, () => spawnTerm(fx, i)); });
+  later(1500, () => {
+    if (!reduce) desk.classList.add('hk-tint');
+    const glyphs = '█▓▒░#@$%&?!<>/\\01';
+    every(110, () => { $('#mb-app').textContent = Array.from({ length: 8 }, () => glyphs[Math.random() * glyphs.length | 0]).join(''); });
+  });
+  later(3300, () => {
+    fx.append(h('<div class="hk-big" data-text="SYSTÈME COMPROMIS">SYSTÈME COMPROMIS</div>'));
+    noise.style.opacity = '.3'; noise.style.mixBlendMode = 'screen';
+    sfxNoise(.5, .25);
+  });
+  later(4700, blackScreen);
+}
+function cleanupHack() {
+  clearIntro();
+  $('#hack')?.remove();
+  $('#os').classList.remove('hk-jitter');
+  desk.classList.remove('hk-tint');
+  setAppName(WM.active?.app || null);
+}
+function blackScreen() {
+  cleanupHack();
+  introStage = 'black';
+  const black = h(`<div id="intro-black"><div class="ib-inner"><p class="ib-pre">&gt; connexion rétablie</p><h1 class="ib-title"><span class="ib-text"></span><span class="ib-caret"></span></h1><p class="ib-sub">Joshua Berger · BTS Communication · Saint-Jo Sup</p><button class="ib-enter" type="button">Entrer <span aria-hidden="true">↓</span></button></div></div>`);
+  if (!mqReduce.matches) black.insertAdjacentHTML('afterbegin', '<div class="crt"></div>');
+  document.body.append(black);
+  sfxThump();
+  black.addEventListener('click', e => { if (introStage === 'welcome-ready' || e.target.closest('.ib-enter')) enterSite(); });
+  later(mqReduce.matches ? 200 : 1300, () => typeWelcome(black));
+}
+function typeWelcome(black) {
+  introStage = 'welcome';
+  const inner = $('.ib-inner', black), out = $('.ib-text', black), text = 'Bienvenue dans mon portfolio.';
+  inner.classList.add('on');
+  const finish = () => { out.textContent = text; inner.classList.add('done'); introStage = 'welcome-ready'; $('.ib-enter', black).focus({ preventScroll: true }); later(3400, enterSite); };
+  if (mqReduce.matches) return finish();
+  let i = 0;
+  const step = () => { out.textContent = text.slice(0, ++i); if (i % 2) sfxTick(); i < text.length ? later(58, step) : finish(); };
+  later(450, step);
+}
+function enterSite() {
+  if (introStage === 'site') return;
+  cleanupHack();
+  introStage = 'site';
+  hackDone = true;
+  showSite(true);
+  const black = $('#intro-black');
+  if (black) { black.classList.add('out'); setTimeout(() => black.remove(), 800); }
+}
+function resetIntro() {
+  cleanupHack();
+  $('#intro-black')?.remove();
+  introStage = 'idle';
+  hackDone = false;
+  hideSite();
+}
+document.addEventListener('keydown', e => {
+  if (!['hack', 'black', 'welcome', 'welcome-ready'].includes(introStage)) return;
+  if (e.key === 'Escape' || (introStage === 'welcome-ready' && (e.key === 'Enter' || e.key === ' '))) { e.preventDefault(); e.stopPropagation(); enterSite(); }
+  else { e.preventDefault(); e.stopPropagation(); }
+}, true);
+
+/* ---------- Site du portfolio ---------- */
+const site = h('<div id="site" hidden role="document" aria-label="Portfolio de Joshua Berger"></div>');
+document.body.append(site);
+const isSiteOpen = () => !site.hidden;
+const S_NAV = [['s-profil', 'Profil'], ['s-stages', 'Stages'], ['s-ateliers', 'Ateliers'], ['s-projets', 'Projets'], ['s-tiktok', 'TikTok'], ['s-ambitions', 'Ambitions']];
+const S_TL = [
+  ['≈ 4 ans', 'Des projets sur Internet', 'Des essais, des abandons, un manque de régularité. J’apprends ce qui ne marche pas.', ''],
+  ['1er août', 'Lancement du compte sur le droit français', 'Un format vidéo encore très peu utilisé sur la thématique.', 'key'],
+  ['27 août', '10 000 abonnés et 2,7 millions de vues', 'Moins d’un mois après la création du compte.', 'key'],
+  ['29–31 août', '357 € en trois jours', 'La première fois que je me dis que tout ce travail commence à payer.', ''],
+  ['Septembre', 'Plus de 800 €', 'Je reste régulier et je travaille énormément sur le compte.', ''],
+  ['Octobre', 'Environ 1 200 €', '', ''],
+  ['Aujourd’hui', '≈ 5 000 € de chiffre d’affaires mensuel', 'En y consacrant environ deux heures par jour.', 'now'],
+  ['2 juillet', 'Objectif : ≈ 10 000 € par mois', '', 'goal'],
+];
+function siteHTML() {
+  const max = 10000;
+  const bars = REVENUE.map(r => `<div class="s-bar"><div><b>${r.label}</b>${r.sub ? `<small>${r.sub}</small>` : ''}</div><div class="s-track"><div class="s-fill ${r.cls || ''}" style="width:${(r.v / max * 100).toFixed(2)}%"></div></div><div class="v">${r.txt}</div></div>`).join('');
+  const ticks = [0, 2500, 5000, 7500, 10000].map(t => `<span style="left:${t / max * 100}%">${t.toLocaleString('fr-FR')} €</span>`).join('');
+  return `
+  <header class="s-nav"><div class="s-wrap">
+    <a class="s-brand" href="#s-top" data-go="s-top"><i>JB</i><span>Joshua Berger</span></a>
+    <nav class="s-links" aria-label="Sections">${S_NAV.map(([id, l]) => `<a href="#${id}" data-go="${id}">${l}</a>`).join('')}</nav>
+    <button class="s-os" type="button" data-site="os" aria-label="Revenir au bureau">${UI.logo}<span>Bureau</span></button>
+  </div></header>
+
+  <section class="s-hero" id="s-top"><div class="s-wrap">
+    <p class="s-eyebrow">Portfolio · BTS Communication · Saint-Jo Sup</p>
+    <h1 class="s-title"><span>Joshua</span><span class="echo">Berger</span></h1>
+    <div class="s-hero-grid">
+      <p class="s-lead">19 ans, étudiant en BTS Communication. Je crée du contenu, je lance des projets, et je surfe quand les vagues le permettent.</p>
+      <div class="s-term" aria-label="Fiche d’identité"><header><i></i><i></i><i></i></header><pre><span class="p">joshua@joshos ~ %</span> whoami
+Joshua Berger, 19 ans
+BTS Communication · Saint-Jo Sup
+Surf · musculation 2× par semaine
+<span class="p">joshua@joshos ~ %</span> <span class="y">ls ~/Portfolio</span>
+Stages  Ateliers  Projets  TikTok  Ambitions</pre></div>
+    </div>
+    <div class="s-kpis">
+      <div class="s-kpi"><b>26 jours</b><span>pour atteindre 10 000 abonnés sur TikTok</span></div>
+      <div class="s-kpi"><b>2,7 M</b><span>de vues cumulées au 27 août</span></div>
+      <div class="s-kpi hl"><b>≈ 5 000 €</b><span>de chiffre d’affaires mensuel aujourd’hui</span></div>
+      <div class="s-kpi"><b>2 stages</b><span>Hossegor, puis un second à venir</span></div>
+    </div>
+  </div></section>
+
+  <section class="s-sec" id="s-profil"><div class="s-wrap s-profile">
+    <div>
+      <p class="s-kicker">Profil</p>
+      <p class="s-big">Je suis quelqu’un d’assez sportif : je fais du <em>surf</em> quand les vagues le permettent, et de la musculation environ deux fois par semaine.</p>
+      <p class="s-p">Dans ce portfolio, je présente les projets réalisés avec mes camarades de classe, les missions de mes deux stages, puis les activités et les projets que j’ai développés en dehors de mes études.</p>
+      <p class="s-p">Je ne suis pas particulièrement engagé dans une association, mais j’ai une ambition personnelle qui me tient énormément à cœur. Elle clôt ce portfolio.</p>
+    </div>
+    <div>
+      <p class="s-toc-title">Sommaire</p>
+      <ol class="s-toc">${[['s-stages', 'Stages', 'Hossegor'], ['s-ateliers', 'Ateliers', 'Heinz × Absolut'], ['s-projets', 'Projets perso', '3 projets'], ['s-tiktok', 'TikTok', 'Activité principale'], ['s-ambitions', 'Ambitions', 'Les prochaines années']].map(([id, l, s], i) => `<li><a href="#${id}" data-go="${id}"><span class="n">0${i + 1}</span><span>${l}</span><small>${s}</small></a></li>`).join('')}</ol>
+    </div>
+  </div></section>
+
+  <section class="s-sec" id="s-stages"><div class="s-wrap">
+    <div class="s-head"><div><p class="s-kicker">01 · Stages</p><h2 class="s-h2">Hossegor, ma première vraie indépendance.</h2></div><p class="s-intro">En mai, j’ai effectué mon stage de première année dans une école de surf. L’objectif : vendre ses produits et services pendant une période plus difficile, pour faire remonter son chiffre d’affaires.</p></div>
+    <div class="s-stage">
+      <div class="s-photo" style="background-image:url('assets/fond-jour.webp')"><span>Côte landaise</span></div>
+      <div>
+        <h3 class="s-h3">École de surf, Hossegor</h3>
+        <dl class="s-meta"><div><dt>Période</dt><dd>Mai · 1re année</dd></div><div><dt>Lieu</dt><dd>Hossegor (Landes)</dd></div><div><dt>Structure</dt><dd>École de surf</dd></div><div><dt>Enjeu</dt><dd>Relancer les ventes</dd></div></dl>
+        <p class="s-p">J’ai créé des contenus pour attirer davantage de clients vers le site internet, travaillé son référencement, suivi les ventes et géré la relation client, jusqu’au service après-vente.</p>
+        <p class="s-p">J’ai aussi appris à installer le matériel nécessaire à l’activité, comme le barnum et les panneaux de signalétique.</p>
+      </div>
+    </div>
+    <div class="s-missions">${MISSIONS.map(([k, t, p]) => `<div class="s-mission"><span class="s-k">${k}</span><h4>${t}</h4><p>${p}</p></div>`).join('')}</div>
+    <h3 class="s-sub">Situations délicates</h3>
+    <div class="s-cases">
+      <div class="s-case"><span class="s-k">Situation</span><p class="q">Communiquer avec des clients anglais.</p><p class="a">J’ai échangé avec eux en anglais.</p></div>
+      <div class="s-case"><span class="s-k">Situation</span><p class="q">Une famille d’une vingtaine de personnes, dont certains membres ont tenté de négocier les prix tout au long de la relation client.</p><p class="a">Je suis resté professionnel, et j’ai appris à mieux gérer ce type de situation.</p></div>
+    </div>
+    <p class="s-quote">Rester professionnel dans les situations difficiles, et relier chaque contenu à un objectif concret : faire revenir des clients.</p>
+    <div class="s-todo"><div><b>Stage de deuxième année</b><small>Les missions seront ajoutées ici.</small></div><span class="s-pill">À venir</span></div>
+  </div></section>
+
+  <section class="s-sec" id="s-ateliers"><div class="s-wrap">
+    <div class="s-head"><div><p class="s-kicker">02 · Ateliers</p><h2 class="s-h2">Les projets réalisés en classe.</h2></div><p class="s-intro">Les projets d’atelier menés avec mes camarades de classe, à commencer par Heinz × Absolut.</p></div>
+    <div class="s-slide"><small>Projet d’atelier · BTS Communication</small><b>Heinz<br>× Absolut</b><span class="s-pill">Présentation à venir</span></div>
+  </div></section>
+
+  <section class="s-sec" id="s-projets"><div class="s-wrap">
+    <div class="s-head"><div><p class="s-kicker">03 · Projets perso</p><h2 class="s-h2">En dehors des cours, j’essaie.</h2></div><p class="s-intro">En parallèle de mes études, j’ai lancé plusieurs projets, qui ont plus ou moins fonctionné. Chacun m’a appris quelque chose.</p></div>
+    <div class="s-projects">
+      <article class="s-proj">
+        <div class="s-visual" style="background:#1a1414"><div class="frame reel"><span class="bar3"><i></i><i></i><i></i></span><span class="tag">Vidéo à intégrer</span><b>Reel Instagram</b><small>Coworking beauté · La Grande-Motte</small></div><div class="frame poster"><span class="tag">Visuel à intégrer</span><b>Poster vitrine</b><small>Grand format</small></div></div>
+        <div><span class="s-pill done">Réalisé · bénévole</span><h3 class="s-h3" style="margin-top:14px">Coworkings beauté</h3><p class="s-p">Des vidéos Instagram pour des professionnelles de la beauté installées dans un coworking beauté à La Grande-Motte, et des posters grand format pour leurs vitrines, ainsi que pour celle d’un autre coworking beauté au Havre.</p><p class="s-p">Je l’ai fait bénévolement : mon objectif était de gagner de l’expérience et de développer mes compétences en communication et en création visuelle.</p></div>
+      </article>
+      <article class="s-proj">
+        <div class="s-visual" style="background:#efe2c6">${APP_ICONS.shop()}<span class="s-stamp">Boutique fermée</span></div>
+        <div><span class="s-pill stop">Arrêté</span><h3 class="s-h3" style="margin-top:14px">Le Vélo Havrais</h3><p class="s-p">Ma marque de cadres mettant en avant des illustrations des plus beaux paysages du Havre. La boutique en ligne a existé pendant environ cinq à six mois, puis j’ai décidé de l’arrêter après plusieurs réflexions sur son potentiel.</p>
+          <ul class="s-list"><li><span><b>Fournisseurs :</b> les rechercher, les sélectionner, comparer la qualité et les prix.</span></li><li><span><b>Produits :</b> gérer leur création, puis leur expédition.</span></li><li><span><b>Communication :</b> animer la marque sur les réseaux sociaux.</span></li></ul>
+          <p class="s-p" style="margin-top:16px">Ce n’est pas un grand succès commercial : une bonne partie des cadres ont été vendus grâce à mes grands-parents. Mais j’ai concrétisé une idée qui me passionnait.</p></div>
+      </article>
+      <article class="s-proj">
+        <div class="s-visual" style="background:#101a26">${APP_ICONS.saas()}<div class="s-floats"><span style="left:8%;top:14%">≈ 30 publications</span><span style="right:8%;top:24%">Logos</span><span style="left:12%;bottom:18%">Stories</span><span style="right:10%;bottom:12%">Biographies</span></div></div>
+        <div><span class="s-pill">Mis de côté</span><h3 class="s-h3" style="margin-top:14px">Studio IA pour les PME</h3><p class="s-p">Un logiciel pour les petites entreprises qui ont peu de moyens et peu de temps : toute leur communication, créée en quelques minutes grâce à l’intelligence artificielle.</p>
+          <ol class="s-steps3"><li>L’entreprise renseigne ses informations.</li><li>Elle choisit son identité visuelle parmi plusieurs modèles.</li><li>L’IA génère publications, Reels, logos, stories et biographies.</li></ol>
+          <div class="s-prices"><div class="s-price"><small>Formule d’entrée</small><b>29,99 €</b> / mois</div><div class="s-price"><small>Version complète</small><b>59,99 €</b> / mois</div></div>
+          <ul class="s-list x"><li><span>De <b>nombreux bugs techniques</b> restaient à corriger.</span></li><li><span>Le <b>coût des générations</b> avec l’IA était important.</span></li><li><span>Mon <b>ordinateur n’était pas assez puissant</b> pour certains modèles.</span></li></ul></div>
+      </article>
+    </div>
+  </div></section>
+
+  <section class="s-sec s-dark" id="s-tiktok"><div class="s-wrap">
+    <div class="s-head"><div><p class="s-kicker">04 · Activité principale</p><h2 class="s-h2">Un compte TikTok sur le droit français.</h2></div><p class="s-intro">Lancé le 1er août 2026. Le droit n’était pas un domaine que je connaissais bien, mais le format vidéo que j’avais imaginé était encore très peu utilisé sur cette thématique.</p></div>
+    <div class="s-bars">${bars}</div>
+    <div class="s-axis" aria-hidden="true"><span></span><div class="t">${ticks}</div><span></span></div>
+    <p class="s-note">« Fin août » ne couvre que les trois derniers jours du mois. L’objectif est en hachuré.</p>
+    <div class="s-tt-grid">
+      <ol class="s-tl">${S_TL.map(([d, t, p, c]) => `<li class="${c}"><span class="d">${d}</span><span class="dot"><i></i></span><div class="t"><b>${t}</b>${p ? `<p>${p}</p>` : ''}</div></li>`).join('')}</ol>
+      <div class="s-why"><h3>Avant ce compte</h3><p>Environ quatre ans d’essais sur Internet, avec des périodes difficiles : des abandons, un manque de régularité, de mauvaises méthodes. Les 357 € de fin août ont été la première preuve que ces années commençaient à porter leurs fruits.</p><h3>Aujourd’hui</h3><p>Plusieurs comptes reprennent un style de vidéos assez similaire. En y consacrant environ deux heures par jour, je suis beaucoup plus autonome financièrement.</p></div>
+    </div>
+    <div class="s-skills">
+      <div class="s-skill"><span class="s-k">Écrire</span><h4>Capter et retenir</h4><ul><li>Travailler le hook, les premières secondes</li><li>Relancer l’attention au fil de la vidéo</li><li>Écrire des scripts qui tiennent jusqu’à la fin</li><li>Provoquer des réactions en commentaires</li></ul></div>
+      <div class="s-skill"><span class="s-k">Analyser</span><h4>Lire les chiffres</h4><ul><li>Temps de visionnage</li><li>Taux de complétion</li><li>Rétention</li><li>Le poids des commentaires et des partages</li></ul></div>
+      <div class="s-skill"><span class="s-k">Construire</span><h4>Durer</h4><ul><li>Créer une véritable communauté</li><li>Des visuels qui captent l’attention</li><li>La régularité</li><li>Transformer ces compétences en activité rentable</li></ul></div>
+    </div>
+  </div></section>
+
+  <section class="s-sec" id="s-ambitions"><div class="s-wrap">
+    <p class="s-kicker">05 · Ambitions</p>
+    <p class="s-amb-quote">Je pense que <span>chacun devrait avoir la possibilité de réussir.</span></p>
+    <div class="s-amb-grid">
+      <div><p class="s-p">Mon objectif est d’abord de construire ma propre vie et d’atteindre une certaine indépendance. À terme, j’aimerais utiliser cette réussite pour aider des personnes qui veulent avancer mais n’ont pas les mêmes ressources, les mêmes moyens ou les mêmes conditions de vie.</p><p class="s-p">Des adultes comme des enfants : ceux qui rêvent de faire de grandes études, de créer leur entreprise, ou simplement de sortir d’une situation de précarité, de dettes ou de pauvreté.</p></div>
+      <ol class="s-steps"><li><span class="w">Court terme</span><div><b>Développer mon activité sur TikTok</b><p>Objectif : environ 10 000 € de chiffre d’affaires mensuel d’ici le 2 juillet.</p></div></li><li><span class="w">Moyen terme</span><div><b>Transmettre ce que j’ai appris</b><p>À travers de la formation.</p></div></li><li><span class="w">Long terme</span><div><b>Créer mon propre logiciel</b><p>Avec une véritable utilité humaine : un projet qui aide concrètement les gens.</p></div></li></ol>
+    </div>
+  </div></section>
+
+  <footer class="s-foot"><div class="s-wrap">
+    <p class="s-thanks">Merci<span class="echo">.</span></p>
+    <div class="s-foot-acts"><button class="s-btn p" type="button" data-site="replay">Rejouer l’intro</button><button class="s-btn" type="button" data-site="os">Ouvrir le bureau JoshOS</button><button class="s-btn" type="button" data-go="s-top">Revenir en haut</button></div>
+    <div class="s-foot-row"><span>Joshua Berger · BTS Communication</span><span>Saint-Jo Sup</span></div>
+  </div></footer>`;
+}
+function siteGo(id) {
+  const t = document.getElementById(id);
+  if (!t) return;
+  site.scrollTo({ top: id === 's-top' ? 0 : t.offsetTop - $('.s-nav', site).offsetHeight + 1, behavior: mqReduce.matches ? 'auto' : 'smooth' });
+}
+function buildSite() {
+  if (site.dataset.built) return;
+  site.innerHTML = siteHTML();
+  site.dataset.built = '1';
+  site.addEventListener('click', e => {
+    const g = e.target.closest('[data-go]');
+    if (g) { e.preventDefault(); return siteGo(g.dataset.go); }
+    const a = e.target.closest('[data-site]');
+    if (a?.dataset.site === 'os') hideSite();
+    if (a?.dataset.site === 'replay') restart();
+  });
+  if ('IntersectionObserver' in window) {
+    const links = $$('.s-links a', site);
+    const io = new IntersectionObserver(entries => entries.forEach(en => {
+      if (en.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.go === en.target.id));
+    }), { root: site, rootMargin: '-45% 0px -50% 0px' });
+    S_NAV.forEach(([id]) => io.observe(document.getElementById(id)));
+  }
+}
+function showSite(animate) {
+  closeMenus(); closeSpot(); closeLaunch();
+  buildSite();
+  site.hidden = false;
+  site.scrollTop = 0;
+  site.classList.remove('s-enter');
+  if (animate && !mqReduce.matches) { void site.offsetWidth; site.classList.add('s-enter'); }
+}
+function hideSite() { site.hidden = true; }
+
+/* =========================================================
    Écran de connexion
    ========================================================= */
 const lock = $('#lock'), lkForm = $('#lk-form'), lkPass = $('#lk-pass'), lkField = $('#lk-field'), lkSub = $('#lk-sub'), lkHint = $('#lk-hint');
 const LK_SUB = 'Touch ID ou saisissez le mot de passe';
 const LK_HINT = 'Indice : n’importe quel mot de passe ouvre la session.';
-let fails = 0, hintTimer = 0, welcomed = false;
+let fails = 0, hintTimer = 0;
 const isLocked = () => !lock.hidden;
 function lockTick() {
   const d = new Date();
@@ -3003,7 +3623,7 @@ function unlock() {
       lock.hidden = true;
       $('#os').classList.remove('waking');
       lkPass.blur();
-      if (!welcomed) { welcomed = true; setTimeout(welcomeToast, 500); }
+      if (!hackDone) scheduleHack();
     }, mqReduce.matches ? 0 : 650);
   }, 700);
 }
@@ -3017,7 +3637,7 @@ function logout() {
 lkForm.addEventListener('submit', e => {
   e.preventDefault();
   if (lkField.classList.contains('busy')) return;
-  if (lkPass.value) return unlock();
+  if (lkPass.value) { audioCtx()?.resume?.(); return unlock(); }
   fails++;
   lkField.classList.remove('shake'); void lkField.offsetWidth; lkField.classList.add('shake');
   lkHint.hidden = false;
@@ -3060,6 +3680,7 @@ function bootScreen(onDone) {
   setTimeout(finish, mqReduce.matches ? 0 : 1600);
 }
 function restart() {
+  resetIntro();
   closeMenus();
   pauseAudio(); audio.win = null;
   [...WM.list].forEach(w => { w.el.remove(); });
@@ -3075,7 +3696,6 @@ $('#mb-cc').innerHTML = UI.cc;
 $('#mb-wifi').innerHTML = UI.wifi;
 $('#mb-batt').innerHTML = UI.batt;
 refreshDock();
-renderWidgets();
 renderIcons();
 tick(); setInterval(tick, 15000);
 

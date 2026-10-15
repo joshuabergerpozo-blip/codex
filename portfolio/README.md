@@ -1,8 +1,12 @@
 # Portfolio Joshua Berger · JoshOS
 
-Portfolio de BTS Communication présenté comme un faux système d'exploitation :
-écran de connexion, bureau, dossiers, fenêtres déplaçables, dock, corbeille, recherche et terminal.
-N’importe quel mot de passe ouvre la session.
+Portfolio de BTS Communication en trois temps :
+
+1. un faux système d'exploitation (démarrage, écran de connexion, bureau) ; n’importe quel mot de passe ouvre la session ;
+2. trois secondes après la connexion, un faux piratage, puis un écran noir « Bienvenue dans mon portfolio » (Échap pour passer) ;
+3. le site du portfolio, avec toutes les sections : profil, stages, ateliers, projets perso, TikTok, ambitions.
+
+Depuis le site, « Ouvrir le bureau JoshOS » ramène au bureau, et « Rejouer l’intro » relance toute la séquence.
 
 Le site tient dans `index.html`, avec les fonds d’écran dans `assets/`. Ouvrez `index.html` dans un navigateur : aucune installation n’est nécessaire.
 
@@ -10,7 +14,8 @@ Le site tient dans `index.html`, avec les fonds d’écran dans `assets/`. Ouvre
 
 Tout le contenu est décrit dans l'objet `FS` du script, en bas de `index.html` :
 
-- `FS.desktop.children` : les icônes affichées sur le bureau, dans l'ordre.
+- `siteHTML()` : le contenu du site du portfolio.
+- `FS.desktop.children` : le contenu du dossier Bureau dans le Finder (le bureau lui-même reste vide).
 - Chaque dossier (`stages`, `ateliers`, `perso`, `trash`) a une liste `children`.
 - Chaque fichier a un `name`, un `desc` (une phrase), un `status`
   (`live`, `done`, `stop`, `pause`, `soon`), un `cat` (le texte affiché par la commande
