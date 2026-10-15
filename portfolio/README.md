@@ -4,9 +4,9 @@ Portfolio de BTS Communication en trois temps :
 
 1. un faux système d'exploitation (démarrage, écran de connexion, bureau) ; n’importe quel mot de passe ouvre la session ;
 2. trois secondes après la connexion, un faux piratage, puis un écran noir « Bienvenue dans mon portfolio » (Échap pour passer) ;
-3. le site du portfolio, avec toutes les sections : profil, stages, ateliers, projets perso, TikTok, ambitions.
+3. le portfolio en **univers 3D** : chaque défilement fait avancer la caméra dans l’espace, et les panneaux (profil, stages, ateliers, projets perso, TikTok, ambitions) arrivent de la profondeur. Chaque thème a sa couleur de nébuleuse.
 
-Depuis le site, « Ouvrir le bureau JoshOS » ramène au bureau, et « Rejouer l’intro » relance toute la séquence.
+Le bouton « Vue classique » affiche le même contenu en site web classique (il est aussi utilisé automatiquement si l’ordinateur demande de réduire les animations). « Bureau » ramène au bureau, et « Rejouer l’intro » relance toute la séquence.
 
 Le site tient dans `index.html`, avec les fonds d’écran dans `assets/`. Ouvrez `index.html` dans un navigateur : aucune installation n’est nécessaire.
 
@@ -14,7 +14,8 @@ Le site tient dans `index.html`, avec les fonds d’écran dans `assets/`. Ouvre
 
 Tout le contenu est décrit dans l'objet `FS` du script, en bas de `index.html` :
 
-- `siteHTML()` : le contenu du site du portfolio.
+- `uData()` : les panneaux de l’univers 3D, dans l’ordre du voyage.
+- `siteHTML()` : le contenu de la vue classique.
 - `FS.desktop.children` : le contenu du dossier Bureau dans le Finder (le bureau lui-même reste vide).
 - Chaque dossier (`stages`, `ateliers`, `perso`, `trash`) a une liste `children`.
 - Chaque fichier a un `name`, un `desc` (une phrase), un `status`
