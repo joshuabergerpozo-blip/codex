@@ -4,11 +4,21 @@ Portfolio de BTS Communication en trois temps :
 
 1. un faux système d'exploitation (démarrage, écran de connexion, bureau) ; n’importe quel mot de passe ouvre la session ;
 2. trois secondes après la connexion, un faux piratage, puis un écran noir « Bienvenue dans mon portfolio » (Échap pour passer) ;
-3. le portfolio en **univers 3D** : chaque défilement fait avancer la caméra dans l’espace, et les panneaux (profil, stages, ateliers, projets perso, TikTok, ambitions) arrivent de la profondeur. Chaque thème a sa couleur de nébuleuse.
+3. le portfolio en **univers 3D** : chaque défilement fait avancer la caméra, et les panneaux (profil, stages, ateliers, projets perso, TikTok, ambitions) arrivent de la profondeur. Chaque thème a son environnement réaliste, avec ses propres particules : le fjord pour l’accueil, une vague pour le profil, la plage d’Hossegor pour les stages, un studio photo pour Heinz × Absolut, un jardin japonais pour le mariage franco-japonais, un salon de beauté, le front de mer du Havre, un studio numérique pour le SaaS, une salle de tribunal pour TikTok droit, et un sommet au-dessus des nuages pour les ambitions.
 
 Le bouton « Vue classique » affiche le même contenu en site web classique (il est aussi utilisé automatiquement si l’ordinateur demande de réduire les animations). « Bureau » ramène au bureau, et « Rejouer l’intro » relance toute la séquence.
 
 Le site tient dans `index.html`, avec les fonds d’écran dans `assets/`. Ouvrez `index.html` dans un navigateur : aucune installation n’est nécessaire.
+
+## Les environnements 3D
+
+Chaque environnement est une photo (`assets/env/<nom>.webp`) et sa carte de profondeur (`assets/env/<nom>-depth.png`, blanc = proche). Le moteur WebGL avance dans la photo selon cette profondeur, puis passe à l’environnement suivant par un fondu qui part du centre. Le studio du SaaS est dessiné par le script (`uTechScene()`).
+
+- `U_ENV` : le point de fuite et les particules de chaque environnement.
+- `UZ` : l’environnement par défaut de chaque section. Un panneau peut le changer avec `env: '<nom>'` dans `uData()`.
+- `assets/env/env-data.js` reprend les images en data URI pour que le portfolio fonctionne aussi en double-cliquant sur `index.html`. Après avoir changé une image, régénérez-le avec `python3 tools/env-data.py`.
+
+Les photos des environnements sont générées par IA. Vous pouvez les remplacer par vos propres photos en gardant les mêmes noms ; il faut alors refaire la carte de profondeur (par exemple avec MiDaS).
 
 ## Modifier le contenu
 
@@ -29,6 +39,7 @@ son identifiant et son contenu, puis ajoutez cet identifiant dans le `children` 
 
 - `stage2` : stage de 2e année.
 - `heinz` : projet d'atelier Heinz × Absolut.
+- `mariage` : projet d’atelier autour d’un mariage franco-japonais.
 - `coworking` : vidéos et posters (les cadres « à intégrer »).
 
 ## Mettre en ligne

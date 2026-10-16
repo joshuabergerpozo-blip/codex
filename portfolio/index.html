@@ -597,6 +597,8 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
 .slide small { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .85; }
 .slide b { font-family: var(--font-display); font-weight: 780; font-size: clamp(28px, 6cqi, 52px); line-height: .95; letter-spacing: -.03em; margin-top: 10px; position: relative; z-index: 1; }
 .slide span { margin-top: 12px; opacity: .85; font-size: 14px; position: relative; z-index: 1; }
+.slide.jp { background: linear-gradient(135deg, #f8f2e7, #e8d9c2); color: #1d1b19; }
+.slide.jp::after { right: 8%; top: 14%; width: 28%; background: #bc002d; opacity: 1; }
 .thumbs { display: flex; gap: 8px; justify-content: center; padding: 10px; background: #0b1214; }
 .thumbs i { width: 64px; aspect-ratio: 16/9; border-radius: 3px; background: #23302f; border: 1px dashed #4a5a58; }
 .thumbs i:first-child { background: #b8221b; border: 2px solid #f5c33b; }
@@ -1012,6 +1014,9 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
 .s-slide small { position: relative; margin-bottom: 14px; font: 500 12px var(--s-mono); letter-spacing: .14em; text-transform: uppercase; opacity: .85; }
 .s-slide b { position: relative; font-size: clamp(48px, 10vw, 148px); font-weight: 800; line-height: .88; letter-spacing: -.04em; font-variation-settings: "wdth" 78; }
 .s-slide .s-pill { position: relative; align-self: flex-start; margin-top: 18px; }
+.s-slide.jp { margin-top: 24px; color: #1d1b19; background: linear-gradient(135deg, #f8f2e7, #e8d9c2); }
+.s-slide.jp::after { right: 8%; top: 50%; width: min(30%, 240px); transform: translateY(-50%); background: #bc002d; opacity: 1; }
+.s-slide.jp b { font-size: clamp(40px, 8vw, 118px); }
 
 .s-projects { display: grid; gap: clamp(56px, 8vw, 110px); }
 .s-proj { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(24px, 5vw, 64px); align-items: center; }
@@ -1124,7 +1129,7 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
   --u-display: "Bricolage Grotesque", -apple-system, "Segoe UI", sans-serif;
   --u-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
   position: fixed; inset: 0; z-index: 9760; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
-  background: #04060a; color: var(--u-ink); color-scheme: dark; outline: none; cursor: auto;
+  background: var(--u-bg, #04060a); color: var(--u-ink); color-scheme: dark; outline: none; cursor: auto;
   font: 400 16px/1.6 var(--u-display); user-select: text; -webkit-user-select: text; scrollbar-width: none;
 }
 #uni::-webkit-scrollbar { display: none; }
@@ -1133,13 +1138,19 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
 #uni a, #uni button { cursor: pointer; }
 #uni :focus-visible { outline: 2px solid var(--u-wax); outline-offset: 3px; }
 .u-stage { position: sticky; top: 0; height: 100%; overflow: hidden; pointer-events: none; }
-.u-neb { position: absolute; inset: -10%; --n1: 14 109 119; --n2: 27 42 107; background: radial-gradient(55% 45% at 28% 38%, rgb(var(--n1) / .36), transparent 70%), radial-gradient(50% 55% at 74% 66%, rgb(var(--n2) / .3), transparent 72%), radial-gradient(30% 30% at 50% 50%, rgb(var(--n1) / .12), transparent 70%); }
-.u-stars { position: absolute; inset: 0; width: 100%; height: 100%; }
+.u-fb, .u-gl, .u-fx, .u-shade { position: absolute; inset: 0; width: 100%; height: 100%; }
+.u-gl, .u-fx { display: block; }
+.u-fb { display: none; background: var(--u-bg, #04060a); transition: background-color 1s; }
+.u-fb i { position: absolute; inset: -3%; background: center / cover no-repeat; filter: brightness(.68); transition: background-image .4s; }
+.u-fb i + i { opacity: 0; }
+.u-nogl .u-fb { display: block; }
+.u-nogl .u-gl { display: none; }
+.u-shade { background: linear-gradient(180deg, rgba(0,0,0,.5), rgba(0,0,0,0) 20%, rgba(0,0,0,0) 72%, rgba(0,0,0,.55)); }
 .u-world { position: absolute; inset: 0; perspective: 1000px; perspective-origin: 50% 50%; }
 .u-item { position: absolute; left: 50%; top: 50%; width: min(var(--w, 460px), calc(100vw - 32px)); visibility: hidden; pointer-events: none; will-change: transform, opacity; backface-visibility: hidden; }
 .u-item.vis { visibility: visible; }
 .u-item.live { pointer-events: auto; }
-.u-card { padding: 26px 28px 28px; border-radius: 20px; background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.015) 40%), rgba(7,10,14,.95); border: 1px solid var(--u-line); box-shadow: 0 40px 90px -30px rgba(0,0,0,.85), 0 0 70px -24px rgb(var(--acc) / .45), inset 0 1px 0 rgba(255,255,255,.08); }
+.u-card { padding: 26px 28px 28px; border-radius: 20px; background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.015) 40%), rgba(9,11,15,.84); border: 1px solid rgba(255,255,255,.14); box-shadow: 0 40px 90px -30px rgba(0,0,0,.9), 0 0 60px -26px rgb(var(--acc) / .5), inset 0 1px 0 rgba(255,255,255,.08); }
 .u-k { display: inline-block; margin: 0 0 10px; font: 500 11.5px var(--u-mono); letter-spacing: .16em; text-transform: uppercase; color: rgb(var(--acc)); }
 .u-card h3 { margin: 0 0 10px; font-size: 26px; font-weight: 760; line-height: 1.08; letter-spacing: -.02em; text-wrap: balance; }
 .u-card h4 { margin: 4px 0 6px; font-size: 19px; font-weight: 720; line-height: 1.2; }
@@ -1147,12 +1158,13 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
 .u-card p:last-child { margin-bottom: 0; }
 .u-card b { color: var(--u-ink); }
 .u-title { text-align: center; }
-.u-title .u-k { font-size: 13px; }
-.u-title h2 { margin: 0; font-size: clamp(44px, 7.4vw, 118px); font-weight: 800; line-height: .92; letter-spacing: -.035em; font-variation-settings: "wdth" 78; text-wrap: balance; text-shadow: 0 0 50px rgb(var(--acc) / .5); }
+.u-title .u-k { margin-bottom: 16px; padding: 7px 14px 6px; border-radius: 99px; font-size: 12.5px; background: rgba(6,8,12,.62); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); text-shadow: none; }
+.u-title { text-shadow: 0 2px 6px rgba(0,0,0,.4), 0 10px 60px rgba(0,0,0,.75); }
+.u-title h2 { margin: 0; font-size: clamp(44px, 7.4vw, 118px); font-weight: 800; line-height: .92; letter-spacing: -.035em; font-variation-settings: "wdth" 78; text-wrap: balance; text-shadow: 0 2px 6px rgba(0,0,0,.4), 0 10px 60px rgba(0,0,0,.75); }
 .u-hero h1 { margin: 0; font-size: clamp(76px, 15vw, 230px); font-weight: 800; line-height: .82; letter-spacing: -.045em; font-variation-settings: "wdth" 75, "opsz" 96; }
 .u-hero h1 span { display: block; }
 .u-hero .echo, .u-end .echo { text-shadow: -.03em 0 rgba(214,64,42,.7), .03em 0 rgba(100,210,196,.7); }
-.u-hero .lead { max-width: 30ch; margin: 24px auto 0; font-size: clamp(18px, 2vw, 24px); line-height: 1.4; color: var(--u-ink-2); }
+.u-hero .lead { max-width: 30ch; margin: 24px auto 0; font-size: clamp(18px, 2vw, 24px); line-height: 1.4; color: rgba(238,242,239,.9); }
 .u-term { margin: 0; font: 13px/1.75 var(--u-mono); white-space: pre-wrap; color: #d7e4df; }
 .u-term .p { color: var(--u-teal); }
 .u-term .y { color: var(--u-wax); }
@@ -1184,6 +1196,11 @@ code { font-family: var(--font-mono); font-size: .9em; padding: 1px 5px; border-
 .u-slide small { position: relative; margin-bottom: 12px; font: 500 11.5px var(--u-mono); letter-spacing: .14em; text-transform: uppercase; opacity: .85; }
 .u-slide b { position: relative; color: #fbf3e4; font-size: clamp(54px, 8vw, 116px); font-weight: 800; line-height: .88; letter-spacing: -.04em; font-variation-settings: "wdth" 78; }
 .u-slide .u-pill { position: relative; align-self: flex-start; margin-top: 16px; color: #fbf3e4; background: rgba(255,255,255,.16); }
+.u-slide.jp { color: #1d1b19; background: linear-gradient(135deg, #f8f2e7, #e8d9c2); box-shadow: 0 40px 100px -30px rgba(0,0,0,.75); }
+.u-slide.jp::after { right: 8%; top: 14%; width: min(28%, 190px); background: #bc002d; opacity: 1; }
+.u-slide.jp::before, .s-slide.jp::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: linear-gradient(90deg, #0055a4 33.3%, #ffffff 33.3% 66.6%, #ef4135 66.6%); }
+.u-slide.jp b { color: #1d1b19; font-size: clamp(44px, 6.4vw, 92px); }
+.u-slide.jp .u-pill { color: #1d1b19; background: rgba(0,0,0,.08); }
 .u-proj { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: 26px; align-items: center; }
 .u-vis { position: relative; display: flex; align-items: center; justify-content: center; gap: 14px; min-height: 280px; padding: 22px; overflow: hidden; border-radius: 14px; }
 .u-vis > svg { width: 62%; height: auto; filter: drop-shadow(0 18px 26px rgba(0,0,0,.4)); }
@@ -1577,6 +1594,7 @@ const THUMBS = {
     + '<rect x="15" y="21.6" width="13.5" height="3.2" rx="1.6" fill="#fbf0d0"/>' + T(16.3, 23.8, 1.6, 'À compléter', { w: 700, fill: '#8a6200' })
     + [28, 31, 34, 40, 43, 46, 49].map((y, i) => `<rect x="15" y="${y}" width="${[34, 30, 22, 34, 28, 32, 18][i]}" height="1.5" rx=".6" fill="#ece8df"/>`).join('')),
   heinz: () => `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="3.6" y="15.6" width="56.8" height="32.8" rx="1.2" fill="url(#g-slide)"/><circle cx="54" cy="16" r="15" fill="#fff" fill-opacity=".12"/><circle cx="12" cy="52" r="10" fill="#000" fill-opacity=".12"/>${T(8.5, 26, 1.7, 'PROJET D’ATELIER · BTS COMMUNICATION', { mono: true, fill: '#fbe9d6', ls: .1 })}${T(8, 34.5, 7, 'Heinz', { w: 850, fill: '#fbf3e4', ls: -.2 })}${T(8, 41.6, 7, '× Absolut', { w: 850, fill: '#fbf3e4', ls: -.2 })}<rect x="3.6" y="15.6" width="56.8" height="32.8" rx="1.2" fill="none" stroke="#fff" stroke-width="1.4"/></svg>`,
+  mariage: () => `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="3.6" y="15.6" width="56.8" height="32.8" rx="1.2" fill="#f3eadb"/><circle cx="50" cy="25" r="6.5" fill="#bc002d"/><rect x="3.6" y="45.6" width="18.9" height="2.8" fill="#0055a4"/><rect x="41.5" y="45.6" width="18.9" height="2.8" fill="#ef4135"/>${T(8.5, 26, 1.7, 'PROJET D’ATELIER · BTS COMMUNICATION', { mono: true, fill: '#6b5f52', ls: .1 })}${T(8, 34.5, 6, 'Mariage', { w: 850, fill: '#1d1b19', ls: -.2 })}${T(8, 41, 4.6, 'franco-japonais', { w: 800, fill: '#1d1b19', ls: -.1 })}<rect x="3.6" y="15.6" width="56.8" height="32.8" rx="1.2" fill="none" stroke="#d9cbb4" stroke-width="1.4"/></svg>`,
   coworking: () => `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="17.6" y="3.6" width="28.8" height="56.8" rx="1.6" fill="url(#g-reel)"/><ellipse cx="32" cy="22" rx="8" ry="10" fill="#fff" fill-opacity=".14"/><path d="M17.6 40h28.8v18.8a1.6 1.6 0 0 1-1.6 1.6H19.2a1.6 1.6 0 0 1-1.6-1.6z" fill="#000" fill-opacity=".3"/>${[0, 1, 2].map(i => `<rect x="${20 + i * 8.3}" y="6" width="7.5" height=".8" rx=".4" fill="#fff" fill-opacity="${i ? .45 : 1}"/>`).join('')}<circle cx="21.6" cy="10.2" r="1.7" fill="#fff" fill-opacity=".9"/>${T(24.2, 10.9, 1.8, 'coworking.beaute', { w: 700, fill: '#fff' })}${T(20.4, 50.5, 3.4, 'Reel', { w: 800, fill: '#fff' })}${T(20.4, 54.4, 3.4, 'Instagram', { w: 800, fill: '#fff' })}${T(20.4, 57.4, 1.6, 'La Grande-Motte', { fill: '#fff' })}<rect x="17.6" y="3.6" width="28.8" height="56.8" rx="1.6" fill="none" stroke="#fff" stroke-width="1.4"/></svg>`,
 };
 
@@ -1661,7 +1679,7 @@ const FS = {
     banner: { text: 'Deux projets arrêtés. Je les garde ici pour tout ce qu’ils m’ont appris.', btn: 'Vider la corbeille', act: 'empty' },
   },
   stages: { name: 'Stages', kind: 'folder', glyph: 'case', children: ['stage1', 'stage2'], type: 'Dossier', desc: 'Les missions de mes deux stages de BTS.' },
-  ateliers: { name: 'Ateliers', kind: 'folder', glyph: 'pencil', children: ['heinz'], type: 'Dossier', desc: 'Les projets réalisés en atelier avec ma classe.' },
+  ateliers: { name: 'Ateliers', kind: 'folder', glyph: 'pencil', children: ['heinz', 'mariage'], type: 'Dossier', desc: 'Les projets réalisés en atelier avec ma classe.' },
   perso: {
     name: 'Projets_perso', kind: 'folder', glyph: 'star', children: ['coworking', 'tiktok'], type: 'Dossier',
     desc: 'Ce que j’ai lancé en parallèle de mes études.',
@@ -1741,6 +1759,14 @@ const FS = {
     </article></div>`,
   },
 
+  mariage: {
+    name: 'Mariage_franco-japonais.key', kind: 'key', app: 'slides', type: 'Présentation', status: 'soon',
+    desc: 'Projet d’atelier autour d’un mariage franco-japonais. Contenu à venir.', kw: 'atelier mariage japon franco-japonais classe projet evenementiel',
+    cat: ['PROJET D’ATELIER · Mariage franco-japonais', '', 'Contenu à venir.'],
+    render: () => `<div class="slides-stage"><div class="slide jp"><small>Projet d’atelier · BTS Communication</small><b>Mariage franco-japonais</b><span>Un projet d’atelier réalisé en classe.</span></div></div>
+      <div class="thumbs" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="body-pad"><div><h2>Notes de présentation</h2><p><span class="chip soon">À compléter</span></p></div><p>Le contexte, la demande, nos idées créatives et le résultat seront ajoutés ici.</p></div>`,
+  },
   heinz: {
     name: 'Heinz_x_Absolut.key', kind: 'key', app: 'slides', type: 'Présentation', status: 'soon',
     desc: 'Projet d’atelier réalisé avec ma classe. Contenu à venir.', kw: 'atelier heinz absolut classe projet cobranding',
@@ -3630,7 +3656,7 @@ Stages  Ateliers  Projets  TikTok  Ambitions</pre></div>
     </div>
     <div>
       <p class="s-toc-title">Sommaire</p>
-      <ol class="s-toc">${[['s-stages', 'Stages', 'Hossegor'], ['s-ateliers', 'Ateliers', 'Heinz × Absolut'], ['s-projets', 'Projets perso', '3 projets'], ['s-tiktok', 'TikTok', 'Activité principale'], ['s-ambitions', 'Ambitions', 'Les prochaines années']].map(([id, l, s], i) => `<li><a href="#${id}" data-go="${id}"><span class="n">0${i + 1}</span><span>${l}</span><small>${s}</small></a></li>`).join('')}</ol>
+      <ol class="s-toc">${[['s-stages', 'Stages', 'Hossegor'], ['s-ateliers', 'Ateliers', 'Heinz × Absolut · Mariage'], ['s-projets', 'Projets perso', '3 projets'], ['s-tiktok', 'TikTok', 'Activité principale'], ['s-ambitions', 'Ambitions', 'Les prochaines années']].map(([id, l, s], i) => `<li><a href="#${id}" data-go="${id}"><span class="n">0${i + 1}</span><span>${l}</span><small>${s}</small></a></li>`).join('')}</ol>
     </div>
   </div></section>
 
@@ -3656,8 +3682,9 @@ Stages  Ateliers  Projets  TikTok  Ambitions</pre></div>
   </div></section>
 
   <section class="s-sec" id="s-ateliers"><div class="s-wrap">
-    <div class="s-head"><div><p class="s-kicker">02 · Ateliers</p><h2 class="s-h2">Les projets réalisés en classe.</h2></div><p class="s-intro">Les projets d’atelier menés avec mes camarades de classe, à commencer par Heinz × Absolut.</p></div>
+    <div class="s-head"><div><p class="s-kicker">02 · Ateliers</p><h2 class="s-h2">Les projets réalisés en classe.</h2></div><p class="s-intro">Les projets d’atelier menés avec mes camarades de classe, à commencer par Heinz × Absolut et un mariage franco-japonais.</p></div>
     <div class="s-slide"><small>Projet d’atelier · BTS Communication</small><b>Heinz<br>× Absolut</b><span class="s-pill">Présentation à venir</span></div>
+    <div class="s-slide jp"><small>Projet d’atelier · BTS Communication</small><b>Mariage<br>franco-japonais</b><span class="s-pill">Présentation à venir</span></div>
   </div></section>
 
   <section class="s-sec" id="s-projets"><div class="s-wrap">
@@ -3754,16 +3781,29 @@ const uni = h('<div id="uni" hidden tabindex="-1" role="document" aria-label="Po
 document.body.append(uni);
 const U_SPEED = 1.6, U_F = 1000;
 const UZ = [
-  { id: 'u-top', label: 'Accueil', c: [[100, 210, 196], [27, 42, 107]] },
-  { id: 'u-profil', label: 'Profil', c: [[100, 210, 196], [14, 109, 119]] },
-  { id: 'u-stages', label: 'Stages', c: [[63, 166, 184], [201, 162, 39]] },
-  { id: 'u-ateliers', label: 'Ateliers', c: [[239, 84, 66], [110, 18, 12]] },
-  { id: 'u-projets', label: 'Projets', c: [[232, 150, 70], [95, 52, 140]] },
-  { id: 'u-tiktok', label: 'TikTok', c: [[242, 183, 5], [80, 52, 8]] },
-  { id: 'u-ambitions', label: 'Ambitions', c: [[240, 120, 100], [242, 183, 5]] },
-  { id: 'u-fin', label: 'Fin', c: [[100, 210, 196], [27, 42, 107]] },
+  { id: 'u-top', label: 'Accueil', env: 'fjord', c: [[120, 205, 222]] },
+  { id: 'u-profil', label: 'Profil', env: 'surf', c: [[100, 210, 196]] },
+  { id: 'u-stages', label: 'Stages', env: 'hossegor', c: [[242, 190, 92]] },
+  { id: 'u-ateliers', label: 'Ateliers', env: 'studio', c: [[239, 96, 76]] },
+  { id: 'u-projets', label: 'Projets', env: 'salon', c: [[240, 150, 170]] },
+  { id: 'u-tiktok', label: 'TikTok', env: 'tribunal', c: [[242, 183, 5]] },
+  { id: 'u-ambitions', label: 'Ambitions', env: 'sommet', c: [[250, 170, 110]] },
+  { id: 'u-fin', label: 'Fin', env: 'fjord', c: [[120, 205, 222]] },
 ];
-let uItems = [], uCam = 0, uRaf = 0, uEnd = 0, uStars = [], uZoneIdx = -1;
+/* Chaque environnement : une photo, sa carte de profondeur (blanc = proche), le point de fuite et ses particules. */
+const U_ENV = {
+  fjord: { focus: [.5, .46], fx: 'mist', bg: '#0d1a22' },
+  surf: { focus: [.5, .5], fx: 'spray', bg: '#0b2a33' },
+  hossegor: { focus: [.5, .52], fx: 'sand', bg: '#3a3426' },
+  studio: { focus: [.5, .5], fx: 'dust', bg: '#1a0f0c' },
+  japon: { focus: [.5, .47], fx: 'sakura', bg: '#1f1a1c' },
+  salon: { focus: [.5, .5], fx: 'bokeh', bg: '#2a1a1f' },
+  lehavre: { focus: [.5, .5], fx: 'gold', bg: '#2a2218' },
+  tech: { focus: [.5, .46], fx: 'data', bg: '#060a18', proc: true },
+  tribunal: { focus: [.5, .48], fx: 'beam', bg: '#1d150d' },
+  sommet: { focus: [.5, .5], fx: 'wisp', bg: '#2a2230' },
+};
+let uItems = [], uCam = 0, uRaf = 0, uEnd = 0, uZoneIdx = -1, uSegs = [], uFx = [], uMouse = [0, 0], uMouseT = [0, 0], uGL = null;
 
 function uData() {
   const max = 10000;
@@ -3784,10 +3824,10 @@ Stages  Ateliers  Projets  TikTok  Ambitions</pre>`, { w: 440 }),
     I('u-profil', 'title', 'c', title('Profil', 'Qui je suis.'), { w: 900 }),
     I('u-profil', 'card', 'l', `<span class="u-k">Sport</span><h3>Le surf et la musculation</h3><p>Je suis quelqu’un d’assez sportif : je fais du surf quand les vagues le permettent, et de la musculation environ deux fois par semaine.</p>`, { w: 420 }),
     I('u-profil', 'card', 'r', `<span class="u-k">Ce portfolio</span><h3>Trois temps</h3><p>Les projets réalisés avec mes camarades de classe, les missions de mes deux stages, puis les activités et projets que j’ai développés en dehors de mes études.</p>`, { w: 440 }),
-    I('u-profil', 'card', 'c', `<span class="u-k">Sommaire</span><ol class="u-toc">${[['u-stages', 'Stages', 'Hossegor'], ['u-ateliers', 'Ateliers', 'Heinz × Absolut'], ['u-projets', 'Projets perso', '3 projets'], ['u-tiktok', 'TikTok', 'Activité principale'], ['u-ambitions', 'Ambitions', 'Les prochaines années']].map(([id, l, s], i) => `<li><button type="button" data-uz="${id}"><span class="n">0${i + 1}</span><span>${l}</span><small>${s}</small></button></li>`).join('')}</ol>`, { w: 520 }),
+    I('u-profil', 'card', 'c', `<span class="u-k">Sommaire</span><ol class="u-toc">${[['u-stages', 'Stages', 'Hossegor'], ['u-ateliers', 'Ateliers', 'Heinz × Absolut · Mariage'], ['u-projets', 'Projets perso', '3 projets'], ['u-tiktok', 'TikTok', 'Activité principale'], ['u-ambitions', 'Ambitions', 'Les prochaines années']].map(([id, l, s], i) => `<li><button type="button" data-uz="${id}"><span class="n">0${i + 1}</span><span>${l}</span><small>${s}</small></button></li>`).join('')}</ol>`, { w: 520 }),
 
     I('u-stages', 'title', 'c', title('01 · Stages', 'Hossegor, ma première vraie indépendance.'), { w: 1000 }),
-    I('u-stages', 'card', 'l', `<div class="u-photo" style="background-image:url('assets/fond-jour.webp')"><span>Côte landaise</span></div><h3>École de surf, Hossegor</h3><dl class="u-meta"><div><dt>Période</dt><dd>Mai · 1re année</dd></div><div><dt>Lieu</dt><dd>Hossegor (Landes)</dd></div><div><dt>Structure</dt><dd>École de surf</dd></div><div><dt>Enjeu</dt><dd>Relancer les ventes</dd></div></dl>`, { w: 440 }),
+    I('u-stages', 'card', 'l', `<div class="u-photo" style="background-image:url('assets/env/hossegor.webp')"><span>Côte landaise</span></div><h3>École de surf, Hossegor</h3><dl class="u-meta"><div><dt>Période</dt><dd>Mai · 1re année</dd></div><div><dt>Lieu</dt><dd>Hossegor (Landes)</dd></div><div><dt>Structure</dt><dd>École de surf</dd></div><div><dt>Enjeu</dt><dd>Relancer les ventes</dd></div></dl>`, { w: 440 }),
     I('u-stages', 'card', 'r', `<span class="u-k">Le contexte</span><h3>Vendre pendant une période difficile</h3><p>L’objectif principal : vendre les produits et les services de l’école pendant une période plus difficile, pour contribuer à faire remonter son chiffre d’affaires.</p>`, { w: 440 }),
     ...MISSIONS.map(([k, t, p], i) => I('u-stages', 'card', i % 2 ? 'r' : 'l', `<span class="u-k">Mission ${i + 1} · ${k}</span><h4>${t}</h4><p class="u-mission-p">${p}</p>`, { w: 400, gap: 800 })),
     I('u-stages', 'card', 'c', `<span class="u-k">Situations délicates</span><div class="u-cases"><div class="u-case"><p class="q">Communiquer avec des clients anglais.</p><p class="a">J’ai échangé avec eux en anglais.</p></div><div class="u-case"><p class="q">Une famille d’une vingtaine de personnes qui négociait les prix tout au long de la relation client.</p><p class="a">Je suis resté professionnel.</p></div></div>`, { w: 720 }),
@@ -3796,11 +3836,13 @@ Stages  Ateliers  Projets  TikTok  Ambitions</pre>`, { w: 440 }),
 
     I('u-ateliers', 'title', 'c', title('02 · Ateliers', 'Les projets réalisés en classe.'), { w: 1000 }),
     I('u-ateliers', 'bare', 'c', `<div class="u-slide"><small>Projet d’atelier · BTS Communication</small><b>Heinz<br>× Absolut</b><span class="u-pill">Présentation à venir</span></div>`, { w: 760 }),
+    I('u-ateliers', 'title', 'c', title('Projet d’atelier · Japon', 'Un mariage franco-japonais.'), { w: 1000, env: 'japon' }),
+    I('u-ateliers', 'bare', 'c', `<div class="u-slide jp"><small>Projet d’atelier · BTS Communication</small><b>Mariage<br>franco-japonais</b><span class="u-pill">Présentation à venir</span></div>`, { w: 760, env: 'japon' }),
 
     I('u-projets', 'title', 'c', title('03 · Projets perso', 'En dehors des cours, j’essaie.'), { w: 1000 }),
     I('u-projets', 'card', 'c', `<div class="u-proj"><div class="u-vis" style="background:#1a1414"><div class="frame reel"><span class="bar3"><i></i><i></i><i></i></span><span class="tag">Vidéo à intégrer</span><b>Reel Instagram</b><small>La Grande-Motte</small></div><div class="frame poster"><span class="tag">Visuel à intégrer</span><b>Poster vitrine</b><small>Grand format</small></div></div><div><span class="u-pill done">Réalisé · bénévole</span><h3 style="margin-top:12px">Coworkings beauté</h3><p>Des vidéos Instagram pour des professionnelles de la beauté d’un coworking à La Grande-Motte, et des posters grand format pour leurs vitrines, ainsi que pour un autre coworking beauté au Havre.</p><p>Bénévole : je voulais gagner de l’expérience en communication et en création visuelle.</p></div></div>`, { w: 780 }),
-    I('u-projets', 'card', 'c', `<div class="u-proj"><div class="u-vis" style="background:#efe2c6">${APP_ICONS.shop()}<span class="u-stamp">Boutique fermée</span></div><div><span class="u-pill stop">Arrêté</span><h3 style="margin-top:12px">Le Vélo Havrais</h3><p>Ma marque de cadres illustrant les plus beaux paysages du Havre, pendant cinq à six mois.</p><ul class="u-list"><li><span><b>Fournisseurs :</b> rechercher, sélectionner, comparer qualité et prix.</span></li><li><span><b>Produits :</b> création et expédition.</span></li><li><span><b>Communication :</b> la marque sur les réseaux sociaux.</span></li></ul><p style="margin-top:12px">Une bonne partie des cadres ont été vendus grâce à mes grands-parents. Mais j’ai concrétisé une idée qui me passionnait.</p></div></div>`, { w: 780 }),
-    I('u-projets', 'card', 'c', `<div class="u-proj"><div class="u-vis" style="background:#101a26">${APP_ICONS.saas()}<div class="u-floats"><span style="left:8%;top:12%">≈ 30 publications</span><span style="right:8%;top:24%">Logos</span><span style="left:10%;bottom:16%">Stories</span><span style="right:8%;bottom:10%">Biographies</span></div></div><div><span class="u-pill">Mis de côté</span><h3 style="margin-top:12px">Studio IA pour les PME</h3><p>Toute la communication d’une petite entreprise, créée en quelques minutes grâce à l’intelligence artificielle.</p><div class="u-prices"><span>Entrée <b>29,99 €</b> / mois</span><span>Complète <b>59,99 €</b> / mois</span></div><ul class="u-list x"><li><span>De nombreux bugs techniques.</span></li><li><span>Un coût de génération important.</span></li><li><span>Un ordinateur pas assez puissant.</span></li></ul></div></div>`, { w: 780 }),
+    I('u-projets', 'card', 'c', `<div class="u-proj"><div class="u-vis" style="background:#efe2c6">${APP_ICONS.shop()}<span class="u-stamp">Boutique fermée</span></div><div><span class="u-pill stop">Arrêté</span><h3 style="margin-top:12px">Le Vélo Havrais</h3><p>Ma marque de cadres illustrant les plus beaux paysages du Havre, pendant cinq à six mois.</p><ul class="u-list"><li><span><b>Fournisseurs :</b> rechercher, sélectionner, comparer qualité et prix.</span></li><li><span><b>Produits :</b> création et expédition.</span></li><li><span><b>Communication :</b> la marque sur les réseaux sociaux.</span></li></ul><p style="margin-top:12px">Une bonne partie des cadres ont été vendus grâce à mes grands-parents. Mais j’ai concrétisé une idée qui me passionnait.</p></div></div>`, { w: 780, env: 'lehavre' }),
+    I('u-projets', 'card', 'c', `<div class="u-proj"><div class="u-vis" style="background:#101a26">${APP_ICONS.saas()}<div class="u-floats"><span style="left:8%;top:12%">≈ 30 publications</span><span style="right:8%;top:24%">Logos</span><span style="left:10%;bottom:16%">Stories</span><span style="right:8%;bottom:10%">Biographies</span></div></div><div><span class="u-pill">Mis de côté</span><h3 style="margin-top:12px">Studio IA pour les PME</h3><p>Toute la communication d’une petite entreprise, créée en quelques minutes grâce à l’intelligence artificielle.</p><div class="u-prices"><span>Entrée <b>29,99 €</b> / mois</span><span>Complète <b>59,99 €</b> / mois</span></div><ul class="u-list x"><li><span>De nombreux bugs techniques.</span></li><li><span>Un coût de génération important.</span></li><li><span>Un ordinateur pas assez puissant.</span></li></ul></div></div>`, { w: 780, env: 'tech' }),
 
     I('u-tiktok', 'title', 'c', title('04 · Activité principale', 'Un compte TikTok sur le droit français.'), { w: 1000 }),
     I('u-tiktok', 'card', 'l', `<span class="u-k">Le 27 août</span><div class="u-kpis"><div class="u-kpi hl"><b>10 000</b><span>abonnés en 26 jours</span></div><div class="u-kpi"><b>2,7 M</b><span>vues cumulées</span></div></div>`, { w: 420 }),
@@ -3819,7 +3861,7 @@ Stages  Ateliers  Projets  TikTok  Ambitions</pre>`, { w: 440 }),
 }
 
 function uniBuild() {
-  uni.innerHTML = `<div class="u-stage"><div class="u-neb"></div><canvas class="u-stars"></canvas><div class="u-world"></div></div>
+  uni.innerHTML = `<div class="u-stage"><div class="u-fb"><i></i><i></i></div><canvas class="u-gl"></canvas><canvas class="u-fx"></canvas><div class="u-shade"></div><div class="u-world"></div></div>
     <header class="u-nav"><button class="u-brand" type="button" data-uz="u-top"><i>JB</i><span>Joshua Berger</span></button>
       <nav class="u-links" aria-label="Sections">${UZ.slice(1, -1).map(z => `<button type="button" data-uz="${z.id}">${z.label}</button>`).join('')}</nav>
       <button class="u-ghost" type="button" data-u="os" aria-label="Revenir au bureau">${UI.logo}<span>Bureau</span></button></header>
@@ -3828,24 +3870,35 @@ function uniBuild() {
     <div class="u-progress" aria-hidden="true"><i></i></div>
     <div class="u-spacer"></div>`;
   const world = $('.u-world', uni);
-  let z = 0, prevKind = null;
+  let z = 0, prev = null;
   uItems = uData().map((it, i) => {
-    if (i) z += it.gap ?? (it.kind === 'title' || prevKind === 'title' ? 1400 : 1050);
-    prevKind = it.kind;
     const zone = UZ.find(x => x.id === it.zone);
+    const env = it.env || zone.env;
+    if (i) z += (it.gap ?? (it.kind === 'title' || prev.kind === 'title' ? 1400 : 1050)) + (env !== prev.env ? 500 : 0);
+    prev = { kind: it.kind, env };
     const el = h(`<div class="u-item ${it.kind === 'card' ? 'u-card' : it.kind === 'title' ? 'u-title' : it.kind === 'hero' ? 'u-title u-hero' : it.kind === 'end' ? 'u-title u-end' : ''}" style="--w:${it.w}px;--acc:${zone.c[0].join(' ')};z-index:${100000 - i}"></div>`);
     el.innerHTML = it.html;
     world.append(el);
     if (zone.z === undefined) zone.z = z;
-    return { ...it, el, z, y0: it.pos === 'c' ? 0 : (i % 2 ? -1 : 1) * 36, vis: false };
+    return { ...it, env, el, z, y0: it.pos === 'c' ? 0 : (i % 2 ? -1 : 1) * 36, vis: false };
   });
   uEnd = z;
+  // Segments : une suite de panneaux dans le même environnement
+  uSegs = [];
+  uItems.forEach(it => {
+    const last = uSegs[uSegs.length - 1];
+    if (last && last.env === it.env) return;
+    uSegs.push({ env: it.env, s: uSegs.length ? it.z - 900 : -2600 });
+  });
+  uSegs.forEach((sg, i) => { sg.e = uSegs[i + 1]?.s ?? uEnd + 1200; });
   uni.dataset.built = '1';
+  uGLInit();
   $$('.u-nav, .u-hud', uni).forEach(el => el.addEventListener('wheel', e => {
     if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
     e.preventDefault();
     uni.scrollBy(0, e.deltaY);
   }, { passive: false }));
+  uni.addEventListener('pointermove', e => { uMouseT = [e.clientX / innerWidth * 2 - 1, e.clientY / innerHeight * 2 - 1]; });
   uni.addEventListener('click', e => {
     const g = e.target.closest('[data-uz]');
     if (g) return uGo(g.dataset.uz);
@@ -3856,67 +3909,357 @@ function uniBuild() {
     if (a.dataset.u === 'classic') { hideUniverse(); showSite(true); }
   });
 }
+
+/* ---------- Environnements : photo + profondeur, rendues en WebGL ---------- */
+const U_VS = `attribute vec2 p; varying vec2 v; void main(){ v = p * .5 + .5; gl_Position = vec4(p, 0., 1.); }`;
+const U_FS = `precision highp float;
+varying vec2 v;
+uniform sampler2D uA, uDA, uB, uDB;
+uniform vec2 uRes, uFA, uFB, uMouse;
+uniform float uAspA, uAspB, uDollyA, uDollyB, uMix, uTime;
+vec2 cover(vec2 uv, float asp) {
+  float scr = uRes.x / uRes.y;
+  vec2 s = scr > asp ? vec2(1., asp / scr) : vec2(scr / asp, 1.);
+  return (uv - .5) * s * .93 + .5;
+}
+vec3 scene(sampler2D C, sampler2D D, float asp, vec2 f, float dolly, vec2 uv, float seed) {
+  vec2 base = cover(uv, asp), src = base;
+  vec2 sway = uMouse * .016 + vec2(sin(uTime * .21 + seed), cos(uTime * .17 + seed)) * .0035;
+  for (int i = 0; i < 7; i++) {
+    float n = texture2D(D, src).r;
+    float m = 1. + dolly * (.3 + .75 * n);
+    src = f + (base - f) / m - sway * (n - .35);
+  }
+  return texture2D(C, clamp(src, .001, .999)).rgb;
+}
+float hash(vec2 q) { return fract(sin(dot(q, vec2(12.9898, 78.233))) * 43758.5453); }
+void main() {
+  vec2 uv = v;
+  vec3 a = scene(uA, uDA, uAspA, uFA, uDollyA, uv, 0.);
+  vec3 col = a;
+  if (uMix > .001) {
+    vec3 b = scene(uB, uDB, uAspB, uFB, uDollyB, uv, 2.3);
+    float r = length((uv - .5) * vec2(uRes.x / uRes.y, 1.));
+    float w = smoothstep(0., 1., clamp(uMix * 1.6 - r * .55, 0., 1.));
+    col = mix(a, b, w);
+    col *= 1. + .35 * sin(uMix * 3.14159) * (1. - r);
+  }
+  float r = length((uv - .5) * vec2(1., .82));
+  col *= mix(1., .5, smoothstep(.32, 1.05, r));
+  col *= .82;
+  col += (hash(uv * uRes + fract(uTime) * 91.) - .5) * .028;
+  gl_FragColor = vec4(col, 1.);
+}`;
+function uGLInit() {
+  const cv = $('.u-gl', uni);
+  const gl = cv.getContext('webgl', { antialias: false, alpha: false, premultipliedAlpha: false, powerPreference: 'high-performance' });
+  if (!gl) { uni.classList.add('u-nogl'); uGL = { fallback: true, tex: {} }; uEnvLoad(); return; }
+  const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return o; };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, U_VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, U_FS));
+  gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { uni.classList.add('u-nogl'); uGL = { fallback: true, tex: {} }; uEnvLoad(); return; }
+  gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p');
+  gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const U = {};
+  ['uA', 'uDA', 'uB', 'uDB', 'uRes', 'uFA', 'uFB', 'uMouse', 'uAspA', 'uAspB', 'uDollyA', 'uDollyB', 'uMix', 'uTime'].forEach(n => { U[n] = gl.getUniformLocation(pr, n); });
+  ['uA', 'uDA', 'uB', 'uDB'].forEach((n, i) => gl.uniform1i(U[n], i));
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  const blank = uTex(gl, null);
+  uGL = { gl, U, cv, tex: {}, blank };
+  cv.addEventListener('webglcontextlost', e => { e.preventDefault(); uni.classList.add('u-nogl'); uGL.fallback = true; });
+  uEnvLoad();
+}
+function uTex(gl, src) {
+  const t = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, t);
+  if (src) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src);
+  else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([8, 10, 14, 255]));
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  return t;
+}
+/* En local (file://), les images passent par assets/env/env-data.js, sinon WebGL les refuse. */
+function uEnvSrc(key) {
+  const d = window.JOSH_ENV?.[key];
+  return d ? [d.c, d.d] : [`assets/env/${key}.webp`, `assets/env/${key}-depth.png`];
+}
+function uEnvLoad() {
+  if (location.protocol === 'file:' && !window.JOSH_ENV && !uEnvLoad.tried) {
+    uEnvLoad.tried = true;
+    const s = document.createElement('script');
+    s.src = 'assets/env/env-data.js';
+    s.onload = s.onerror = () => uEnvLoad();
+    document.head.append(s);
+    return;
+  }
+  const order = [...new Set(uSegs.map(sg => sg.env))];
+  order.forEach((key, i) => setTimeout(() => uEnvOne(key), i < 2 ? 0 : 300 + i * 120));
+}
+function uEnvOne(key) {
+  if (uGL.tex[key]) return;
+  const slot = uGL.tex[key] = { ready: false, asp: 16 / 9 };
+  if (U_ENV[key].proc) {
+    const [c, d] = uTechScene();
+    return uEnvSet(key, slot, c, d, c.width / c.height, c.toDataURL('image/jpeg', .9));
+  }
+  const [cs, ds] = uEnvSrc(key);
+  const c = new Image(), d = new Image();
+  let n = 0;
+  const done = () => { if (++n === 2 && c.naturalWidth && d.naturalWidth) uEnvSet(key, slot, c, d, c.naturalWidth / c.naturalHeight, cs); };
+  c.onload = d.onload = done;
+  c.onerror = d.onerror = () => {};
+  c.src = cs; d.src = ds;
+}
+function uEnvSet(key, slot, c, d, asp, url) {
+  slot.asp = asp; slot.url = url;
+  if (!uGL.fallback) {
+    try {
+      slot.c = uTex(uGL.gl, c); slot.d = uTex(uGL.gl, d);
+    } catch {
+      // Image refusée par WebGL (fichier local sans env-data.js) : on garde le fond CSS.
+      uni.classList.add('u-nogl'); uGL.fallback = true;
+    }
+  }
+  slot.ready = true;
+}
+/* Le Studio IA : une scène générée (bureau de nuit, grille au sol, écrans flottants). */
+function uTechScene() {
+  const W = 1920, H = 1080, hy = H * .5;
+  const c = document.createElement('canvas'), d = document.createElement('canvas');
+  c.width = W; c.height = H; d.width = 480; d.height = 270;
+  const x = c.getContext('2d'), y = d.getContext('2d'), k = d.width / W;
+  const sky = x.createLinearGradient(0, 0, 0, hy);
+  sky.addColorStop(0, '#03050d'); sky.addColorStop(1, '#141a3e');
+  x.fillStyle = sky; x.fillRect(0, 0, W, hy);
+  const glow = x.createRadialGradient(W / 2, hy, 0, W / 2, hy, W * .55);
+  glow.addColorStop(0, 'rgba(160,90,255,.75)'); glow.addColorStop(.25, 'rgba(90,60,200,.35)'); glow.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = glow; x.fillRect(0, 0, W, H);
+  // Ville au loin
+  for (let i = 0; i < 70; i++) {
+    const bw = 20 + Math.random() * 60, bh = 30 + Math.random() * 190 * (1 - Math.abs(i / 70 - .5)), bx = i / 70 * W + Math.random() * 20;
+    x.fillStyle = '#0a0d22'; x.fillRect(bx, hy - bh, bw, bh);
+    x.fillStyle = 'rgba(120,230,255,.55)';
+    for (let w = 0; w < bh / 14; w++) if (Math.random() < .35) x.fillRect(bx + 4 + Math.random() * (bw - 10), hy - bh + 6 + w * 14, 3, 4);
+  }
+  const floor = x.createLinearGradient(0, hy, 0, H);
+  floor.addColorStop(0, '#0d1030'); floor.addColorStop(1, '#02030a');
+  x.fillStyle = floor; x.fillRect(0, hy, W, H - hy);
+  x.save(); x.shadowColor = 'rgba(80,230,220,.9)'; x.shadowBlur = 12; x.lineWidth = 1.6;
+  for (let i = -24; i <= 24; i++) {
+    x.strokeStyle = `rgba(80,230,220,${.5 - Math.abs(i) / 60})`;
+    x.beginPath(); x.moveTo(W / 2, hy); x.lineTo(W / 2 + i * 160, H); x.stroke();
+  }
+  for (let j = 1; j < 26; j++) {
+    const t = Math.pow(j / 25, 2.2), yy = hy + (H - hy) * t;
+    x.strokeStyle = `rgba(80,230,220,${.12 + t * .5})`;
+    x.beginPath(); x.moveTo(0, yy); x.lineTo(W, yy); x.stroke();
+  }
+  x.restore();
+  // Profondeur : ciel lointain, sol qui se rapproche vers le bas
+  y.fillStyle = '#000'; y.fillRect(0, 0, d.width, d.height);
+  const g = y.createLinearGradient(0, hy * k, 0, d.height);
+  g.addColorStop(0, '#101010'); g.addColorStop(1, '#ffffff');
+  y.fillStyle = g; y.fillRect(0, hy * k, d.width, d.height);
+  // Écrans flottants : une publication, un logo, des stories…
+  const panels = [[.17, .3, 300, 380, '#5ae6dc', .55], [.8, .27, 340, 240, '#b48cff', .6], [.33, .58, 220, 160, '#f2b705', .8], [.7, .62, 260, 320, '#5ae6dc', .85], [.5, .2, 240, 150, '#b48cff', .35]];
+  for (const [px, py, pw, ph, col, dep] of panels) {
+    const X = px * W - pw / 2, Y = py * H - ph / 2;
+    x.save();
+    x.shadowColor = col; x.shadowBlur = 40;
+    x.fillStyle = 'rgba(12,16,40,.82)'; x.strokeStyle = col; x.lineWidth = 2;
+    x.beginPath(); x.roundRect(X, Y, pw, ph, 18); x.fill(); x.stroke();
+    x.restore();
+    x.fillStyle = col; x.globalAlpha = .85;
+    x.beginPath(); x.arc(X + 34, Y + 34, 14, 0, 7); x.fill();
+    x.globalAlpha = .35;
+    for (let r = 0; r < 4; r++) x.fillRect(X + 22, Y + 66 + r * 22, (pw - 44) * (r % 2 ? .6 : .9), 8);
+    x.globalAlpha = .18;
+    x.fillRect(X + 22, Y + 160, pw - 44, Math.max(0, ph - 190));
+    x.globalAlpha = 1;
+    const v = Math.round(dep * 255);
+    y.fillStyle = `rgb(${v},${v},${v})`;
+    y.beginPath(); y.roundRect(X * k - 2, Y * k - 2, pw * k + 4, ph * k + 4, 4); y.fill();
+  }
+  y.filter = 'blur(7px)'; y.drawImage(d, 0, 0); y.filter = 'none';
+  return [c, d];
+}
+
+/* ---------- Particules propres à chaque environnement ---------- */
+const U_FX = {
+  mist: { n: 26, size: [140, 320], col: '220,235,240', a: .07, drift: [.15, -.02], soft: 1 },
+  spray: { n: 140, size: [1.5, 4], col: '235,250,255', a: .7, drift: [.25, -.35], soft: .6 },
+  sand: { n: 170, size: [1, 2.6], col: '250,225,170', a: .55, drift: [1.6, -.06], soft: .5, streak: 1 },
+  dust: { n: 120, size: [1, 3], col: '255,215,160', a: .55, drift: [.05, -.08], soft: .7 },
+  sakura: { n: 90, size: [7, 13], col: '255,182,200', a: .9, drift: [.35, .5], petal: 1 },
+  bokeh: { n: 44, size: [18, 60], col: '255,190,205', a: .16, drift: [.04, -.05], soft: .9, ring: 1 },
+  gold: { n: 110, size: [1.2, 3.4], col: '255,205,120', a: .6, drift: [.12, -.12], soft: .7 },
+  data: { n: 120, size: [2, 5], col: '90,230,220', a: .7, drift: [0, -.45], square: 1 },
+  beam: { n: 130, size: [1, 2.6], col: '255,225,170', a: .5, drift: [.06, .05], soft: .6 },
+  wisp: { n: 34, size: [100, 260], col: '255,240,235', a: .08, drift: [.3, 0], soft: 1 },
+};
+const uSprite = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const x = c.getContext('2d'), g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(.35, 'rgba(255,255,255,.55)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+  return c;
+})();
+const uTinted = {};
+function uTint(col) {
+  if (uTinted[col]) return uTinted[col];
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const x = c.getContext('2d');
+  x.drawImage(uSprite, 0, 0); x.globalCompositeOperation = 'source-in'; x.fillStyle = `rgb(${col})`; x.fillRect(0, 0, 64, 64);
+  return (uTinted[col] = c);
+}
+function uFxSpawn(p, env, far) {
+  const f = U_FX[U_ENV[env].fx];
+  p.env = env;
+  p.x = (Math.random() * 2 - 1) * 1500;
+  p.y = (Math.random() * 2 - 1) * 900;
+  p.z = far ? 2400 + Math.random() * 1600 : 120 + Math.random() * 3800;
+  p.s = f.size[0] + Math.random() * (f.size[1] - f.size[0]);
+  p.r = Math.random() * 6.28; p.vr = (Math.random() - .5) * .04;
+  p.ph = Math.random() * 6.28;
+  p.a = 0;
+}
+function uFxInit() {
+  const mob = innerWidth < 760;
+  uFx = Array.from({ length: mob ? 70 : 150 }, () => ({}));
+  const env = uSegs[0]?.env || 'fjord';
+  uFx.forEach(p => uFxSpawn(p, env, false));
+}
+function uFxDraw(dz, envA, envB, mix, t) {
+  const c = $('.u-fx', uni), ctx = c.getContext('2d'), W = c.clientWidth, H = c.clientHeight, cx = W / 2, cy = H / 2;
+  ctx.clearRect(0, 0, W, H);
+  const wA = 1 - mix, wB = mix;
+  for (const p of uFx) {
+    const f = U_FX[U_ENV[p.env].fx];
+    const w = p.env === envA ? wA : p.env === envB ? wB : 0;
+    p.z -= dz * .9 + 1.2;
+    p.x += f.drift[0] * 1.4 + Math.sin(t * .6 + p.ph) * .3;
+    p.y += f.drift[1] * 1.4 + (f.petal ? Math.cos(t * .9 + p.ph) * .4 : 0);
+    p.r += p.vr + (f.petal ? .01 : 0);
+    if (p.z < 40 || p.z > 4400 || (w <= .001 && Math.random() < .08)) { uFxSpawn(p, Math.random() < mix ? envB : envA, p.z < 40 || dz > 0); continue; }
+    const k = U_F / p.z, sx = cx + p.x * k, sy = cy + p.y * k, sz = p.s * k;
+    if (sx < -300 || sx > W + 300 || sy < -300 || sy > H + 300) { if (Math.abs(p.x) > 1700 || Math.abs(p.y) > 1100) uFxSpawn(p, Math.random() < mix ? envB : envA, true); continue; }
+    p.a += (w - p.a) * .06;
+    const fade = Math.min(1, (4400 - p.z) / 1200) * Math.min(1, (p.z - 40) / 220);
+    const al = f.a * p.a * fade;
+    if (al < .005) continue;
+    ctx.globalAlpha = Math.min(1, al);
+    if (f.petal) {
+      ctx.save(); ctx.translate(sx, sy); ctx.rotate(p.r); ctx.scale(1, .55 + .45 * Math.sin(t * 2 + p.ph));
+      ctx.fillStyle = `rgb(${f.col})`;
+      ctx.beginPath(); ctx.ellipse(0, 0, sz, sz * .62, 0, 0, 6.283); ctx.fill();
+      ctx.restore();
+    } else if (f.square) {
+      ctx.fillStyle = `rgb(${f.col})`;
+      ctx.fillRect(sx - sz / 2, sy - sz / 2, sz, sz);
+    } else if (f.streak) {
+      ctx.strokeStyle = `rgb(${f.col})`; ctx.lineWidth = Math.max(.6, sz * .7);
+      ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx - sz * 9, sy + sz * .4); ctx.stroke();
+    } else if (f.ring) {
+      ctx.drawImage(uTint(f.col), sx - sz, sy - sz, sz * 2, sz * 2);
+    } else {
+      const big = sz * (f.soft ? 2.4 : 1.4);
+      ctx.drawImage(uTint(f.col), sx - big / 2, sy - big / 2, big, big);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
 function uLayout() {
   const mob = innerWidth < 760, spread = mob ? 0 : Math.min(innerWidth * .22, 330);
   uItems.forEach(it => { it.x = it.pos === 'l' ? -spread : it.pos === 'r' ? spread : 0; it.y = mob ? 0 : it.y0; });
   $('.u-spacer', uni).style.height = Math.ceil(uEnd / U_SPEED) + 'px';
-  const c = $('.u-stars', uni), dpr = Math.min(devicePixelRatio || 1, 2);
-  c.width = Math.round(c.clientWidth * dpr); c.height = Math.round(c.clientHeight * dpr);
-  c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
-  uStars = Array.from({ length: mob ? 260 : 560 }, () => ({ x: (Math.random() * 2 - 1) * 1800, y: (Math.random() * 2 - 1) * 1100, z: Math.random() * 6000 }));
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const fx = $('.u-fx', uni);
+  fx.width = Math.round(fx.clientWidth * dpr); fx.height = Math.round(fx.clientHeight * dpr);
+  fx.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (uGL?.gl) {
+    const r = Math.min(dpr, 1.5), cv = uGL.cv;
+    cv.width = Math.round(cv.clientWidth * r); cv.height = Math.round(cv.clientHeight * r);
+    uGL.gl.viewport(0, 0, cv.width, cv.height);
+  }
+  if (!uFx.length) uFxInit();
 }
 function uGo(id) {
   const z = UZ.find(x => x.id === id)?.z ?? 0;
   uni.scrollTo({ top: Math.max(0, (z - (id === 'u-top' ? 0 : 260)) / U_SPEED), behavior: 'smooth' });
 }
-function uStarsDraw(vel) {
-  const c = $('.u-stars', uni), ctx = c.getContext('2d'), W = c.clientWidth, H = c.clientHeight, cx = W / 2, cy = H / 2, R = 6000;
-  ctx.clearRect(0, 0, W, H);
-  ctx.lineCap = 'round';
-  const k = clamp(vel * 2.4, -600, 600);
-  for (const s of uStars) {
-    const d = ((s.z - uCam * .8) % R + R) % R;
-    if (d < 30) continue;
-    const p = U_F / d, x = cx + s.x * p, y = cy + s.y * p;
-    if (x < -60 || x > W + 60 || y < -60 || y > H + 60) continue;
-    const d2 = Math.max(30, d + k), p2 = U_F / d2;
-    ctx.strokeStyle = `rgba(230,240,255,${Math.min(1, (1 - d / R) * 1.3).toFixed(3)})`;
-    ctx.lineWidth = Math.max(.5, Math.min(2.6, 1.5 * p));
-    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(cx + s.x * p2 + .01, cy + s.y * p2); ctx.stroke();
-  }
+/* Où en est la caméra : environnement courant, suivant, fondu et avancée dans chacun. */
+function uEnvState(cam) {
+  let i = 0;
+  uSegs.forEach((sg, k) => { if (cam >= sg.s) i = k; });
+  const A = uSegs[i], B = uSegs[i + 1];
+  const dolly = sg => clamp((cam - sg.s) / (sg.e - sg.s), 0, 1.2) * .5;
+  const mix = B ? clamp((cam - (B.s - 700)) / 700, 0, 1) : 0;
+  return { a: A.env, b: B ? B.env : A.env, mix: mix * mix * (3 - 2 * mix), da: dolly(A) + mix * .28, db: 0 };
 }
-function uFrame() {
+function uRender(st, t) {
+  const g = uGL;
+  if (!g) return;
+  const A = g.tex[st.a], B = g.tex[st.b];
+  if (g.fallback) {
+    const [fa, fb] = $$('.u-fb i', uni);
+    if (A?.url && fa.dataset.k !== st.a) { fa.dataset.k = st.a; fa.style.backgroundImage = `url("${A.url}")`; }
+    if (B?.url && fb.dataset.k !== st.b) { fb.dataset.k = st.b; fb.style.backgroundImage = `url("${B.url}")`; }
+    fa.style.transform = `scale(${(1.04 + st.da * .5).toFixed(4)})`;
+    fb.style.opacity = st.mix.toFixed(3);
+    return;
+  }
+  const { gl, U } = g;
+  const aOk = A?.ready && A.c, bOk = B?.ready && B.c;
+  gl.uniform2f(U.uRes, g.cv.width, g.cv.height);
+  gl.uniform2f(U.uMouse, uMouse[0], -uMouse[1]);
+  gl.uniform1f(U.uTime, t);
+  const fA = U_ENV[st.a].focus, fB = U_ENV[st.b].focus;
+  gl.uniform2f(U.uFA, fA[0], 1 - fA[1]); gl.uniform2f(U.uFB, fB[0], 1 - fB[1]);
+  gl.uniform1f(U.uAspA, A?.asp || 1.78); gl.uniform1f(U.uAspB, B?.asp || 1.78);
+  gl.uniform1f(U.uDollyA, st.da); gl.uniform1f(U.uDollyB, st.db);
+  gl.uniform1f(U.uMix, bOk ? st.mix : 0);
+  const bind = (unit, tex) => { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, tex || g.blank); };
+  bind(0, aOk && A.c); bind(1, aOk && A.d); bind(2, bOk && B.c); bind(3, bOk && B.d);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+}
+function uFrame(now) {
   if (uni.hidden) return;
   uRaf = requestAnimationFrame(uFrame);
+  const t = (now || performance.now()) / 1000;
   const target = uni.scrollTop * U_SPEED, prev = uCam;
   uCam += (target - uCam) * .1;
   if (Math.abs(target - uCam) < .05) uCam = target;
+  uMouse[0] += (uMouseT[0] - uMouse[0]) * .05; uMouse[1] += (uMouseT[1] - uMouse[1]) * .05;
   for (const it of uItems) {
     const d = it.z - uCam;
-    const op = d > 0 ? clamp(1 - (d - 350) / 2300, 0, 1) : clamp(1 + d / 520, 0, 1);
+    const op = d > 0 ? clamp(1 - (d - 300) / 1700, 0, 1) : clamp(1 + d / 520, 0, 1);
     if (op <= .004) { if (it.vis) { it.el.classList.remove('vis', 'live'); it.vis = false; } continue; }
     if (!it.vis) { it.el.classList.add('vis'); it.vis = true; }
     it.el.style.opacity = op.toFixed(3);
-    it.el.style.transform = `translate3d(calc(-50% + ${it.x}px), calc(-50% + ${it.y}px), ${(-d).toFixed(1)}px)`;
+    it.el.style.transform = `translate3d(calc(-50% + ${(it.x - uMouse[0] * 14).toFixed(1)}px), calc(-50% + ${(it.y - uMouse[1] * 10).toFixed(1)}px), ${(-d).toFixed(1)}px)`;
     it.el.classList.toggle('live', op > .6 && d > -160);
     const blur = d > 1100 ? Math.min(6, (d - 1100) / 450) : 0;
     if (Math.abs(blur - (it.blur || 0)) > .2 || (!blur && it.blur)) { it.blur = blur; it.el.style.filter = blur ? `blur(${blur.toFixed(1)}px)` : ''; }
   }
-  uStarsDraw(uCam - prev);
-  // Zone courante, couleurs de la nébuleuse et progression
+  const st = uEnvState(uCam);
+  uRender(st, t);
+  uFxDraw(uCam - prev, st.a, st.b, st.mix, t);
+  // Zone courante et progression
   let zi = 0;
   UZ.forEach((z, i) => { if (uCam >= (z.z ?? 0) - 700) zi = i; });
-  const a = UZ[zi], b = UZ[Math.min(zi + 1, UZ.length - 1)];
-  const t = b === a ? 0 : clamp((uCam - (a.z - 700)) / ((b.z - 700) - (a.z - 700)), 0, 1);
-  const mix = (p, q) => p.map((v, i) => Math.round(v + (q[i] - v) * t)).join(' ');
-  const neb = $('.u-neb', uni);
-  neb.style.setProperty('--n1', mix(a.c[0], b.c[0]));
-  neb.style.setProperty('--n2', mix(a.c[1], b.c[1]));
   if (zi !== uZoneIdx) {
     uZoneIdx = zi;
     $('.u-hud .z', uni).innerHTML = `<span>${String(zi).padStart(2, '0')}</span> · ${UZ[zi].label}`;
     $$('.u-links button', uni).forEach(btn => btn.classList.toggle('on', btn.dataset.uz === UZ[zi].id));
   }
+  if (uni.dataset.env !== st.a) { uni.dataset.env = st.a; uni.style.setProperty('--u-bg', U_ENV[st.a].bg); }
   const pr = clamp(uCam / uEnd, 0, 1);
   $('.u-progress i', uni).style.transform = `scaleX(${pr.toFixed(4)})`;
   $('.u-hud .pct', uni).textContent = Math.round(pr * 100) + ' %';
