@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La France en relief</title>
+<meta name="description" content="Carte 3D de la France métropolitaine : imagerie Sentinel-2 sans nuages et relief Copernicus, à explorer dans le navigateur.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #f4f1ea; --ink-2: rgba(244,241,234,.72); --ink-3: rgba(244,241,234,.5);
+  --glass: rgba(14,18,26,.62); --line: rgba(255,255,255,.12); --accent: #f0c36a;
+  --sky-top: #0b1424; --sky-mid: #1d3352; --sky-low: #6f8fb0;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #0b1424; color: var(--ink); font: 400 14px/1.45 Inter, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+#sky { position: fixed; inset: 0; background: radial-gradient(120% 80% at 50% 100%, var(--sky-low) 0%, var(--sky-mid) 42%, var(--sky-top) 100%); transition: background .6s; }
+#view { position: fixed; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+#labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+.lb { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 6px; white-space: nowrap; font-weight: 500; font-size: 12.5px; letter-spacing: .01em; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.85), 0 0 12px rgba(0,0,0,.55); transform: translate(-5px, -50%); will-change: transform, opacity; transition: opacity .25s; }
+.lb i { width: 7px; height: 7px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px rgba(0,0,0,.45); flex: none; }
+.lb.s2 { font-size: 11.5px; color: rgba(255,255,255,.88); }
+.lb.s2 i { width: 5px; height: 5px; }
+.lb.pk { font-family: Fraunces, Georgia, serif; font-style: italic; font-size: 13px; transform: translate(-50%, -100%); flex-direction: column; gap: 2px; text-align: center; }
+.lb.pk i { width: 0; height: 0; border-radius: 0; background: none; box-shadow: none; border: 5px solid transparent; border-top: 7px solid #fff; border-bottom: 0; order: 2; filter: drop-shadow(0 1px 1px rgba(0,0,0,.7)); }
+.lb.pk small { font: 500 10.5px Inter, sans-serif; font-style: normal; color: var(--accent); }
+.lb.off { opacity: 0; }
+body.nolabels #labels { display: none; }
+
+.panel { position: fixed; z-index: 2; background: var(--glass); -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 20px 50px -20px rgba(0,0,0,.6); }
+#title { left: 20px; top: 20px; padding: 16px 18px 15px; max-width: 320px; }
+#title h1 { margin: 0; font: 650 26px/1.05 Fraunces, Georgia, serif; letter-spacing: -.01em; }
+#title p { margin: 6px 0 0; color: var(--ink-2); font-size: 13px; }
+#readout { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); display: flex; gap: 14px; font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+#readout b { display: block; color: var(--ink); font-weight: 600; font-size: 15px; }
+
+#places { left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; gap: 4px; padding: 6px; max-width: calc(100vw - 32px); overflow-x: auto; scrollbar-width: none; }
+#places::-webkit-scrollbar { display: none; }
+#places button { flex: none; padding: 8px 13px; border: 0; border-radius: 10px; background: none; color: var(--ink-2); font: 500 13px Inter, sans-serif; cursor: pointer; transition: background .15s, color .15s; }
+#places button:hover { background: rgba(255,255,255,.08); color: var(--ink); }
+#places button.on { background: var(--ink); color: #12161d; }
+
+#ctrl { right: 20px; top: 20px; width: 250px; padding: 14px 16px 12px; }
+#ctrl label { display: block; margin-bottom: 12px; font-size: 12px; color: var(--ink-3); }
+#ctrl label span { float: right; color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 500; }
+#ctrl input[type=range] { width: 100%; margin: 8px 0 0; accent-color: var(--accent); }
+#ctrl .row { display: flex; gap: 6px; }
+#ctrl .row button { flex: 1; padding: 7px 0; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.04); color: var(--ink-2); font: 500 12px Inter, sans-serif; cursor: pointer; }
+#ctrl .row button[aria-pressed=true] { background: rgba(240,195,106,.16); border-color: rgba(240,195,106,.5); color: var(--ink); }
+#ctrlToggle { display: none; }
+#title #credits { margin: 10px 0 0; font-size: 10px; line-height: 1.4; color: var(--ink-3); }
+#credits a { color: inherit; }
+
+#loader { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; background: #0b1424; transition: opacity .9s; }
+#loader.done { opacity: 0; pointer-events: none; }
+#loader div { width: min(320px, 80vw); text-align: center; }
+#loader h2 { margin: 0 0 14px; font: 650 30px Fraunces, Georgia, serif; }
+#loader .bar { height: 3px; border-radius: 3px; background: rgba(255,255,255,.12); overflow: hidden; }
+#loader .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+#loader p { margin: 12px 0 0; font-size: 12px; color: var(--ink-3); }
+
+@media (max-width: 760px) {
+  #title { left: 16px; top: 16px; right: 16px; max-width: none; padding: 12px 14px; }
+  #title h1 { font-size: 21px; }
+  #title p { display: none; }
+  #readout { margin-top: 8px; padding-top: 8px; }
+  #ctrl { right: 16px; top: auto; bottom: 76px; width: min(260px, calc(100vw - 32px)); display: none; }
+  #ctrl.open { display: block; }
+  #ctrlToggle { display: grid; place-items: center; position: fixed; z-index: 3; right: 16px; bottom: 20px; width: 46px; height: 46px; padding: 0; border-radius: 14px; color: var(--ink); cursor: pointer; }
+  #places { left: 16px; right: 74px; bottom: 20px; transform: none; max-width: none; }
+  #title #credits { display: block; margin-top: 6px; font-size: 8.5px; }
+}
+</style>
+<script type="importmap">{ "imports": { "three": "./lib/three.module.min.js" } }</script>
+</head>
+<body>
+<div id="sky"></div>
+<canvas id="view" tabindex="0" aria-label="Carte de la France en relief. Glissez pour tourner, molette ou pincement pour zoomer."></canvas>
+<div id="labels" aria-hidden="true"></div>
+
+<section id="title" class="panel">
+  <h1>La France en relief</h1>
+  <p>Imagerie satellite Sentinel-2 sans nuages et relief Copernicus, à 140 m près. Glissez pour tourner, clic droit pour déplacer, molette pour zoomer.</p>
+  <div id="readout"><div><b id="alt">—</b>altitude sous le curseur</div><div><b id="exr">×10</b>relief</div></div>
+  <p id="credits">Contient des données Copernicus Sentinel-2 modifiées (2021), traitées par <a href="https://esa-worldcover.org" target="_blank" rel="noopener">ESA WorldCover</a> (CC BY 4.0) · Relief Copernicus DEM GLO-90 © DLR / Airbus · Contours <a href="https://github.com/gregoiredavid/france-geojson" target="_blank" rel="noopener">france-geojson</a></p>
+</section>
+
+<nav id="places" class="panel" aria-label="Vues"></nav>
+
+<section id="ctrl" class="panel" aria-label="Réglages">
+  <label>Exagération du relief <span id="exv">×10</span><input id="ex" type="range" min="1" max="25" step="0.5" value="10"></label>
+  <label>Heure du jour <span id="hrv">14 h</span><input id="hr" type="range" min="6" max="20.5" step="0.1" value="14"></label>
+  <div class="row">
+    <button id="tLabels" type="button" aria-pressed="true">Noms</button>
+    <button id="tSpin" type="button" aria-pressed="false">Rotation</button>
+  </div>
+</section>
+<button id="ctrlToggle" class="panel" type="button" aria-label="Réglages" aria-expanded="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+
+
+
+<div id="loader"><div><h2>La France en relief</h2><div class="bar"><i></i></div><p>Chargement des données satellite…</p></div></div>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>
