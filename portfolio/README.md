@@ -4,9 +4,15 @@ Portfolio de BTS Communication en trois temps :
 
 1. un faux système d'exploitation (démarrage, écran de connexion, bureau) ; n’importe quel mot de passe ouvre la session ;
 2. trois secondes après la connexion, un faux piratage, puis un écran noir « Bienvenue dans mon portfolio » (Échap pour passer) ;
-3. le portfolio en **univers 3D** : chaque défilement fait avancer la caméra, et les panneaux (profil, stages, ateliers, projets perso, TikTok, ambitions) arrivent de la profondeur. Chaque thème a son environnement réaliste, avec ses propres particules : le fjord pour l’accueil, une vague pour le profil, la plage d’Hossegor pour les stages, un studio photo pour Heinz × Absolut, un jardin japonais pour le mariage franco-japonais, un salon de beauté, le front de mer du Havre, un studio numérique pour le SaaS, une salle de tribunal pour TikTok droit, et un sommet au-dessus des nuages pour les ambitions.
+3. le portfolio sous forme de **dossier E6 déchiffré par le pirate** : un fichier par partie, dans l'ordre attendu par l'épreuve.
+   - `00_identite.txt` : l'en-tête E6 (étudiant, établissement, session) et une présentation ;
+   - `01_tableau_synoptique.xls` : le tableau synoptique (annonceur, intitulé, support, période, conditions), filtrable par support. Un clic sur une ligne ouvre le détail de la production ;
+   - `02` à `04` : les fiches descriptives de situation professionnelle (stage à Hossegor, coworkings beauté, TikTok), avec toutes les rubriques du document officiel ;
+   - `05_ateliers.key`, `06_profil_ambitions.txt`, puis `07_pirate.exe` : la révélation finale.
 
-Le bouton « Vue classique » affiche le même contenu en site web classique (il est aussi utilisé automatiquement si l’ordinateur demande de réduire les animations). « Bureau » ramène au bureau, et « Rejouer l’intro » relance toute la séquence.
+   Les informations encore inconnues sont marquées « À préciser ». Un petit message du pirate commente chaque fichier.
+
+Le « Voyage 3D » (les environnements réalistes) et la « Version site web » restent accessibles depuis le dossier. « Bureau » ramène au bureau, et « Rejouer l’intro » relance toute la séquence.
 
 Le site tient dans `index.html`, avec les fonds d’écran dans `assets/`. Ouvrez `index.html` dans un navigateur : aucune installation n’est nécessaire.
 
@@ -24,6 +30,7 @@ Les photos des environnements sont générées par IA. Vous pouvez les remplacer
 
 Tout le contenu est décrit dans l'objet `FS` du script, en bas de `index.html` :
 
+- `D_PROD` : les lignes du tableau synoptique ; `D_DOCS` : les fichiers du dossier E6, dont les fiches descriptives (fonction `dFiche`).
 - `uData()` : les panneaux de l’univers 3D, dans l’ordre du voyage.
 - `siteHTML()` : le contenu de la vue classique.
 - `FS.desktop.children` : le contenu du dossier Bureau dans le Finder (le bureau lui-même reste vide).
@@ -36,6 +43,9 @@ Pour ajouter un projet, copiez une entrée existante (par exemple `coworking`), 
 son identifiant et son contenu, puis ajoutez cet identifiant dans le `children` du dossier voulu.
 
 ## À compléter
+
+- Les rubriques « À préciser » des fiches : logiciels utilisés, travail en autonomie ou accompagné, individuel ou collectif, résultats obtenus, numéro de candidat.
+- Les visuels des productions (cadres « Visuel à intégrer » du tableau synoptique).
 
 - `stage2` : stage de 2e année.
 - `heinz` : projet d'atelier Heinz × Absolut.
